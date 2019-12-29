@@ -8,4 +8,13 @@ function searchPlace($keyword) {
 	$json = file_get_contents($url);
 	return json_decode($json, true);
 }
-print_r(searchPlace("町屋駅"));
+// print_r(searchPlace("町屋駅"));
+$array = searchPlace("町屋駅");
+echo($array["result"]["formatted_address"]);
+$opening_hours = $array["result"]["opening_hours"]["weekday_text"];
+// var_dump($opening_hours);
+foreach($opening_hours as $oh){
+	echo($oh."\n");
+}
+echo('price_level: '.$array["result"]["price_level"]."\n");
+echo('avrg_rating: '.$array["result"]["rating"]);
