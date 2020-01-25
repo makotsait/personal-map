@@ -8,8 +8,8 @@ function searchPlace($keyword) {
 	$json = file_get_contents($url);
 	return json_decode($json, true);
 }
-// print_r(searchPlace("町屋駅"));
-$array = searchPlace("町屋駅");
+// print_r(searchPlace("東京駅"));
+$array = searchPlace("東京駅");
 echo($array["result"]["formatted_address"]);
 $opening_hours = $array["result"]["opening_hours"]["weekday_text"];
 // var_dump($opening_hours);
