@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -50,6 +51,7 @@
     </style>
   </head>
   <body>
+  @include('common.sidebar')
     <div style="display: none">
         <input id="pac-input"
                class="controls"
