@@ -2,7 +2,7 @@
 @section('sidebar')
 
 <div class="sidebar left" >Hello World
-<img class="sidebar close" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="イラスト1">
+<img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="イラスト1">
 </div>
 
 <script>
@@ -26,8 +26,4 @@ $(document).ready(function () {
     });
 });
 </script>
-
-<a href="#" class="btn" data-action="toggle" data-side="left" style="margin-left: 300px;">
-  Toggle Left
-</a>
 @show
