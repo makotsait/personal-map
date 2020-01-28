@@ -35,3 +35,10 @@
       height: 270px;
       background: #03A9F4;
     }
+
+    .sidebar.close {
+        width: 25px;
+        position: absolute;
+        top: 0;
+        left: 270px;
+    }
