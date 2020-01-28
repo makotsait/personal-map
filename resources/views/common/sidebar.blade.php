@@ -1,7 +1,9 @@
 
 @section('sidebar')
 
-<div class="sidebar left" >Hello World</div>
+<div class="sidebar left" >Hello World
+<img class="sidebar close" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="イラスト1">
+</div>
 
 <script>
 $(document).ready(function () {
