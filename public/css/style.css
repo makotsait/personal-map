@@ -1,14 +1,14 @@
   .sidebar{
     position: fixed;
-    color: #fff; /* 好みに応じて調節してください */
+    color: #fff;
   }
  
     .sidebar.left {
       top: 0;
       left: 0;
       bottom: 0;
-      width: 270px; /*この値は調節してください。*/
-      background: #448AFF; /*背景色も好みに応じにて調節してください。*/
+      width: 500px;
+      background: #fff;
       z-index:1;
     }
  
@@ -40,5 +40,5 @@
         width: 25px;
         position: absolute;
         top: 0;
-        left: 270px;
+        left: 500px;
     }
