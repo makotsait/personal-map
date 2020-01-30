@@ -59,6 +59,27 @@
     margin: 0;
 }
 
+span{
+    color: black;
+}
+
+.ratings-line{
+    height: 35px;
+}
+
+.rating{
+    width:245px;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+}
+.rating-left{
+    padding-left: 20px;
+}
+
+
 .range{
     color: black;
+    position: absolute;
+    left: 70px;
 }
