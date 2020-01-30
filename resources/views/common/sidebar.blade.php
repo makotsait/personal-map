@@ -15,37 +15,62 @@
         <h1 class = "header-title">東京駅</h1>
     </div>
     <div class = "ratings">
-        <div class="range">
-            <input type="range" min="0" max="5" value="0">
-            <span>0</span>
+        <div class = "ratings-line">
+            <span class = "rating rating-left">
+                <span>味</span>
+                <span class="range">
+                    <input type="range" min="0" max="5" value="0">
+                    <span>0</span>
+                </span>
+            </span>
+            <span class = "rating">
+                <span>コスパ</span>
+                <span class="range">
+                    <input type="range" min="0" max="5" value="0">
+                    <span>0</span>
+                </span>
+            </span>
         </div>
-        <div class="range">
-            <input type="range" min="0" max="5" value="0">
-            <span>0</span>
+        <div class = "ratings-line">
+            <span class = "rating rating-left">
+                <span>接客</span>
+                <span class="range">
+                    <input type="range" min="0" max="5" value="0">
+                    <span>0</span>
+                </span>
+            </span>
+            <span class = "rating">
+                <span>デザイン</span>
+                <span class="range">
+                    <input type="range" min="0" max="5" value="0">
+                    <span>0</span>
+                </span>
+            </span>
         </div>
+        
     </div>
 </div>
 
 <script>
-$(document).ready(function () {
-    // 向き
-    var sides = ["left", "top", "right", "bottom"];
+    $(document).ready(function () {
+        // 向き
+        var sides = ["left", "top", "right", "bottom"];
 
-    // サイドバーの初期化
-    for (var i = 0; i < sides.length; ++i) {
-        var cSide = sides[i];
-        $(".sidebar." + cSide).sidebar({side: cSide}{close:true});
-    }
+        // サイドバーの初期化
+        for (var i = 0; i < sides.length; ++i) {
+            var cSide = sides[i];
+            $(".sidebar." + cSide).sidebar({side: cSide}{close:true});
+        }
 
-    // ボタンのクリックにより...
-    $(".btn[data-action]").on("click", function () {
-        var $this = $(this);
-        var action = $this.attr("data-action");
-        var side = $this.attr("data-side");
-        $(".sidebar." + side).trigger("sidebar:" + action);
-        return false;
+        // ボタンのクリックにより...
+        $(".btn[data-action]").on("click", function () {
+            var $this = $(this);
+            var action = $this.attr("data-action");
+            var side = $this.attr("data-side");
+            $(".sidebar." + side).trigger("sidebar:" + action);
+            return false;
+        });
     });
-});
 </script>
 
 <!-- スライドバーの現在地値を表示するスクリプト -->
@@ -56,7 +81,7 @@ $(document).ready(function () {
 　　　 　　target.innerHTML = elem.value;
  　　　}
 　 }
-　 for(var i = 0, max = elem.length; i < max; i++){
+　 for(var i = 0; i < elem.length; i++){
  　　　bar = elem[i].getElementsByTagName('input')[0];
  　　　target = elem[i].getElementsByTagName('span')[0];
 　　　 bar.addEventListener('input', rangeValue(bar, target));
