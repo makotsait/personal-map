@@ -83,3 +83,7 @@ span{
     position: absolute;
     left: 70px;
 }
+
+.range > input{
+    vertical-align: middle;
+}
