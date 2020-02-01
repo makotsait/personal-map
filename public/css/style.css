@@ -1,4 +1,8 @@
-  .sidebar{
+span{
+    color:black;
+}
+
+.sidebar{
     position: fixed;
     color: #fff;
 }

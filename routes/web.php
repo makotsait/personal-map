@@ -16,3 +16,4 @@
 // });
 
 Route::get('/', 'MapController@index');
+Route::get('test', 'TestController@test')->name('test');

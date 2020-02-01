@@ -49,6 +49,8 @@
         </div>
         
     </div>
+    <span id="place_address">
+    </span>
 </div>
 
 <script>
@@ -59,7 +61,8 @@
         // サイドバーの初期化
         for (var i = 0; i < sides.length; ++i) {
             var cSide = sides[i];
-            $(".sidebar." + cSide).sidebar({side: cSide}{close:true});
+            // $(".sidebar." + cSide).sidebar({side: cSide}{close:true});
+            $(".sidebar." + cSide).sidebar({side: cSide});
         }
 
         // ボタンのクリックにより...
