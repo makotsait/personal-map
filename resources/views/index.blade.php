@@ -133,17 +133,20 @@
             location: place.geometry.location
           });
           var address_text = document.getElementById('place_address');
+          var value1 = 'hoge';
           $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: "{{route('test')}}",
-            dataType: 'text ',
-            // data: "name1=value1&name2=value2",
+            dataType: 'text',
+            data: {name1:value1},  
             success: function(data) {
-              address_text.innerHTML = data;
+              // address_text.innerHTML = data;
+              alert(data);
             },
             error:function() {
             //取得失敗時に実行する処理
-              address_text.innerHTML = "取得失敗しました";
+              // address_text.innerHTML = "取得失敗しました";
+              alert("取得失敗");
             }
           });
 
