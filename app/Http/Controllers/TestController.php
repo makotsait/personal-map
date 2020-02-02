@@ -8,6 +8,6 @@ class TestController extends Controller
 {
     public function test()
     {
-        echo 'test';
+        echo $_POST['name1'];
     }
 }
