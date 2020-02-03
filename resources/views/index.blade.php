@@ -138,15 +138,15 @@
             type: 'POST',
             url: "{{route('test')}}",
             dataType: 'text',
-            data: {name1:value1},  
+            data: {name1:place.place_id, _token: '{{ csrf_token() }}'},  
             success: function(data) {
-              // address_text.innerHTML = data;
-              alert(data);
+              address_text.innerHTML = data;
+              // alert(data);
             },
             error:function() {
             //取得失敗時に実行する処理
-              // address_text.innerHTML = "取得失敗しました";
-              alert("取得失敗");
+              address_text.innerHTML = "取得失敗しました";
+              // alert("取得失敗");
             }
           });
 
