@@ -12,7 +12,7 @@
         ?>
     </div>
     <div class = "header-title-description">
-        <h1 class = "header-title">place name</h1>
+        <h1 class = "header-title" id = "header-title">place name</h1>
         <span id="place_address">address</span>
     </div>
     
