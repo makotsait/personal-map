@@ -95,22 +95,6 @@
           infowindow.open(map, marker);
         });
 
-        function get_place_detail(place_id){
-          var req = new XMLHttpRequest();		  // XMLHttpRequest オブジェクトを生成する
-          // req.onreadystatechange = function() {		  // XMLHttpRequest オブジェクトの状態が変化した際に呼び出されるイベントハンドラ
-          //   if(req.readyState == 4 && req.status == 200){ // サーバーからのレスポンスが完了し、かつ、通信が正常に終了した場合
-          //     alert(req.responseText);		          // 取得した JSON ファイルの中身を表示
-          //   }
-          // };
-          var api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-          var place_id="ChIJH7qx1tCMGGAR1f2s7PGhMhw";
-          // var keyword = urlencode($keyword);
-          var url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$place_id}&language=ja";
-          req.open("GET", url, false); // HTTPメソッドとアクセスするサーバーの　URL　を指定
-          // req.send(null);		
-          alart(JSON.parse(req.send(null)));  
-        }
-
         autocomplete.addListener('place_changed', function() {
           infowindow.close();
 
@@ -132,18 +116,24 @@
             placeId: place.place_id,
             location: place.geometry.location
           });
+          var place_name_text = document.getElementById('header-title');
           var address_text = document.getElementById('place_address');
+          var value1 = 'hoge';
           $.ajax({
-            type: 'GET',
-            url: "{{route('test')}}",
-            dataType: 'text ',
-            // data: "name1=value1&name2=value2",
+            type: 'POST',
+            url: "{{route('get_place_detail')}}",
+            dataType: 'json',
+            data: {place_id:place.place_id, _token: '{{ csrf_token() }}'},  
             success: function(data) {
-              address_text.innerHTML = data;
+              // place_name_text.innerHTML = ;
+              place_name_text.innerHTML = data["result"]["name"];
+              address_text.innerHTML = data["result"]["formatted_address"];
+              // alert(data["result"]["formatted_address"]);
             },
             error:function() {
             //取得失敗時に実行する処理
-              address_text.innerHTML = "取得失敗しました";
+              // address_text.innerHTML = "取得失敗しました";
+              alert("取得失敗");
             }
           });
 
