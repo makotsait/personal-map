@@ -12,8 +12,10 @@
         ?>
     </div>
     <div class = "header-title-description">
-        <h1 class = "header-title">東京駅</h1>
+        <h1 class = "header-title" id = "header-title">place name</h1>
+        <span id="place_address">address</span>
     </div>
+    
     <div class = "ratings">
         <div class = "ratings-line">
             <span class = "rating rating-left">
@@ -47,10 +49,7 @@
                 </span>
             </span>
         </div>
-        
     </div>
-    <span id="place_address">
-    </span>
 </div>
 
 <script>
@@ -76,7 +75,7 @@
     });
 </script>
 
-<!-- スライドバーの現在地値を表示するスクリプト -->
+<!-- スライドバーに現在値を表示するスクリプト -->
 <script>
  　var elem = document.getElementsByClassName('range');
 　 var rangeValue = function (elem, target) {
