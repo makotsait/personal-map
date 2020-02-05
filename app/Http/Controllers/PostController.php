@@ -6,5 +6,8 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    //
+    public function index(Request $request){
+        $items = PostRatings::all();
+        return view('', ['items' => $items]);
+    }
 }
