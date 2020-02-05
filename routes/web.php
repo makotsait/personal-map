@@ -16,6 +16,7 @@
 // });
 
 Route::get('/', 'MapController@index');
+Route::get('test', 'PostController@index');
 // Route::get('test', 'TestController@test')->name('test');
-Route::post('test', 'PlaceApiController@test')->name('test');
+// Route::post('test', 'PlaceApiController@test')->name('test');
 Route::post('get_place_detail', 'PlaceApiController@getPlaceDetail')->name('get_place_detail');
