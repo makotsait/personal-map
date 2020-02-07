@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRatingsTable extends Migration
+class CreatePlaceTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
-            $table->increments('rating_id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('place_id');
-            $table->unsignedInteger('criteria_id');
-            $table->unsignedInteger('rating');
+        Schema::create('place_types', function (Blueprint $table) {
+            $table->increments('place_type_id');
+            $table->text('palace_type_name_en');
+            $table->text('palace_type_name_jp');
             $table->timestamps();
             $table->unsignedInteger('status');
         });
@@ -31,6 +29,6 @@ class CreateRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('place_types');
     }
 }
