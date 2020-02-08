@@ -69,6 +69,44 @@
     </div>
 
     <script>
+      var place_detail;
+      var place_name_text = document.getElementById('header-title');
+      var address_text = document.getElementById('place_address');
+      var place_header_image = document.getElementById('header-image');
+      function getPlaceDetail(place_id){
+        $.ajax({
+          type: 'POST',
+          url: "{{route('get_place_detail')}}",
+          dataType: 'json',
+          data: {place_id:place_id, _token: '{{ csrf_token() }}'},  
+          success: function(data) {
+            place_name_text.innerHTML = data["result"]["name"];
+            address_text.innerHTML = data["result"]["formatted_address"];
+            getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
+          },
+          error:function() {
+            //取得失敗時に実行する処理
+            place_name_text.innerHTML = "取得失敗しました";
+            address_text.innerHTML = "取得失敗しました";
+            // alert("取得失敗");
+          }
+        });
+      }
+      function getPlaceHeaderImg(photoreference){
+        $.ajax({
+          type: 'GET',
+          url: "{{route('get_header_image')}}",
+          data: {photoreference:photoreference},
+          success: function(data) {
+            alert(data);
+            // place_header_image.setAttribute('src', data);
+          },
+          error:function() {
+            //取得失敗時に実行する処理
+            alert("取得失敗");
+          }
+        });
+      }
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 35.742251, lng: 139.7813826},
@@ -116,26 +154,10 @@
             placeId: place.place_id,
             location: place.geometry.location
           });
-          var place_name_text = document.getElementById('header-title');
-          var address_text = document.getElementById('place_address');
           var value1 = 'hoge';
-          $.ajax({
-            type: 'POST',
-            url: "{{route('get_place_detail')}}",
-            dataType: 'json',
-            data: {place_id:place.place_id, _token: '{{ csrf_token() }}'},  
-            success: function(data) {
-              // place_name_text.innerHTML = ;
-              place_name_text.innerHTML = data["result"]["name"];
-              address_text.innerHTML = data["result"]["formatted_address"];
-              // alert(data["result"]["formatted_address"]);
-            },
-            error:function() {
-            //取得失敗時に実行する処理
-              // address_text.innerHTML = "取得失敗しました";
-              alert("取得失敗");
-            }
-          });
+          getPlaceDetail(place.place_id);
+          // getPlaceDetail(place.place_id)
+          //   .then(getPlaceHeaderImg(data));
 
           marker.setVisible(true);
 
