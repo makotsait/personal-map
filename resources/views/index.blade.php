@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Place ID Finder</title>
+    <title>PlaceLogs</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
@@ -98,8 +98,8 @@
           url: "{{route('get_header_image')}}",
           data: {photoreference:photoreference},
           success: function(data) {
-            alert(data);
-            // place_header_image.setAttribute('src', data);
+            // alert(data);
+            place_header_image.setAttribute('src', data);
           },
           error:function() {
             //取得失敗時に実行する処理

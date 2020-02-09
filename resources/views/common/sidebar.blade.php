@@ -3,7 +3,7 @@
 
 <div class="sidebar left" >
     <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
-    <div class = "header-image" id = "header-image">
+    <div class = "header-image">
         <img id = "header-image" src="">
         <?php
         // $top_img_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
