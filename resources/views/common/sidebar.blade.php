@@ -51,6 +51,12 @@
             </span>
         </div>
     </div>
+    <div>
+        <textarea class="place_note" rows="5"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="保存">
+    </div>
 </div>
 
 <script>
@@ -76,7 +82,7 @@
     });
 </script>
 
-<!-- スライドバーに現在値を表示するスクリプト -->
+<!-- スライドバーに評価値を表示するスクリプト -->
 <script>
  　var elem = document.getElementsByClassName('range');
 　 var rangeValue = function (elem, target) {
