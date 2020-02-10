@@ -1,10 +1,9 @@
 
 @section('sidebar')
-<script>
-</script>
 <div class="sidebar left scroll_box" >
+    <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
     <div class="section-sidebar-left-content inner">
-        <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
+        
         <div class = "header-image">
             <img id = "header-image" src="">
             <?php
@@ -56,13 +55,15 @@
         <div class="section-note-note-content">
             <textarea class="section-note-text" rows="20"></textarea>
         </div>
-        <div>
-            <input type="submit" value="保存">
+        <div class="section-submit-cancel-btn-line">
+            <input type="submit" class="section-submit-btn section-submit-cancel-btn" value="Save">
+            <input type="submit" class="section-cancel-btn section-submit-cancel-btn" value="Cancel">
         </div>
     </div>
 </div>
 
 <script>
+    // perfect-scrollbrの処理
     // var ps = new PerfectScrollbar('.scroll_box');
 </script>
 <script>

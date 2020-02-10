@@ -50,6 +50,8 @@ span{
 
 .section-sidebar-left-content{
     overflow:scroll;
+    /* height:100vh; */
+    height:500px;
 }
 
 .header-image{
@@ -71,12 +73,15 @@ span{
 span{
     color: black;
 }
+.ratings{
+    position: relative;
+}
 
 .ratings-line{
     height: 35px;
 }
 .section-rating-inline-right{
-    /* left:200px; */
+    left:240px;
 }
 
 .section-rating-value{
@@ -87,8 +92,8 @@ span{
 .rating{
     width:245px;
     box-sizing: border-box;
-    display: inline-block;
-    position: relative;
+    /* display: inline-block; */
+    position: absolute;
 }
 .raging-value{
     position: absolute;
@@ -116,3 +121,19 @@ span{
     width: 440px;
     height: 300px;
 }
+.section-submit-cancel-btn-line{
+    position: relative;
+}
+.section-submit-cancel-btn{
+    width: 55px;
+    height: 27px;
+    margin-bottom: 5px;
+    position: absolute;
+}
+.section-submit-btn{
+    left: 350px;
+} 
+.section-cancel-btn{
+    left: 411px;
+    position: absolute;
+} 
