@@ -14,6 +14,7 @@ span{
     width: 500px;
     background: #fff;
     z-index:1;
+    /* overflow: scroll; */
 }
 
 .sidebar.right {
@@ -47,6 +48,10 @@ span{
     left: 500px;
     }
 
+.section-sidebar-left-content{
+    overflow:scroll;
+}
+
 .header-image{
     height: 300px;
     overflow: hidden;
@@ -70,6 +75,14 @@ span{
 .ratings-line{
     height: 35px;
 }
+.section-rating-inline-right{
+    /* left:200px; */
+}
+
+.section-rating-value{
+    position: absolute;
+    left: 210px;
+}
 
 .rating{
     width:245px;
@@ -77,10 +90,15 @@ span{
     display: inline-block;
     position: relative;
 }
+.raging-value{
+    position: absolute;
+}
 .rating-left{
     padding-left: 20px;
 }
-
+.rating-right{
+    left: 200px;
+}
 
 .range{
     color: black;
@@ -90,4 +108,11 @@ span{
 
 .range > input{
     vertical-align: middle;
+}
+.section-note-note-content{
+    margin: 20px 20px 0px;
+}
+.section-note-text{
+    width: 440px;
+    height: 300px;
 }
