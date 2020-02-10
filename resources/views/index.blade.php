@@ -50,8 +50,11 @@
 
     </style>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/perfect-scrollbar.css') }}">
     <script src="{{ asset('/js/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ asset('/js/jquery.sidebar.min.js') }}"></script>
+    <script src="{{ asset('/js/perfect-scrollbar.min.js') }}"></script>
+
   </head>
   <body>
   @include('common.sidebar')
