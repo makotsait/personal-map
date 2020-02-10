@@ -2,60 +2,62 @@
 @section('sidebar')
 
 <div class="sidebar left" >
-    <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
-    <div class = "header-image">
-        <img id = "header-image" src="">
-        <?php
-        // $top_img_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-        // $photo_ref = "photoreference=CmRaAAAAiVgVE_r8zAmHGceo65OoPPa4tUqawrI0OiuHrxH_wKVyJ2NCEv_bnvFUeuwbPX8liS2XGC_sfuBUJdh48leGihuC8UixzwBHtjPtxuhQnE1OTekd78nUr-eqQWPII3KoEhCv9Ixq_3zcDqMtEGFJLSN4GhSExSvn9LvQFJga4bqAmtqCYn7gAg";
-        // $top_img_url =  $top_img_url."&".$photo_ref;
-        // echo "<img src=$top_img_url>";
-        ?>
-    </div>
-    <div class = "header-title-description">
-        <h1 class = "header-title" id = "header-title">place name</h1>
-        <span id="place_address">address</span>
-    </div>
-    
-    <div class = "ratings">
-        <div class = "ratings-line">
-            <span class = "rating rating-left">
-                <span>味</span>
-                <span class="range">
-                    <input type="range" min="0" max="5" value="0">
-                    <span>0</span>
-                </span>
-            </span>
-            <span class = "rating">
-                <span>コスパ</span>
-                <span class="range">
-                    <input type="range" min="0" max="5" value="0">
-                    <span>0</span>
-                </span>
-            </span>
+    <div class="section-sidebar-left-content">
+        <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
+        <div class = "header-image">
+            <img id = "header-image" src="">
+            <?php
+            // $top_img_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
+            // $photo_ref = "photoreference=CmRaAAAAiVgVE_r8zAmHGceo65OoPPa4tUqawrI0OiuHrxH_wKVyJ2NCEv_bnvFUeuwbPX8liS2XGC_sfuBUJdh48leGihuC8UixzwBHtjPtxuhQnE1OTekd78nUr-eqQWPII3KoEhCv9Ixq_3zcDqMtEGFJLSN4GhSExSvn9LvQFJga4bqAmtqCYn7gAg";
+            // $top_img_url =  $top_img_url."&".$photo_ref;
+            // echo "<img src=$top_img_url>";
+            ?>
         </div>
-        <div class = "ratings-line">
-            <span class = "rating rating-left">
-                <span>接客</span>
-                <span class="range">
-                    <input type="range" min="0" max="5" value="0">
-                    <span>0</span>
-                </span>
-            </span>
-            <span class = "rating">
-                <span>デザイン</span>
-                <span class="range">
-                    <input type="range" min="0" max="5" value="0">
-                    <span>0</span>
-                </span>
-            </span>
+        <div class = "header-title-description">
+            <h1 class = "header-title" id = "header-title">place name</h1>
+            <span id="place_address">address</span>
         </div>
-    </div>
-    <div>
-        <textarea class="place_note" rows="5"></textarea>
-    </div>
-    <div>
-        <input type="submit" value="保存">
+        
+        <div class = "ratings">
+            <div class = "ratings-line">
+                <span class = "rating rating-left">
+                    <span>味</span>
+                    <span class="range">
+                        <input type="range" min="0" max="5" value="0">
+                    </span>
+                    <span class="section-rating-value">0</span>
+                </span>
+                <span class = "rating section-rating-inline-right">
+                    <span>コスパ</span>
+                    <span class="range">
+                        <input type="range" min="0" max="5" value="0">
+                    </span>
+                    <span class="section-rating-value">0</span>
+                </span>
+            </div>
+            <div class = "ratings-line">
+                <span class = "rating rating-left">
+                    <span>接客</span>
+                    <span class="range">
+                        <input type="range" min="0" max="5" value="0">
+                    </span>
+                    <span class="section-rating-value">0</span>
+                </span>
+                <span class = "rating section-rating-inline-right">
+                    <span>デザイン</span>
+                    <span class="range">
+                        <input type="range" min="0" max="5" value="0">
+                    </span>
+                    <span class="section-rating-value">0</span>
+                </span>
+            </div>
+        </div>
+        <div class="section-note-note-content">
+            <textarea class="section-note-text" rows="5"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="保存">
+        </div>
     </div>
 </div>
 
