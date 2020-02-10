@@ -1,8 +1,9 @@
 
 @section('sidebar')
-
-<div class="sidebar left" >
-    <div class="section-sidebar-left-content">
+<script>
+</script>
+<div class="sidebar left scroll_box" >
+    <div class="section-sidebar-left-content inner">
         <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
         <div class = "header-image">
             <img id = "header-image" src="">
@@ -53,7 +54,7 @@
             </div>
         </div>
         <div class="section-note-note-content">
-            <textarea class="section-note-text" rows="5"></textarea>
+            <textarea class="section-note-text" rows="20"></textarea>
         </div>
         <div>
             <input type="submit" value="保存">
@@ -61,6 +62,9 @@
     </div>
 </div>
 
+<script>
+    // var ps = new PerfectScrollbar('.scroll_box');
+</script>
 <script>
     $(document).ready(function () {
         // 向き
