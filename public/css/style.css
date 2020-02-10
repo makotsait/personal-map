@@ -130,6 +130,10 @@ span{
     margin-bottom: 5px;
     position: absolute;
 }
+.login{
+    left: 20px;
+    position: absolute;
+}
 .section-submit-btn{
     left: 350px;
 } 

@@ -56,6 +56,9 @@
             <textarea class="section-note-text" rows="20"></textarea>
         </div>
         <div class="section-submit-cancel-btn-line">
+            <span class="login">
+                <a link rel="login" href="">ログイン</a>
+            </span>
             <input type="submit" class="section-submit-btn section-submit-cancel-btn" value="Save">
             <input type="submit" class="section-cancel-btn section-submit-cancel-btn" value="Cancel">
         </div>
