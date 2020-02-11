@@ -50,8 +50,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'user_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'user_name' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -68,25 +68,25 @@ class RegisterController extends Controller
             'user_name' => $data['user_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'status' => 0,
+            'status' => '0',
         ]);
     }
 
     // override
-    public function register(Request $request)
-    {
-        $this->validator($request->all())->validate();
+    // public function register(Request $request)
+    // {
+    //     $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+    //     event(new Registered($user = $this->create($request->all())));
 
-        $this->guard()->login($user);
+    //     $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
-    }
+    //     return $this->registered($request, $user)
+    //                     ?: redirect($this->redirectPath());
+    // }
     // override
-    protected function registered(Request $request, $user)
-    {
-        //
-    }
+    // protected function registered(Request $request, $user)
+    // {
+    //     //
+    // }
 }
