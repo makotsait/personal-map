@@ -11,9 +11,9 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/home', function () {
+    return view('welcome');
+});
 
 Route::get('/', 'MapController@index');
 Route::get('test', 'PostController@index');
@@ -22,5 +22,5 @@ Route::get('test', 'PostController@index');
 Route::post('get_place_detail', 'PlaceApiController@getPlaceDetail')->name('get_place_detail');
 Route::get('get_header_image', 'PlaceApiController@getHeaderImage')->name('get_header_image');
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
