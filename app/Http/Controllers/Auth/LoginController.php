@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -38,6 +39,18 @@ class LoginController extends Controller
     }
     public function username()
     {
-        return 'user_name';
+        $login_id = request()->input('login_id');
+        $field = filter_var($login_id, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+        // 利用中ユーザのみがログインできるようにする
+        request()->merge([$field => $login_id, 'status' => 0]);
+        return $field;
+    }
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password', 'status');
+    }
+    public function redirectPath()
+    {
+        return '/home';
     }
 }
