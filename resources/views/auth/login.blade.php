@@ -20,7 +20,7 @@
                             <label for="user_name" class="col-md-4 col-form-label text-md-right">User Name/email</label>
 
                             <div class="col-md-6">
-                                <input id="login_id" type="text" class="form-control @error('user_name') is-invalid @enderror" name="login_id" value="{{ old('login_id') }}" required autocomplete="user_name" autofocus>
+                                <input id="login_id" type="text" class="form-control @error('login_id') is-invalid @enderror" name="login_id" value="{{ old('login_id') }}" required autocomplete="on" autofocus>
 
                                 @error('user_name')
                                 <span class="invalid-feedback" role="alert">
