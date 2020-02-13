@@ -15,7 +15,7 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-Route::get('/', 'MapController@index');
+Route::get('/', 'MapController@index')->name('index');
 Route::get('test', 'PostController@index');
 // Route::get('test', 'TestController@test')->name('test');
 // Route::post('test', 'PlaceApiController@test')->name('test');
@@ -24,3 +24,11 @@ Route::get('get_header_image', 'PlaceApiController@getHeaderImage')->name('get_h
 
 // Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
+
+Route::prefix('ratings')->group(function () {
+    // フォーム表示用
+    // Route::get('add', 'PostController@addForm');
+    // POSTデータを受け取る用
+    Route::post('update', 'PostController@updateRatings');
+    // Route::get('edit{id}', 'PostController@updateRatings');
+});
