@@ -17,7 +17,7 @@ class CreateRatingsTable extends Migration
             $table->increments('rating_id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('place_id');
-            $table->unsignedInteger('criteria_id');
+            $table->unsignedInteger('criterion_id');
             $table->unsignedInteger('rating');
             $table->timestamps();
             $table->unsignedInteger('status');
