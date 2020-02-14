@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ratings;
+use App\Models\Rating;
 
 class PostController extends Controller
 {
@@ -15,14 +15,6 @@ class PostController extends Controller
 
     public function createRatings(Request $request)
     {
-        //バリデーション
-        $validatedData = $request->validate([
-            // 'title' => 'required|string|max:200',
-            'criterion1' => 'between:0,5',
-            'criterion2' => 'between:0,5',
-            'criterion3' => 'between:0,5',
-            'criterion4' => 'between:0,5'
-        ]);
         // レコード登録処理
         for ($i = 1; $i <= $request->num_criteria; $i++) {
             $post = new Ratings();
@@ -38,12 +30,16 @@ class PostController extends Controller
     }
     public function updateRatings(Request $request)
     {
+        // $rating = Ratings::where('user_id',  $request->user_id)->where('place_id', $request->place_id)->where('criterion_id', $criterion_id)->first();
+        // if (is_null($rating)) {
+        // }
         for ($i = 1; $i <= $request->num_criteria; $i++) {
+
             $criterion_num = 'criterion' . $i;
             $criterion_id = $i;
-            $rating = Ratings::where('user_id',  $request->user_id)->where('place_id', $request->place_id)->where('criterion_id', $criterion_id)->first();
+            $rating = Rating::where('user_id',  $request->user_id)->where('place_id', $request->place_id)->where('criterion_id', $criterion_id)->first();
             if (is_null($rating)) {
-                $rating = new Ratings();
+                $rating = new Rating();
                 $rating->user_id = $request->user_id;
                 $rating->place_id = $request->place_id;
                 $rating->criterion_id = $criterion_id;
