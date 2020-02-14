@@ -18,7 +18,7 @@
         </div>
 
         <form method="POST" action="ratings/update">
-            <input type="hidden" name="user_id" value="10">
+            <input type="hidden" name="user_id" value="12">
             <input type="hidden" name="place_id" value="2">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="num_criteria" value="2">
