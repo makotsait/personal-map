@@ -17,7 +17,7 @@ class CreateNotesTable extends Migration
             $table->increments('note_id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('place_id');
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->unsignedInteger('status');
         });

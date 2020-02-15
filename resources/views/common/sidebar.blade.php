@@ -18,10 +18,11 @@
         </div>
 
         <form method="POST" action="ratings/update">
-            <input type="hidden" name="user_id" value="12">
+            <input type="hidden" name="user_id" value="17">
             <input type="hidden" name="place_id" value="2">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="num_criteria" value="2">
+            <input type="hidden" name="google_place_id" value="ChIJNysA7lyOGGARcfvoCr_5XuI">
             @csrf
             <div class="ratings">
                 <div class="ratings-line">
@@ -58,7 +59,7 @@
                 </div>
             </div>
             <div class="section-note-note-content">
-                <textarea class="section-note-text" rows="20"></textarea>
+                <textarea name="place_note" class="section-note-text" rows="20"></textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
                 <span class="login">
