@@ -15,8 +15,8 @@ class CreatePlaceTypesTable extends Migration
     {
         Schema::create('place_types', function (Blueprint $table) {
             $table->increments('place_type_id');
-            $table->text('palace_type_name_en');
-            $table->text('palace_type_name_jp');
+            $table->text('place_type_name_en');
+            $table->text('place_type_name_ja')->nullable();
             $table->timestamps();
             $table->unsignedInteger('status');
         });
