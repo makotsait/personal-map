@@ -17,40 +17,56 @@
             <span id="place_address">address</span>
         </div>
 
-        <form method="POST" action="ratings/update">
-            <input type="hidden" name="user_id" value="17">
-            <input type="hidden" name="place_id" value="2">
-            <input type="hidden" name="criterion_id" value="2">
-            <input type="hidden" name="num_criteria" value="2">
-            <input type="hidden" name="google_place_id" value="ChIJNysA7lyOGGARcfvoCr_5XuI">
+        <form action="ratings/update" method="POST">
             @csrf
+            <input type="hidden" name="user_id" value="19">
+            <input type="hidden" name="place_id" value="1">
+            <input type="hidden" name="criterion_id" value="1">
+            <input type="hidden" name="num_criteria" value="2">
+            <input type="hidden" name="google_place_id" value="ChIJ__SmPqeOGGAR42HgD-XxuV4">
             <div class="ratings">
-                <div class="ratings-line">
-                    <span class="rating rating-left">
-                        <span>味</span>
+                <div class="ratings-line" id="section-ratings-line-1">
+                    <span class="rating rating-left" id="section-rating-group-1">
+                        <span>要素1</span>
                         <span class="range">
                             <input type="range" name="criterion1" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
-                    <span class="rating section-rating-inline-right">
-                        <span>コスパ</span>
+                    <span class="rating section-rating-inline-right" id="section-rating-group-2">
+                        <span>要素2</span>
                         <span class="range">
                             <input type="range" name="criterion2" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                 </div>
-                <div class="ratings-line">
-                    <span class="rating rating-left">
-                        <span>接客</span>
+                <div class="ratings-line" id="section-ratings-line-2">
+                    <span class="rating rating-left" id="section-rating-group-3">
+                        <span>要素3</span>
                         <span class="range">
                             <input type="range" name="criterion3" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
-                    <span class="rating section-rating-inline-right">
-                        <span>デザイン</span>
+                    <span class="rating section-rating-inline-right" id="section-rating-group-4">
+                        <span>要素4</span>
+                        <span class="range">
+                            <input type="range" name="criterion4" min="0" max="5" value="0">
+                        </span>
+                        <span class="section-rating-value">0</span>
+                    </span>
+                </div>
+                <div class="ratings-line" id="section-ratings-line-3">
+                    <span class="rating rating-left" id="section-rating-group-5">
+                        <span>要素5</span>
+                        <span class="range">
+                            <input type="range" name="criterion3" min="0" max="5" value="0">
+                        </span>
+                        <span class="section-rating-value">0</span>
+                    </span>
+                    <span class="rating section-rating-inline-right" id="section-rating-group-6">
+                        <span>要素6</span>
                         <span class="range">
                             <input type="range" name="criterion4" min="0" max="5" value="0">
                         </span>
@@ -76,6 +92,28 @@
     // perfect-scrollbrの処理
     // var ps = new PerfectScrollbar('.scroll_box');
 </script>
+<!-- <script>
+    function getRatings() {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('get_ratings')}}",
+            data: {
+                user_id: 1,
+                google_place_id: 'ChIJ__SmPqeOGGAR42HgD-XxuV4'
+            },
+            success: function(data) {
+                alert(data);
+            },
+            error: function() {
+                //取得失敗時に実行する処理
+                alert("取得失敗2");
+            }
+        });
+    }
+    // var greet = document.getElementById('greet')
+    // greet.innerHTML = '<h1>こんにちは～～</h1>'
+</script> -->
+
 <script>
     $(document).ready(function() {
         // 向き
