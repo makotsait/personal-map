@@ -93,7 +93,7 @@
           place_name_text.innerHTML = data["result"]["name"];
           address_text.innerHTML = data["result"]["formatted_address"];
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-          getRatings();
+          // getRatings();
         },
         error: function() {
           //取得失敗時に実行する処理
@@ -176,7 +176,7 @@
         });
         var value1 = 'hoge';
         getPlaceDetail(place.place_id);
-        // getRatings();  
+        getRatings();
 
         marker.setVisible(true);
 
@@ -189,7 +189,7 @@
     }
   </script>
 
-  <script>
+  <!-- <script>
     $.ajax({
       type: 'GET',
       url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap',
@@ -203,7 +203,7 @@
         console.log("何らかの理由で失敗しました");
       }
     });
-  </script>
+  </script> -->
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap" async defer></script>
 </body>

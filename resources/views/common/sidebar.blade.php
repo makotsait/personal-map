@@ -19,24 +19,24 @@
 
         <form action="ratings/update" method="POST">
             @csrf
-            <input type="hidden" name="user_id" value="19">
-            <input type="hidden" name="place_id" value="1">
-            <input type="hidden" name="criterion_id" value="1">
-            <input type="hidden" name="num_criteria" value="2">
-            <input type="hidden" name="google_place_id" value="ChIJ__SmPqeOGGAR42HgD-XxuV4">
+            <input type="hidden" name="user_id" value="23">
+            <!-- <input type="hidden" name="place_id" value="2"> -->
+            <input type="hidden" name="criterion_id" value="2">
+            <!-- <input type="hidden" name="num_criteria" value="2"> -->
+            <input type="hidden" name="google_place_id" value="ChIJC3Cf2PuLGGAROO00ukl8JwA">
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
                         <span>要素1</span>
                         <span class="range">
-                            <input type="range" name="criterion1" min="0" max="5" value="0">
+                            <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
                         <span>要素2</span>
                         <span class="range">
-                            <input type="range" name="criterion2" min="0" max="5" value="0">
+                            <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
@@ -45,19 +45,19 @@
                     <span class="rating rating-left" id="section-rating-group-3">
                         <span>要素3</span>
                         <span class="range">
-                            <input type="range" name="criterion3" min="0" max="5" value="0">
+                            <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
                         <span>要素4</span>
                         <span class="range">
-                            <input type="range" name="criterion4" min="0" max="5" value="0">
+                            <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="0">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                 </div>
-                <div class="ratings-line" id="section-ratings-line-3">
+                <!-- <div class="ratings-line" id="section-ratings-line-3">
                     <span class="rating rating-left" id="section-rating-group-5">
                         <span>要素5</span>
                         <span class="range">
@@ -72,7 +72,7 @@
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
-                </div>
+                </div> -->
             </div>
             <div class="section-note-note-content">
                 <textarea name="place_note" class="section-note-text" rows="20"></textarea>
@@ -92,17 +92,24 @@
     // perfect-scrollbrの処理
     // var ps = new PerfectScrollbar('.scroll_box');
 </script>
-<!-- <script>
+<script>
     function getRatings() {
         $.ajax({
             type: 'GET',
             url: "{{route('get_ratings')}}",
             data: {
-                user_id: 1,
-                google_place_id: 'ChIJ__SmPqeOGGAR42HgD-XxuV4'
+                user_id: 23,
+                google_place_id: 'ChIJC3Cf2PuLGGAROO00ukl8JwA'
             },
+            dataType: 'JSON',
             success: function(data) {
-                alert(data);
+                // console.log(data);
+                for (let i = 1; i <= data['num_of_criteria']; i++) {
+                    // alert(data['rating'][i]['rating']);
+                    var elem_id = 'criterion' + i;
+                    document.getElementById(elem_id).value = data['rating'][i]['rating'];
+                }
+
             },
             error: function() {
                 //取得失敗時に実行する処理
@@ -110,9 +117,7 @@
             }
         });
     }
-    // var greet = document.getElementById('greet')
-    // greet.innerHTML = '<h1>こんにちは～～</h1>'
-</script> -->
+</script>
 
 <script>
     $(document).ready(function() {
