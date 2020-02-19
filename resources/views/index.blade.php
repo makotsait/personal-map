@@ -92,6 +92,7 @@
         success: function(data) {
           place_name_text.innerHTML = data["result"]["name"];
           address_text.innerHTML = data["result"]["formatted_address"];
+          // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
           // getRatings();
         },
@@ -107,17 +108,18 @@
     function getPlaceHeaderImg(photoreference) {
       $.ajax({
         type: 'GET',
-        url: "{{route('get_ratings')}}",
+        url: "{{route('get_header_image')}}",
         data: {
           photoreference: photoreference
         },
         success: function(data) {
           // alert(data);
+          console.log('headerimgurl:'.data);
           place_header_image.setAttribute('src', data);
         },
         error: function() {
           //取得失敗時に実行する処理
-          // alert("取得失敗");
+          alert("画像取得失敗");
         }
       });
     }
@@ -176,7 +178,7 @@
         });
         var value1 = 'hoge';
         getPlaceDetail(place.place_id);
-        getRatings();
+        getRatings(place.place_id);
 
         marker.setVisible(true);
 
@@ -184,6 +186,7 @@
         infowindowContent.children['place-id'].textContent = place.place_id;
         infowindowContent.children['place-address'].textContent =
           place.formatted_address;
+        document.getElementById('google_place_id').value = place.place_id;
         infowindow.open(map, marker);
       });
     }
