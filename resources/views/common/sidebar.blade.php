@@ -74,8 +74,8 @@
                     </span>
                 </div> -->
             </div>
-            <div class="section-note-note-content">
-                <textarea name="place_note" class="section-note-text" rows="20"></textarea>
+            <div class="section-note-note-content" id="section-note-note-content">
+                <textarea name="place_note" class="section-note-text" id="section-note-text" rows="20"></textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
                 <span class="login">
@@ -104,11 +104,15 @@
             dataType: 'JSON',
             success: function(data) {
                 // console.log(data);
+                var rating_values = document.getElementsByClassName('section-rating-value');
                 for (let i = 1; i <= data['num_of_criteria']; i++) {
                     // alert(data['rating'][i]['rating']);
+                    var rating = data['rating'][i]['rating'];
                     var elem_id = 'criterion' + i;
-                    document.getElementById(elem_id).value = data['rating'][i]['rating'];
+                    document.getElementById(elem_id).value = rating;
+                    rating_values[i - 1].innerHTML = rating;
                 }
+                document.getElementById("section-note-text").value = data['note'];
 
             },
             error: function() {
@@ -147,14 +151,15 @@
 <!-- スライドバーに評価値を表示するスクリプト -->
 <script>
     var elem = document.getElementsByClassName('range');
-    var rangeValue = function(elem, target) {
+    var rating_values = document.getElementsByClassName('section-rating-value');
+    var rangeValue = function(bar, target) {
         return function(evt) {
-            target.innerHTML = elem.value;
+            target.innerHTML = bar.value;
         }
     }
     for (var i = 0; i < elem.length; i++) {
         bar = elem[i].getElementsByTagName('input')[0];
-        target = elem[i].getElementsByTagName('span')[0];
+        target = rating_values[i];
         bar.addEventListener('input', rangeValue(bar, target));
     }
 </script>
