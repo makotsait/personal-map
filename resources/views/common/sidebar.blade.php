@@ -8,7 +8,7 @@
             <?php
             // $top_img_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
             // $photo_ref = "photoreference=CmRaAAAAiVgVE_r8zAmHGceo65OoPPa4tUqawrI0OiuHrxH_wKVyJ2NCEv_bnvFUeuwbPX8liS2XGC_sfuBUJdh48leGihuC8UixzwBHtjPtxuhQnE1OTekd78nUr-eqQWPII3KoEhCv9Ixq_3zcDqMtEGFJLSN4GhSExSvn9LvQFJga4bqAmtqCYn7gAg";
-            // $top_img_url =  $top_img_url."&".$photo_ref;
+            // $top_img_url =  $top_img_url . "&" . $photo_ref;
             // echo "<img src=$top_img_url>";
             ?>
         </div>
@@ -23,7 +23,7 @@
             <!-- <input type="hidden" name="place_id" value="2"> -->
             <input type="hidden" name="criterion_id" value="2">
             <!-- <input type="hidden" name="num_criteria" value="2"> -->
-            <input type="hidden" name="google_place_id" value="ChIJC3Cf2PuLGGAROO00ukl8JwA">
+            <input type="hidden" name="google_place_id" id="google_place_id" value="a">
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
@@ -93,13 +93,13 @@
     // var ps = new PerfectScrollbar('.scroll_box');
 </script>
 <script>
-    function getRatings() {
+    function getRatings(google_place_id) {
         $.ajax({
             type: 'GET',
             url: "{{route('get_ratings')}}",
             data: {
                 user_id: 23,
-                google_place_id: 'ChIJC3Cf2PuLGGAROO00ukl8JwA'
+                google_place_id: google_place_id
             },
             dataType: 'JSON',
             success: function(data) {
