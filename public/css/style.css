@@ -142,3 +142,8 @@ span{
     left: 411px;
     position: absolute;
 } 
+
+.section-logout-btn{
+    margin-left: 20px;
+    height: 27px;
+}
