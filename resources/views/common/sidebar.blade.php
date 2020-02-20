@@ -15,9 +15,22 @@
         <div class="header-title-description">
             <h1 class="header-title" id="header-title">place name</h1>
             <span id="place_address">address</span>
+
+            <div include="form-input-select()">
+                <select required id="section-place-type">
+                    <option value="" hidden>Place type</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                    <option value="5">Option 5</option>
+                </select>
+            </div>
         </div>
 
-        <form action="ratings/update" method="POST">
+
+
+        <form action="ratings/update" method="POST" class="section">
             @csrf
             <input type="hidden" name="user_id" value="23">
             <!-- <input type="hidden" name="place_id" value="2"> -->
@@ -103,7 +116,7 @@
             },
             dataType: 'JSON',
             success: function(data) {
-                // console.log(data);
+                console.log(data);
                 var rating_values = document.getElementsByClassName('section-rating-value');
                 for (let i = 1; i <= data['num_of_criteria']; i++) {
                     // alert(data['rating'][i]['rating']);
@@ -113,6 +126,14 @@
                     rating_values[i - 1].innerHTML = rating;
                 }
                 document.getElementById("section-note-text").value = data['note'];
+                setPlaceType(data['place_types']);
+                // console.log(data['place_types']);
+                // place_types = data['place_types'];
+                // // console.log(place_types1[1]);
+                // for (var i in place_types) {
+                //     place_types[i];
+                // }
+
 
             },
             error: function() {
@@ -120,6 +141,25 @@
                 alert("取得失敗2");
             }
         });
+    }
+
+    function setPlaceType(place_types) {
+        var dropdown = document.getElementById('section-place-type');
+        // 子要素の削除
+        while (dropdown.firstChild) {
+            dropdown.removeChild(dropdown.firstChild);
+        }
+        // 子要素の新規追加
+        for (var i = 0; i < Object.keys(place_types).length; i++) {
+            var option = document.createElement('option');
+            option.value = i + 1;
+            option.innerHTML = place_types[i];
+            if (i == 0) {
+                option.setAttribute("selected", "");
+            }
+            dropdown.appendChild(option);
+        }
+
     }
 </script>
 

@@ -109,10 +109,16 @@ class PostController extends Controller
         } else {
             $items['note'] = '';
         }
-        // $json = json_encode(array(
-        //     "foo" => "bar",
-        //     "bar" => "foo",
-        // ));
+
+
+        // 施設タイプ一覧の取得
+        $place_types = PlaceType::all();
+        $i = 0;
+        foreach ($place_types as $place_type) {
+            $items['place_types'][$i] = $place_type->place_type_name_ja;
+            $i++;
+        }
+
         return json_encode($items);
     }
 

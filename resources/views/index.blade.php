@@ -94,7 +94,8 @@
           address_text.innerHTML = data["result"]["formatted_address"];
           // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-          // getRatings();
+
+
         },
         error: function() {
           //取得失敗時に実行する処理
