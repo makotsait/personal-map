@@ -91,12 +91,17 @@
                 <textarea name="place_note" class="section-note-text" id="section-note-text" rows="20"></textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
-                <span class="login">
-                    <a link rel="login" href="">ログイン</a>
-                </span>
+
+                <!-- <span class="login">
+                    <a link rel="login" href="{{route('logout')}}">ログアウト</a>
+                </span> -->
                 <input type="submit" class="section-submit-btn section-submit-cancel-btn" value="Save">
                 <input type="submit" class="section-cancel-btn section-submit-cancel-btn" value="Cancel">
             </div>
+        </form>
+        <form action="/logout" method="post">
+            @csrf
+            <div><input type="submit" value="Logout" class="section-logout-btn"></div>
         </form>
     </div>
 </div>
@@ -127,6 +132,7 @@
                 }
                 document.getElementById("section-note-text").value = data['note'];
                 setPlaceType(data['place_types']);
+                // console.log(Auth::check());
                 // console.log(data['place_types']);
                 // place_types = data['place_types'];
                 // // console.log(place_types1[1]);
