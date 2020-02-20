@@ -1,7 +1,8 @@
 <?php
-function searchPlace($place_id) {
+function searchPlace($place_id)
+{
 	$api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-	// $place_id="ChIJH7qx1tCMGGAR1f2s7PGhMhw";
+	$place_id = $place_id;
 	// $keyword = urlencode($keyword);
 	// $url = "https://maps.googleapis.com/maps/api/place/textsearch/json?key={$api_key}&query={$keyword}";
 	$url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$place_id}&language=ja";
@@ -12,13 +13,16 @@ function searchPlace($place_id) {
 // place detailのjson取得
 // $url = "https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&place_id=ChIJH7qx1tCMGGAR1f2s7PGhMhw&language=ja";
 // place head imgの取得
-$url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&photoreference=CmRaAAAArHCqh8wKJg94Bv_ksvzAhz1IW03ygjkY8UPOKdSwsRRCa_Gx4yLXVqMxuo7XyfNL4djtVFOL8Q-nze21zxQGvNlPfbct8Wm8x-k1XHBBnsw1QhTgBehNpYcQ26DjWEqHEhBPNkoyy9_wRyKnAM9iZaiOGhSUkCtenJ81LJXNoEcsrU-ZB8e98A";
-$header=get_headers($url);
-print_r($header);
-$img_url = preg_replace('@^Location: @','',$header[5]);
-echo $img_url;
-// $array = searchPlace("ChIJH7qx1tCMGGAR1f2s7PGhMhw");
-// var_dump($array);
+
+// $url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&photoreference=CmRaAAAArHCqh8wKJg94Bv_ksvzAhz1IW03ygjkY8UPOKdSwsRRCa_Gx4yLXVqMxuo7XyfNL4djtVFOL8Q-nze21zxQGvNlPfbct8Wm8x-k1XHBBnsw1QhTgBehNpYcQ26DjWEqHEhBPNkoyy9_wRyKnAM9iZaiOGhSUkCtenJ81LJXNoEcsrU-ZB8e98A";
+// $header=get_headers($url);
+// print_r($header);
+// $img_url = preg_replace('@^Location: @','',$header[5]);
+// echo $img_url;
+echo 'Google_place_id:';
+$stdin = trim(fgets(STDIN));
+$array = searchPlace($stdin);
+var_dump($array);
 // echo($array["result"]["photos"][0]["photo_reference"]);
 // $opening_hours = $array["result"]["opening_hours"]["weekday_text"];
 // // var_dump($opening_hours);
