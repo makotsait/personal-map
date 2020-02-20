@@ -47,17 +47,6 @@ class PostController extends Controller
 
     public function createCriteriaOrder($user_id, $place_type_id)
     {
-        // $defalut_set = [
-        //     ['taste', '味'], ['hospitality', '対応の良さ'], ['good_deal', 'コスパ'], ['stylishness', 'おしゃれさ']
-        // ];
-        // $criterion = Criterion::where('criterion_id', $google_place_id)->where('status', 0)->first();
-        // foreach ($defalut_set as $item) {
-        //     $criterion = new Criterion();
-        //     $criterion->criterion_name_en = $item[0];
-        //     $criterion->criterion_name_ja = $item[1];
-        //     $criterion->status = 0;
-        //     $criterion->save();
-        // }
 
         // $criterion_id_list = [1, 2, 3, 4];
         // foreach ($criterion_id_list as $criterion_id) {
