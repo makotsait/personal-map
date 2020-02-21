@@ -138,12 +138,17 @@ span{
 .section-submit-btn{
     left: 350px;
 } 
+.section-logout-btn{
+    height: 27px;
+    margin-left: 20px;
+    display: inline-block;
+}
 .section-cancel-btn{
-    left: 411px;
-    position: absolute;
+    margin-left: 330px;
+    position: static;
 } 
 
-.section-logout-btn{
-    margin-left: 20px;
+.btn-default{
+    width: 55px;
     height: 27px;
 }

@@ -75,8 +75,11 @@ class PostController extends Controller
 
     public function getRatings()
     {
-
+        // $user = Auth::user();
+        // return ($user);
+        // $user_id = $user->user_id;
         $user_id = $_GET['user_id'];
+        // $user_id = Auth::id();
         $google_place_id = $_GET['google_place_id'];
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         $rating = Rating::where('user_id',  $user_id)->where('place_id', $place->place_id)->where('status', 0)->first();

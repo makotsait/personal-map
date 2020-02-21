@@ -95,14 +95,14 @@
                 <!-- <span class="login">
                     <a link rel="login" href="{{route('logout')}}">ログアウト</a>
                 </span> -->
-                <input type="submit" class="section-submit-btn section-submit-cancel-btn" value="Save">
-                <input type="submit" class="section-cancel-btn section-submit-cancel-btn" value="Cancel">
+                <input type="submit" class="btn-default section-submit-btn section-submit-cancel-btn" value="Save">
             </div>
         </form>
-        <form action="/logout" method="post">
+        <form action="/logout" method="post" class="section-logout-btn">
             @csrf
-            <div><input type="submit" value="Logout" class="section-logout-btn"></div>
+            <input type="submit" value="Logout" class="btn-default">
         </form>
+        <button type="button" Class="btn-default section-cancel-btn" id="cancel-btn">Cancel</button>
     </div>
 </div>
 
@@ -124,7 +124,6 @@
                 console.log(data);
                 var rating_values = document.getElementsByClassName('section-rating-value');
                 for (let i = 1; i <= data['num_of_criteria']; i++) {
-                    // alert(data['rating'][i]['rating']);
                     var rating = data['rating'][i]['rating'];
                     var elem_id = 'criterion' + i;
                     document.getElementById(elem_id).value = rating;
@@ -132,14 +131,6 @@
                 }
                 document.getElementById("section-note-text").value = data['note'];
                 setPlaceType(data['place_types']);
-                // console.log(Auth::check());
-                // console.log(data['place_types']);
-                // place_types = data['place_types'];
-                // // console.log(place_types1[1]);
-                // for (var i in place_types) {
-                //     place_types[i];
-                // }
-
 
             },
             error: function() {
@@ -208,6 +199,12 @@
         target = rating_values[i];
         bar.addEventListener('input', rangeValue(bar, target));
     }
+
+    // 入力・ 更新のキャンセル
+    document.getElementById("cancel-btn").onclick = function() {
+        var google_place_id = document.getElementById('google_place_id').value;
+        getRatings(google_place_id);
+    };
 </script>
 
 @show

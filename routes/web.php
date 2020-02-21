@@ -25,25 +25,6 @@ Route::get('get_header_image', 'PlaceApiController@getHeaderImage')->name('get_h
 // Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
-// Route::group(['prefix' => 'user'], function () {
-
-// Route::group(['middleware' => 'auth'], function () {
-//     Route::get('', 'PostController');
-// });
-//         // ユーザープロファイル
-//         // // ＃こういう書き方もあるらしい
-//         // Route::get('/profile', [
-//         //     'uses' => 'UserController@getProfile',
-//         //     'as' => 'user.profile'
-//         // ]);
-//         
-
-//         // ログアウト
-//         Route::get('/logout', [
-//             'uses' => 'UserController@getLogout',
-//             'as' => 'user.logout'
-//         ]);
-//     });
 
 Route::prefix('ratings')->group(function () {
     // フォーム表示用
@@ -55,7 +36,3 @@ Route::prefix('ratings')->group(function () {
 
     // Route::get('edit{id}', 'PostController@updateRatings');
 });
-
-// Route::group(['middleware' => ['auth', 'can:user']], function () {
-//     Route::resource('', 'PostController');
-// });
