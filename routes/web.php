@@ -15,17 +15,35 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-Route::get('/', 'MapController@index')->name('index');
+Route::get('/', 'MapController@index')->middleware('auth')->name('index');
 Route::get('test', 'PostController@index');
 // Route::get('test', 'TestController@test')->name('test');
 // Route::post('test', 'PlaceApiController@test')->name('test');
 Route::post('get_place_detail', 'PlaceApiController@getPlaceDetail')->name('get_place_detail');
 Route::get('get_header_image', 'PlaceApiController@getHeaderImage')->name('get_header_image');
 
-
-
 // Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
+
+// Route::group(['prefix' => 'user'], function () {
+
+// Route::group(['middleware' => 'auth'], function () {
+//     Route::get('', 'PostController');
+// });
+//         // ユーザープロファイル
+//         // // ＃こういう書き方もあるらしい
+//         // Route::get('/profile', [
+//         //     'uses' => 'UserController@getProfile',
+//         //     'as' => 'user.profile'
+//         // ]);
+//         
+
+//         // ログアウト
+//         Route::get('/logout', [
+//             'uses' => 'UserController@getLogout',
+//             'as' => 'user.logout'
+//         ]);
+//     });
 
 Route::prefix('ratings')->group(function () {
     // フォーム表示用
@@ -37,3 +55,7 @@ Route::prefix('ratings')->group(function () {
 
     // Route::get('edit{id}', 'PostController@updateRatings');
 });
+
+// Route::group(['middleware' => ['auth', 'can:user']], function () {
+//     Route::resource('', 'PostController');
+// });

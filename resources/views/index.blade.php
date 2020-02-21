@@ -95,7 +95,6 @@
           // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
 
-
         },
         error: function() {
           //取得失敗時に実行する処理

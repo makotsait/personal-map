@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Models\Rating;
 use App\Models\Place;
@@ -16,8 +18,12 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $items = PostRatings::all();
-        return view('', ['items' => $items]);
+        // $items = PostRatings::all();
+        // return view('', ['items' => $items]);
+    }
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
     public function insertPlace($google_place_id)
@@ -69,6 +75,7 @@ class PostController extends Controller
 
     public function getRatings()
     {
+
         $user_id = $_GET['user_id'];
         $google_place_id = $_GET['google_place_id'];
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
@@ -118,6 +125,8 @@ class PostController extends Controller
             $items['place_types'][$i] = $place_type->place_type_name_ja;
             $i++;
         }
+
+        $items['user_id'] = Auth::id();
 
         return json_encode($items);
     }
