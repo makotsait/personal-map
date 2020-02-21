@@ -121,6 +121,9 @@
             },
             dataType: 'JSON',
             success: function(data) {
+                if (data == 'nodata') {
+                    // ratingデータが無いときの処理
+                }
                 console.log(data);
                 var rating_values = document.getElementsByClassName('section-rating-value');
                 for (let i = 1; i <= data['num_of_criteria']; i++) {
@@ -135,7 +138,8 @@
             },
             error: function() {
                 //取得失敗時に実行する処理
-                alert("取得失敗2");
+                console.log('ratingの取得失敗');
+                // alert("ratingの取得失敗");
             }
         });
     }
