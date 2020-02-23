@@ -17,6 +17,7 @@ Route::get('/home', function () {
 
 Route::get('/', 'MapController@index')->middleware('auth')->name('index');
 Route::get('test', 'PostController@index');
+Route::get('get_place_type_options', 'PostController@getPlaceTypeOpions')->name('get.place.type.options');
 // Route::get('test', 'TestController@test')->name('test');
 // Route::post('test', 'PlaceApiController@test')->name('test');
 Route::post('get_place_detail', 'PlaceApiController@getPlaceDetail')->name('get_place_detail');

@@ -74,13 +74,23 @@ class PostController extends Controller
         }
     }
 
+    public function getPlaceTypeOpions()
+    {
+        $items = array();
+        $place_types = PlaceType::all();
+        $i = 0;
+        foreach ($place_types as $place_type) {
+            $items[$i] = $place_type->place_type_name_ja;
+            $i++;
+        }
+        return json_encode($items);
+    }
+
     public function getRatings()
     {
-        // $user = Auth::user();
-        // return ($user);
-        // $user_id = $user->user_id;
-        $user_id = $_GET['user_id'];
-        // $user_id = Auth::id();
+        $user = Auth::user();
+        $user_id = $user->user_id;
+        // $user_id = $_GET['user_id'];
         $google_place_id = $_GET['google_place_id'];
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place)) return 'place not found in db';
@@ -125,24 +135,28 @@ class PostController extends Controller
 
     public function updateRatings(Request $request)
     {
-        $user_id = $request->user_id;
+        $user = Auth::user();
+        $user_id = $user->user_id;
+        // $user_id = $request->user_id;
         $google_place_id = $request->google_place_id;
+        $place_type_id = $request->place_type_id;
+        // $place_type_id = $_GET['place_type_id'];
         $place = Place::where('google_place_id', $google_place_id)->first();
         if (is_null($place)) {
             $api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
             $url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$google_place_id}&language=ja";
             $place_detail = json_decode(file_get_contents($url), true);
             $place_name = $place_detail["result"]["name"];
-            $place_type_name_en = $place_detail["result"]["types"][0];
-            $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-            if (is_null($place_type)) {
-                $place_type = new PlaceType();
-                $place_type->place_type_name_en = $place_type_name_en;
-                $place_type->status = 0;
-                $place_type->save();
-                $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-            }
-            $place_type_id = $place_type->place_type_id;
+            // $place_type_name_en = $place_detail["result"]["types"][0];
+            // $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
+            // if (is_null($place_type)) {
+            //     $place_type = new PlaceType();
+            //     $place_type->place_type_name_en = $place_type_name_en;
+            //     $place_type->status = 0;
+            //     $place_type->save();
+            //     $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
+            // }
+            // $place_type_id = $place_type->place_type_id;
 
             $place = new Place();
             $place->google_place_id = $google_place_id;
@@ -198,6 +212,11 @@ class PostController extends Controller
             }
             $note->save();
         }
-        return redirect('/');
+        // return redirect('/')->with('items1', 'tetsutetsu');
+        // return redirect(route('index', [
+        //     'items1' => 'tetsu'
+        // ]));
+        // return redirect()->route('index', ['criterion' => $criterion_input_name, 'place_type_id' => $place_type_id]);
+        return redirect()->route('index')->withInput();
     }
 }
