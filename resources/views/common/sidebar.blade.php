@@ -5,12 +5,6 @@
 
         <div class="header-image">
             <img id="header-image" src="">
-            <?php
-            // $top_img_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-            // $photo_ref = "photoreference=CmRaAAAAiVgVE_r8zAmHGceo65OoPPa4tUqawrI0OiuHrxH_wKVyJ2NCEv_bnvFUeuwbPX8liS2XGC_sfuBUJdh48leGihuC8UixzwBHtjPtxuhQnE1OTekd78nUr-eqQWPII3KoEhCv9Ixq_3zcDqMtEGFJLSN4GhSExSvn9LvQFJga4bqAmtqCYn7gAg";
-            // $top_img_url =  $top_img_url . "&" . $photo_ref;
-            // echo "<img src=$top_img_url>";
-            ?>
         </div>
         <div class="header-title-description">
             <h1 class="header-title" id="header-title">place name</h1>
@@ -34,22 +28,28 @@
             @csrf
             <input type="hidden" name="user_id" value="23">
             <!-- <input type="hidden" name="place_id" value="2"> -->
+            <input type="hidden" name="form_place_name" id="form_place_name" value="{{old('form_place_name')}}">
+            <input type="hidden" name="form_place_address" id="form_place_address" value="{{old('form_place_address')}}">
+            <input type="hidden" name="form_header_img_url" id="form_header_img_url" value="{{old('form_header_img_url')}}">
             <input type="hidden" name="criterion_id" value="2">
+            <input type="hidden" name="place_name" id="place_name" value="">
+            <input type="hidden" name="place_type_id" id="place_type_id" value="1">
             <!-- <input type="hidden" name="num_criteria" value="2"> -->
-            <input type="hidden" name="google_place_id" id="google_place_id" value="a">
+            <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
+            <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}">
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
                         <span>要素1</span>
                         <span class="range">
-                            <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="0">
+                            <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
                         <span>要素2</span>
                         <span class="range">
-                            <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="0">
+                            <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
@@ -58,14 +58,14 @@
                     <span class="rating rating-left" id="section-rating-group-3">
                         <span>要素3</span>
                         <span class="range">
-                            <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="0">
+                            <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
                         <span>要素4</span>
                         <span class="range">
-                            <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="0">
+                            <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
                         </span>
                         <span class="section-rating-value">0</span>
                     </span>
@@ -88,7 +88,7 @@
                 </div> -->
             </div>
             <div class="section-note-note-content" id="section-note-note-content">
-                <textarea name="place_note" class="section-note-text" id="section-note-text" rows="20"></textarea>
+                <textarea name="place_note" class="section-note-text" id="section-note-text" rows="20">{{old('place_note')}}</textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
 
@@ -104,20 +104,35 @@
         </form>
         <button type="button" Class="btn-default section-cancel-btn" id="cancel-btn">Cancel</button>
     </div>
+    <!-- @if (Session::has('message'))
+    <p>{{ session('message')[0] }}</p>
+    <p>{{ session('message')['item'] }}</p>
+    @endif -->
+
 </div>
 
 <script>
     // perfect-scrollbrの処理
     // var ps = new PerfectScrollbar('.scroll_box');
+    // console.log({
+    //     {
+    //         session('items1')
+    //     }
+    // });
+    console.log('a');
 </script>
+
 <script>
     function getRatings(google_place_id) {
+        place_type_id = $('#section-place-type option:selected').val();
+        console.log('place_type_id: ' + place_type_id);
         $.ajax({
             type: 'GET',
             url: "{{route('get_ratings')}}",
             data: {
                 user_id: 23,
-                google_place_id: google_place_id
+                google_place_id: google_place_id,
+                place_type_id: place_type_id
             },
             dataType: 'JSON',
             success: function(data) {
@@ -133,7 +148,7 @@
                     rating_values[i - 1].innerHTML = rating;
                 }
                 document.getElementById("section-note-text").value = data['note'];
-                setPlaceType(data['place_types']);
+                // setPlaceType(data['place_types']);
 
             },
             error: function() {
@@ -144,23 +159,36 @@
         });
     }
 
-    function setPlaceType(place_types) {
-        var dropdown = document.getElementById('section-place-type');
-        // 子要素の削除
-        while (dropdown.firstChild) {
-            dropdown.removeChild(dropdown.firstChild);
-        }
-        // 子要素の新規追加
-        for (var i = 0; i < Object.keys(place_types).length; i++) {
-            var option = document.createElement('option');
-            option.value = i + 1;
-            option.innerHTML = place_types[i];
-            if (i == 0) {
-                option.setAttribute("selected", "");
+    function setPlaceType() {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('get.place.type.options')}}",
+            data: {},
+            dataType: 'JSON',
+            success: function(place_types) {
+                console.log(place_types);
+                var dropdown = document.getElementById('section-place-type');
+                // 子要素の削除
+                while (dropdown.firstChild) {
+                    dropdown.removeChild(dropdown.firstChild);
+                }
+                // 子要素の新規追加
+                for (var i = 0; i < Object.keys(place_types).length; i++) {
+                    var option = document.createElement('option');
+                    option.value = i + 1;
+                    option.innerHTML = place_types[i];
+                    option.setAttribute("id", 'place-type-' + (i + 1));
+                    if (i == 0) {
+                        option.setAttribute("selected", "");
+                    }
+                    dropdown.appendChild(option);
+                }
+                // console.log($('#section-place-type option:selected').val());
+            },
+            error: function() {
+                console.log('place_type_optionsの取得失敗');
             }
-            dropdown.appendChild(option);
-        }
-
+        });
     }
 </script>
 
