@@ -210,7 +210,7 @@
     //   target = rating_values[i];
     //   bar.addEventListener('input', rangeValue(bar, target));
     // }
-    setPlaceType();
+    // window.onload = setPlaceType();
   </script>
 
   <!-- <script>
