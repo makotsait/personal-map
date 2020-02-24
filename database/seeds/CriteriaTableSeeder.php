@@ -13,8 +13,9 @@
         public function run()
         {
             $defalut_set = [
-                [1, 'taste', '味'], [2, 'good_deal', 'コスパ'], [3, 'hospitality', '対応'], [4, 'stylishness', 'おしゃれさ'],
-                [5, 'quickness', 'スムーズさ'], [6, 'equipment', '設備'], [7, 'comfortableness', '居心地'], [8, 'flexibility', '柔軟さ']
+                [1, 'taste', '味'], [2, 'good_deal', 'コスパ'], [3, 'comfortableness', '居心地'], [4, 'stylishness', 'おしゃれさ'],
+                [5, 'equipment', '設備'], [6, 'employee_attitude', 'Staff対応'], [7, 'dactor_attitude', '医師対応'], [8, 'quickness', '迅速さ'],
+                [9, 'good_access', 'アクセス'], [10, 'pleasantness', '楽しさ'], [11, 'onsen_quality', 'お湯質'], [12, 'good_view', '景色']
             ];
             foreach ($defalut_set as $item) {
                 $criterion = new Criterion();
