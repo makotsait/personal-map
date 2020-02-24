@@ -91,10 +91,12 @@
         },
         success: function(data) {
           place_name_text.innerHTML = data["result"]["name"];
+          document.getElementById('form_place_name').value = data["result"]["name"];
           address_text.innerHTML = data["result"]["formatted_address"];
+          document.getElementById('form_place_address').value = data["result"]["formatted_address"];
           // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-
+          setPlaceType();
         },
         error: function() {
           //取得失敗時に実行する処理
@@ -115,6 +117,7 @@
         success: function(data) {
           // alert(data);
           console.log('headerimgurl:'.data);
+          document.getElementById('form_header_img_url').value = data;
           place_header_image.setAttribute('src', data);
         },
         error: function() {
@@ -186,10 +189,28 @@
         infowindowContent.children['place-id'].textContent = place.place_id;
         infowindowContent.children['place-address'].textContent =
           place.formatted_address;
+        document.getElementById('place_name').value = place.name;
         document.getElementById('google_place_id').value = place.place_id;
         infowindow.open(map, marker);
       });
     }
+    // フォーム送信時のリダイレクト
+    place_name_text.innerHTML = document.getElementById('form_place_name').value;
+    address_text.innerHTML = document.getElementById('form_place_address').value;
+    place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
+    // var elem = document.getElementsByClassName('range');
+    // var rating_values = document.getElementsByClassName('section-rating-value');
+    // var rangeValue = function(bar, target) {
+    //   return function(evt) {
+    //     target.innerHTML = bar.value;
+    //   }
+    // }
+    // for (var i = 0; i < elem.length; i++) {
+    //   bar = elem[i].getElementsByTagName('input')[0];
+    //   target = rating_values[i];
+    //   bar.addEventListener('input', rangeValue(bar, target));
+    // }
+    // window.onload = setPlaceType();
   </script>
 
   <!-- <script>
@@ -207,6 +228,11 @@
       }
     });
   </script> -->
+
+  <script>
+
+
+  </script>
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap" async defer></script>
 </body>

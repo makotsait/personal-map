@@ -16,7 +16,7 @@ class CriteriaOrderTableSeeder extends Seeder
         $defalut_set = [
             [1, 1, 1, 1, 1],
             [2, 1, 1, 2, 2],
-            [3, 1, 1, 3, 3],
+            [3, 1, 1, 6, 3],
             [4, 1, 1, 4, 4],
         ];
         foreach ($defalut_set as $item) {
