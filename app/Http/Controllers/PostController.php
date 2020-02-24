@@ -26,49 +26,25 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
-    public function insertPlace($google_place_id, $place_type_id)
+    public function setCriteriaOrderDefaultValue($user_id, $place_type_id)
     {
-        // $api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-        // $url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$google_place_id}&language=ja";
-        // $place_detail = json_decode(file_get_contents($url), true);
-        // $place_name = $place_detail["result"]["name"];
-        // $place_type_names = $place_detail["result"]["types"];
-        // $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-        // if (is_null($place_type)) {
-        //     return null;
-        //     // $place_type = new PlaceType();
-        //     // $place_type->place_type_name_en = $place_type_name_en;
-        //     // $place_type->status = 0;
-        //     // $place_type->save();
-        //     // $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-        // }
-        // $place_type_id = $place_type->place_type_id;
-
-        $place = new Place();
-        $place->google_place_id = $google_place_id;
-        $place->place_name = $place_name;
-        $place->place_type_id = $place_type_id;
-        $place->status = 0;
-        $place->save();
-    }
-
-    public function createCriteriaOrder($user_id, $place_type_id)
-    {
-
-        // $criterion_id_list = [1, 2, 3, 4];
-        // foreach ($criterion_id_list as $criterion_id) {
-        // }
-        // =>criterionを作成する部分は別に記載
-
-        // 1ユーザのデフォルトの表示順を設定をする
-        for ($i = 1; $i <= 4; $i++) {
+        // [[place_type_id]=>[[criterion_id,display_order]]]
+        $default_set = array(
+            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
+            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
+            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
+            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
+            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
+            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
+        );
+        foreach ($default_set[$place_type_id] as $item) {
             $criteria_order = new CriteriaOrder();
             $criteria_order->user_id = $user_id;
             $criteria_order->place_type_id = $place_type_id;
-            // ↓ここは要変更（まだplace_typeごとのcriteriaを決めてないため設定できない）
-            $criteria_order->criterion_id = $i;
-            $criteria_order->display_order = $i;
-            // -----
+            $criteria_order->criterion_id = $item[0];
+            $criteria_order->display_order = $item[1];
             $criteria_order->status = 0;
             $criteria_order->save();
         }
@@ -80,7 +56,8 @@ class PostController extends Controller
         $place_types = PlaceType::all();
         $i = 0;
         foreach ($place_types as $place_type) {
-            $items[$i] = $place_type->place_type_name_ja;
+            $items['place_type_id'][$i] = $place_type->place_type_id;
+            $items['place_type_name_ja'][$i] = $place_type->place_type_name_ja;
             $i++;
         }
         return json_encode($items);
@@ -90,13 +67,9 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $user_id = $user->user_id;
-        // $user_id = $_GET['user_id'];
         $google_place_id = $_GET['google_place_id'];
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place)) return 'place not found in db';
-        // $rating = Rating::where('user_id',  $user_id)->where('place_id', $place->place_id)->where('status', 0)->first();
-        // if (is_null($rating)) return 'rating not found in db';
-        // Log::info($place_id);
 
         $items = array();
         $place_id = $place->place_id;
@@ -123,7 +96,7 @@ class PostController extends Controller
         if (is_null($criteria_order)) return 'note not found in db';
         $items['note'] = $note->note;
 
-        // 施設タイプ一覧の取得(別のメソッドを作る予定)getで取得して問題ないのでは？
+        // 施設タイプ一覧の取得(メソッドを作る予定)
         $place_types = PlaceType::all();
         $i = 0;
         foreach ($place_types as $place_type) {
@@ -137,27 +110,17 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $user_id = $user->user_id;
-        // $user_id = $request->user_id;
         $google_place_id = $request->google_place_id;
-        $place_type_id = $request->place_type_id;
+        $place_name =  $request->form_place_name;
+        $place_type_id = $request->form_place_type_id;
         // $place_type_id = $_GET['place_type_id'];
         $place = Place::where('google_place_id', $google_place_id)->first();
         if (is_null($place)) {
-            $api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-            $url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$google_place_id}&language=ja";
-            $place_detail = json_decode(file_get_contents($url), true);
-            $place_name = $place_detail["result"]["name"];
-            // $place_type_name_en = $place_detail["result"]["types"][0];
-            // $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-            // if (is_null($place_type)) {
-            //     $place_type = new PlaceType();
-            //     $place_type->place_type_name_en = $place_type_name_en;
-            //     $place_type->status = 0;
-            //     $place_type->save();
-            //     $place_type = PlaceType::where('place_type_name_en', $place_type_name_en)->first();
-            // }
-            // $place_type_id = $place_type->place_type_id;
-
+            // 施設の追加
+            // $api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
+            // $url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$google_place_id}&language=ja";
+            // $place_detail = json_decode(file_get_contents($url), true);
+            // $place_name = $place_detail["result"]["name"];
             $place = new Place();
             $place->google_place_id = $google_place_id;
             $place->place_name = $place_name;
@@ -166,26 +129,26 @@ class PostController extends Controller
             $place->save();
             $place = Place::where('google_place_id', $google_place_id)->first();
         }
+        if ($place->place_name != $place_name) {
+            $place->place_name = $place_name;
+            $place->save();
+        }
+        if ($place->place_type_id != $place_type_id) {
+            $place->place_type_id = $place_type_id;
+            $place->save();
+        }
         $place_id = $place->place_id;
-        $place_type_id = $place->place_type_id;
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->first();
-        // $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
-        // **get()でコレクションを取得して、emptyで空か判定する形ではうまく動作しなかったため、一旦first()でモデルを取得して判定する形にした**
-        // get()でコレクションを取得して、emptyで空か判定する形ではうまく動作しなかったため、一旦first()でモデルを取得して判定する形にした
+        // **->get()でコレクションを取得して、emptyで空か判定する形はうまく動作しなかったため、一旦first()でモデルを取得して判定する形にした**
         if (is_null($criteria_order)) {
-            // if (is_null($criteria_order)) {
-            $this->createCriteriaOrder($user_id, $place_type_id);
+            $this->setCriteriaOrderDefaultValue($user_id, $place_type_id);
         }
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
 
-        Log::info('after_criteria_order2');
-        // $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
         foreach ($criteria_order as $order) {
-            $criterion_input_name = 'criterion' . $order->display_order;
             $criterion_id = $order->criterion_id;
+            $criterion_input_name = 'criterion' . $order->display_order;
             // 表示順序からcriterion_idを取得
-
-            // $criterion = Place::where('criterion_name_en', $criteria_name)->first();
 
             $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->first();
             if (is_null($rating)) {
@@ -212,11 +175,6 @@ class PostController extends Controller
             }
             $note->save();
         }
-        // return redirect('/')->with('items1', 'tetsutetsu');
-        // return redirect(route('index', [
-        //     'items1' => 'tetsu'
-        // ]));
-        // return redirect()->route('index', ['criterion' => $criterion_input_name, 'place_type_id' => $place_type_id]);
         return redirect()->route('index')->withInput();
     }
 }

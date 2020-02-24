@@ -33,10 +33,10 @@
             <input type="hidden" name="form_header_img_url" id="form_header_img_url" value="{{old('form_header_img_url')}}">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
-            <input type="hidden" name="place_type_id" id="place_type_id" value="1">
+            <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="1">
             <!-- <input type="hidden" name="num_criteria" value="2"> -->
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
-            <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}">
+            <!-- <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}"> -->
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
@@ -166,23 +166,39 @@
             data: {},
             dataType: 'JSON',
             success: function(place_types) {
-                console.log(place_types);
+                // console.log(place_types);
                 var dropdown = document.getElementById('section-place-type');
                 // 子要素の削除
                 while (dropdown.firstChild) {
                     dropdown.removeChild(dropdown.firstChild);
                 }
                 // 子要素の新規追加
-                for (var i = 0; i < Object.keys(place_types).length; i++) {
+                for (var i = 0; i < Object.keys(place_types['place_type_id']).length; i++) {
                     var option = document.createElement('option');
-                    option.value = i + 1;
-                    option.innerHTML = place_types[i];
+                    option.classList.add('section-place-type-option');
+                    option.value = place_types['place_type_id'][i];
+                    option.innerHTML = place_types['place_type_name_ja'][i];
                     option.setAttribute("id", 'place-type-' + (i + 1));
-                    if (i == 0) {
-                        option.setAttribute("selected", "");
-                    }
+                    // if (i == 0) {
+                    //     option.setAttribute("selected", "");
+                    // }
                     dropdown.appendChild(option);
                 }
+                place_type_options = document.getElementsByClassName('section-place-type-option');
+                place_type_id = document.getElementById('form_place_type_id').value;
+                place_type_options[place_type_id - 1].setAttribute("selected", "");
+
+
+                //プルダウン選択時の処理を設定
+                // var select = document.querySelector("#word");
+                var options = document.querySelectorAll("#section-place-type option");
+                dropdown.addEventListener('change', function() {
+                    //選択されたoption番号を取得
+                    var index = this.selectedIndex;
+                    // console.log(options[index].value);
+                    // console.log(options[index].innerHTML);
+                    document.getElementById('form_place_type_id').value = options[index].value;
+                });
                 // console.log($('#section-place-type option:selected').val());
             },
             error: function() {
