@@ -33,41 +33,43 @@
             <input type="hidden" name="form_header_img_url" id="form_header_img_url" value="{{old('form_header_img_url')}}">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
-            <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="1">
+            <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="{{old('form_place_type_id')}}">
             <!-- <input type="hidden" name="num_criteria" value="2"> -->
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
             <!-- <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}"> -->
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
-                        <span>要素1</span>
+                        <span class="section-criterion-name-display">要素1</span>
                         <span class="range">
                             <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
                         </span>
-                        <span class="section-rating-value">0</span>
+                        <span class="section-rating-value">{{old('criterion1')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
-                        <span>要素2</span>
+                        <span class="section-criterion-name-display">要素2
+                        </span>
                         <span class="range">
                             <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
                         </span>
-                        <span class="section-rating-value">0</span>
+                        <span class="section-rating-value">{{old('criterion2')}}</span>
+                    </span>
                     </span>
                 </div>
                 <div class="ratings-line" id="section-ratings-line-2">
                     <span class="rating rating-left" id="section-rating-group-3">
-                        <span>要素3</span>
+                        <span class="section-criterion-name-display">要素3</span>
                         <span class="range">
                             <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
                         </span>
-                        <span class="section-rating-value">0</span>
+                        <span class="section-rating-value">{{old('criterion3')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
-                        <span>要素4</span>
+                        <span class="section-criterion-name-display">要素4</span>
                         <span class="range">
                             <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
                         </span>
-                        <span class="section-rating-value">0</span>
+                        <span class="section-rating-value">{{old('criterion4')}}</span>
                     </span>
                 </div>
                 <!-- <div class="ratings-line" id="section-ratings-line-3">
@@ -139,16 +141,25 @@
                 if (data == 'nodata') {
                     // ratingデータが無いときの処理
                 }
-                console.log(data);
+                console.log('getratingreturn' + data);
+                var criterion_names = document.getElementsByClassName('section-criterion-name-display');
                 var rating_values = document.getElementsByClassName('section-rating-value');
                 for (let i = 1; i <= data['num_of_criteria']; i++) {
+                    var criterion_name_ja = data['rating'][i]['criterion_name_ja'];
                     var rating = data['rating'][i]['rating'];
                     var elem_id = 'criterion' + i;
                     document.getElementById(elem_id).value = rating;
+                    criterion_names[i - 1].innerHTML = criterion_name_ja;
                     rating_values[i - 1].innerHTML = rating;
                 }
+                // document.getElementsByClassName('section-criterion-name-display').value = 1;
+                // for (var i = 0; i < Object.keys(place_types).length; i++) {
+
+                // }
                 document.getElementById("section-note-text").value = data['note'];
-                // setPlaceType(data['place_types']);
+                document.getElementById('form_place_type_id').value = 1;
+
+                getPlaceType(data['place_types']);
 
             },
             error: function() {
@@ -159,47 +170,55 @@
         });
     }
 
-    function setPlaceType() {
+    function setPlaceType(place_types) {
+        console.log(place_types);
+        var dropdown = document.getElementById('section-place-type');
+        // 子要素の削除
+        while (dropdown.firstChild) {
+            dropdown.removeChild(dropdown.firstChild);
+        }
+        // 子要素の新規追加
+        for (var i = 0; i < Object.keys(place_types).length; i++) {
+            var option = document.createElement('option');
+            option.classList.add('section-place-type-option');
+            option.value = place_types[i]['place_type_id'];
+            option.innerHTML = place_types[i]['place_type_name_ja'];
+            option.setAttribute("id", 'place-type-' + (i + 1));
+            // if (i == 0) {
+            //     option.setAttribute("selected", "");
+            // }
+            dropdown.appendChild(option);
+        }
+        // 施設タイプを選択
+        var place_type_options = dropdown.getElementsByClassName('section-place-type-option');
+        // console.log('place_type_options: ' + place_type_options[1].innerHTML);
+        place_type_id = document.getElementById('form_place_type_id').value;
+        // console.log('place_type_id: ' + place_type_id);
+        place_type_options[place_type_id - 1].setAttribute("selected", "");
+
+        //プルダウン選択時の処理を設定
+        // var select = document.querySelector("#word");
+        var options = document.querySelectorAll("#section-place-type option");
+        dropdown.addEventListener('change', function() {
+            //選択されたoption番号を取得
+            var index = this.selectedIndex;
+            document.getElementById('form_place_type_id').value = options[index].value;
+        });
+    }
+
+    function getPlaceType() {
         $.ajax({
             type: 'GET',
             url: "{{route('get.place.type.options')}}",
             data: {},
             dataType: 'JSON',
             success: function(place_types) {
-                // console.log(place_types);
-                var dropdown = document.getElementById('section-place-type');
-                // 子要素の削除
-                while (dropdown.firstChild) {
-                    dropdown.removeChild(dropdown.firstChild);
-                }
-                // 子要素の新規追加
-                for (var i = 0; i < Object.keys(place_types['place_type_id']).length; i++) {
-                    var option = document.createElement('option');
-                    option.classList.add('section-place-type-option');
-                    option.value = place_types['place_type_id'][i];
-                    option.innerHTML = place_types['place_type_name_ja'][i];
-                    option.setAttribute("id", 'place-type-' + (i + 1));
-                    // if (i == 0) {
-                    //     option.setAttribute("selected", "");
-                    // }
-                    dropdown.appendChild(option);
-                }
-                place_type_options = document.getElementsByClassName('section-place-type-option');
-                place_type_id = document.getElementById('form_place_type_id').value;
-                place_type_options[place_type_id - 1].setAttribute("selected", "");
-
-
-                //プルダウン選択時の処理を設定
-                // var select = document.querySelector("#word");
-                var options = document.querySelectorAll("#section-place-type option");
-                dropdown.addEventListener('change', function() {
-                    //選択されたoption番号を取得
-                    var index = this.selectedIndex;
-                    // console.log(options[index].value);
-                    // console.log(options[index].innerHTML);
-                    document.getElementById('form_place_type_id').value = options[index].value;
-                });
-                // console.log($('#section-place-type option:selected').val());
+                setPlaceType(place_types);
+                // var json = JSON.stringify(array);
+                // localStorage.setItem('anyName', json);
+                // // テキストから復元
+                // var json2 = localStorage.getItem('anyName');
+                // var array2 = JSON.parse(json2);
             },
             error: function() {
                 console.log('place_type_optionsの取得失敗');

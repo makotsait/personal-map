@@ -56,8 +56,8 @@ class PostController extends Controller
         $place_types = PlaceType::all();
         $i = 0;
         foreach ($place_types as $place_type) {
-            $items['place_type_id'][$i] = $place_type->place_type_id;
-            $items['place_type_name_ja'][$i] = $place_type->place_type_name_ja;
+            $items[$i]['place_type_id'] = $place_type->place_type_id;
+            $items[$i]['place_type_name_ja'] = $place_type->place_type_name_ja;
             $i++;
         }
         return json_encode($items);
@@ -76,18 +76,21 @@ class PostController extends Controller
         $place_type_id = $place->place_type_id;
 
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->orderBy('display_order', 'asc')->first();
-        // if (is_null($criteria_order)) {
-        //     $this->createCriteriaOrder($user_id, $place_type_id);
-        //     $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
-        // }
-        if (is_null($criteria_order)) return 'criteria_order not found in db';
-        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->orderBy('display_order', 'asc')->get();
+        if (is_null($criteria_order)) {
+            return 'criteria_order not found in db';
+        } else {
+            $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
+        }
         $i = 0;
         foreach ($criteria_order as $order) {
             $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
             if (is_null($rating)) return 'rating not found in db';
             $i++;
-            $items['rating'][$i]['criterion_name'] = $rating->criterion->criterion_name_en;
+            // $items['rating'][$i]=$order->criterion criteria_tableに紐付けてここに表示させたい
+            // $items['criterion_name'][$i] = $order->place_type->criterion;
+
+            $items['rating'][$i]['criterion_name_en'] = $rating->criterion->criterion_name_en;
+            $items['rating'][$i]['criterion_name_ja'] = $rating->criterion->criterion_name_ja;
             $items['rating'][$i]['rating'] = $rating->rating;
         }
         $items['num_of_criteria'] = $i;
@@ -96,13 +99,13 @@ class PostController extends Controller
         if (is_null($criteria_order)) return 'note not found in db';
         $items['note'] = $note->note;
 
-        // 施設タイプ一覧の取得(メソッドを作る予定)
-        $place_types = PlaceType::all();
-        $i = 0;
-        foreach ($place_types as $place_type) {
-            $items['place_types'][$i] = $place_type->place_type_name_ja;
-            $i++;
-        }
+        // $items = array();
+        // $place_types = PlaceType::all();
+        // $i = 0;
+        // foreach ($place_types as $place_type) {
+        //     $items[$i] = $place_type->place_type_name_ja;
+        //     $i++;
+        // }
         return json_encode($items);
     }
 

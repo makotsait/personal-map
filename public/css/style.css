@@ -1,5 +1,6 @@
 span{
     color:black;
+    font-size:14px;
 }
 
 .sidebar{
@@ -95,7 +96,7 @@ span{
 
 .section-rating-value{
     position: absolute;
-    left: 210px;
+    left: 215px;
 }
 
 .rating{
@@ -117,11 +118,13 @@ span{
 .range{
     color: black;
     position: absolute;
-    left: 70px;
+    left: 80px;
 }
 
 .range > input{
     vertical-align: middle;
+    width: 125px;
+    height: 12px;
 }
 .section-note-note-content{
     margin: 20px 20px 0px;
