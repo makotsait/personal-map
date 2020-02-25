@@ -56,8 +56,8 @@ class PostController extends Controller
         $place_types = PlaceType::all();
         $i = 0;
         foreach ($place_types as $place_type) {
-            $items[$i]['place_type_id'] = $place_type->place_type_id;
-            $items[$i]['place_type_name_ja'] = $place_type->place_type_name_ja;
+            $items['place_type_id'][$i] = $place_type->place_type_id;
+            $items['place_type_name_ja'][$i] = $place_type->place_type_name_ja;
             $i++;
         }
         return json_encode($items);
@@ -74,6 +74,8 @@ class PostController extends Controller
         $items = array();
         $place_id = $place->place_id;
         $place_type_id = $place->place_type_id;
+
+        $items['place_type_id'] = $place_type_id;
 
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->orderBy('display_order', 'asc')->first();
         if (is_null($criteria_order)) {
