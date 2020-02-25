@@ -96,7 +96,6 @@
           document.getElementById('form_place_address').value = data["result"]["formatted_address"];
           // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-          setPlaceType();
         },
         error: function() {
           //取得失敗時に実行する処理
@@ -194,10 +193,11 @@
         infowindow.open(map, marker);
       });
     }
-    // フォーム送信時のリダイレクト
+    // フォーム送信後にControllerでリダイレクトにより呼び出される時に、元の値をセットし直す処理
     place_name_text.innerHTML = document.getElementById('form_place_name').value;
     address_text.innerHTML = document.getElementById('form_place_address').value;
     place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
+    getPlaceType();
     // var elem = document.getElementsByClassName('range');
     // var rating_values = document.getElementsByClassName('section-rating-value');
     // var rangeValue = function(bar, target) {
@@ -210,7 +210,7 @@
     //   target = rating_values[i];
     //   bar.addEventListener('input', rangeValue(bar, target));
     // }
-    // window.onload = setPlaceType();
+    // window.onload = getPlaceType();
   </script>
 
   <!-- <script>
