@@ -10,8 +10,8 @@ class CriteriaOrder extends Model
     protected $primaryKey = 'criteria_order_id';
     protected $guarded = 'criteria_order_id';
 
-    // public function place_type()
-    // {
-    //     return $this->belongsTo('PlaceType', 'place_type_id', 'place_type_id');
-    // }
+    public function criterion()
+    {
+        return $this->belongsTo('Criterion', 'criterion_id', 'criterion_id');
+    }
 }
