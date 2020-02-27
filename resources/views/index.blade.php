@@ -180,7 +180,7 @@
         });
         var value1 = 'hoge';
         getPlaceDetail(place.place_id);
-        getRatings(place.place_id);
+        getRatings(place.place_id, null);
 
         marker.setVisible(true);
 
@@ -197,7 +197,13 @@
     place_name_text.innerHTML = document.getElementById('form_place_name').value;
     address_text.innerHTML = document.getElementById('form_place_address').value;
     place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
-    setPlaceType();
+
+    localStorage.clear()
+    getPlaceType();
+
+
+
+
     // var elem = document.getElementsByClassName('range');
     // var rating_values = document.getElementsByClassName('section-rating-value');
     // var rangeValue = function(bar, target) {
