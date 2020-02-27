@@ -16,9 +16,10 @@ use App\Models\PlaceType;
 
 class PostController extends Controller
 {
+
     public function index(Request $request)
     {
-        // $items = PostRatings::all();
+        // $items = PostRatings::();
         // return view('', ['items' => $items]);
     }
     public function __construct()
@@ -77,32 +78,99 @@ class PostController extends Controller
 
         $items['place_type_id'] = $place_type_id;
 
-        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->orderBy('display_order', 'asc')->first();
+        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->first();
         if (is_null($criteria_order)) {
             return 'criteria_order not found in db';
         } else {
-            $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
+            $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
         }
         $i = 0;
         foreach ($criteria_order as $order) {
-            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
-            if (is_null($rating)) return 'rating not found in db';
             $i++;
-            // $items['rating'][$i]=$order->criterion criteria_tableに紐付けてここに表示させたい
-            // $items['criterion_name'][$i] = $order->place_type->criterion;
+            $items['user_order'][$order->place_type_id]['criterion_id'][] = $order->criterion_id;
+            $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
+            // $items['criterion_order'][$order->place_type_id]['display_order'][$i] = $order->display_order;
 
-            $items['rating'][$i]['criterion_name_en'] = $rating->criterion->criterion_name_en;
-            $items['rating'][$i]['criterion_name_ja'] = $rating->criterion->criterion_name_ja;
-            $items['rating'][$i]['rating'] = $rating->rating;
+            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
+            if (is_null($rating)) {
+                $rating_value = 0;
+            } else {
+                $rating_value = $rating->rating;
+            };
+            $items['user_order'][$order->place_type_id]['ratings'][] = $rating_value;
+
+            // if (empty($items['num_of_criteria'][$order->place_type_id])) {
+            //     $items['num_of_criteria'][$order->place_type_id] = 0;
+            // }
+            // $items['num_of_criteria'][$order->place_type_id]++;
         }
-        $items['num_of_criteria'] = $i;
+
+        // $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->first();
+        // if (is_null($rating)) return 'rating not found in db';
+        // $ratings = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->get();
+        // $i = 0;
+        // foreach ($ratings as $rating) {
+        //     $i++;
+        //     if (is_null($rating)) {
+        //         $rating_value = 0;
+        //     } else {
+        //         $rating_value = $rating->rating;
+        //     };
+        //     // $items['rating'][$i]=$order->criterion criteria_tableに紐付けてここに表示させたい
+        //     // $items['criterion_name'][$i] = $order->place_type->criterion;
+
+        //     // $items['rating'][$i]['criterion_name_en'] = $rating->criterion->criterion_name_en;
+        //     // $items['rating'][$i]['criterion_name_ja'] = $rating->criterion->criterion_name_ja;
+
+        //     $items['criterion_id'][$i] = $rating->criterion_id;
+        //     $items['criterion_name_ja'][$i] = $rating->criterion->criterion_name_ja;
+        //     $items['rating'][$i] = $rating_value;
+        // }
 
         $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
-        if (is_null($criteria_order)) return 'note not found in db';
+        if (is_null($note)) return 'note not found in db';
         $items['note'] = $note->note;
 
+        $default_set = array(
+            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
+            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
+            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
+            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
+            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
+            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
+        );
+
+        // $place_type_ids = array_keys($default_set);
+
+        $criterion = Criterion::where('status', 0)->first();
+        if (is_null($criteria_order)) return 'criteria_order not found in db';
+        $criteria = Criterion::where('status', 0)->get();
+        $criterion_name_ls = array();
+        foreach ($criteria as $criterion) {
+            $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
+        }
+
+        $i = 0;
+        foreach ($default_set as $place_type_id => $criteria_order) {
+            // $j = 0;
+            foreach ($criteria_order as $k => $order) {
+                $sort[$k] = $order[1];
+            }
+            array_multisort($sort, SORT_ASC, $criteria_order);
+
+            foreach ($criteria_order as $k =>  $order) {
+                $items['default_order'][$place_type_id]['criterion_id'][$k] = $order[0];
+                $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
+                $items['default_order'][$place_type_id]['ratings'][$k] = 0;
+                // $j++;
+            }
+            $i++;
+        }
+
         // $items = array();
-        // $place_types = PlaceType::all();
+        // $place_types = PlaceType::();
         // $i = 0;
         // foreach ($place_types as $place_type) {
         //     $items[$i] = $place_type->place_type_name_ja;
