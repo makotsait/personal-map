@@ -12,6 +12,6 @@ class CriteriaOrder extends Model
 
     public function criterion()
     {
-        return $this->belongsTo('Criterion', 'criterion_id', 'criterion_id');
+        return $this->belongsTo('App\Models\Criterion', 'criterion_id', 'criterion_id');
     }
 }
