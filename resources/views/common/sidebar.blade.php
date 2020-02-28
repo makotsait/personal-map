@@ -34,21 +34,24 @@
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
             <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="{{old('form_place_type_id')}}">
-            <!-- <input type="hidden" name="num_criteria" value="2"> -->
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
-            <!-- <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}"> -->
+            <!-- <input type="hidden" name="criterion1-name-hidden" id="criterion1-name-hidden" value="{{old('criterion1-name-hidden')}}"> -->
+            <input type="hidden" name="criterion1-name-hidden" class="criterion-name-hidden" value="{{old('criterion1-name-hidden')}}">
+            <input type="hidden" name="criterion2-name-hidden" class="criterion-name-hidden" value="{{old('criterion2-name-hidden')}}">
+            <input type="hidden" name="criterion3-name-hidden" class="criterion-name-hidden" value="{{old('criterion3-name-hidden')}}">
+            <input type="hidden" name="criterion4-name-hidden" class="criterion-name-hidden" value="{{old('criterion4-name-hidden')}}">
+
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
-                        <span class="section-criterion-name-display">要素1</span>
+                        <span class="section-criterion-name-display">{{old('criterion1-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion1')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
-                        <span class="section-criterion-name-display">要素2
-                        </span>
+                        <span class="section-criterion-name-display">{{old('criterion2-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
                         </span>
@@ -58,14 +61,14 @@
                 </div>
                 <div class="ratings-line" id="section-ratings-line-2">
                     <span class="rating rating-left" id="section-rating-group-3">
-                        <span class="section-criterion-name-display">要素3</span>
+                        <span class="section-criterion-name-display">{{old('criterion3-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion3')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
-                        <span class="section-criterion-name-display">要素4</span>
+                        <span class="section-criterion-name-display">{{old('criterion4-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
                         </span>
@@ -179,10 +182,11 @@
 
         // console.log('getratingreturn' + data);
         var criterion_names = document.getElementsByClassName('section-criterion-name-display');
+        var criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
         var rating_values = document.getElementsByClassName('section-rating-value');
         for (let i = 0; i < Object.keys(place_type_ratings['criterion_id']).length; i++) {
             criterion_names[i].innerHTML = place_type_ratings['criterion_name_ja'][i];
-
+            criterion_names_hidden[i].value = place_type_ratings['criterion_name_ja'][i];
             var elem_id = 'criterion' + (i + 1);
             var rating = place_type_ratings['ratings'][i];
             document.getElementById(elem_id).value = rating;
