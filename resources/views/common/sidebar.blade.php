@@ -34,21 +34,24 @@
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
             <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="{{old('form_place_type_id')}}">
-            <!-- <input type="hidden" name="num_criteria" value="2"> -->
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
-            <!-- <input type="hidden" name="google_place_id2" id="google_place_id22" value="{{old('google_place_id')}}"> -->
+            <!-- <input type="hidden" name="criterion1-name-hidden" id="criterion1-name-hidden" value="{{old('criterion1-name-hidden')}}"> -->
+            <input type="hidden" name="criterion1-name-hidden" class="criterion-name-hidden" value="{{old('criterion1-name-hidden')}}">
+            <input type="hidden" name="criterion2-name-hidden" class="criterion-name-hidden" value="{{old('criterion2-name-hidden')}}">
+            <input type="hidden" name="criterion3-name-hidden" class="criterion-name-hidden" value="{{old('criterion3-name-hidden')}}">
+            <input type="hidden" name="criterion4-name-hidden" class="criterion-name-hidden" value="{{old('criterion4-name-hidden')}}">
+
             <div class="ratings">
                 <div class="ratings-line" id="section-ratings-line-1">
                     <span class="rating rating-left" id="section-rating-group-1">
-                        <span class="section-criterion-name-display">要素1</span>
+                        <span class="section-criterion-name-display">{{old('criterion1-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion1')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
-                        <span class="section-criterion-name-display">要素2
-                        </span>
+                        <span class="section-criterion-name-display">{{old('criterion2-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
                         </span>
@@ -58,14 +61,14 @@
                 </div>
                 <div class="ratings-line" id="section-ratings-line-2">
                     <span class="rating rating-left" id="section-rating-group-3">
-                        <span class="section-criterion-name-display">要素3</span>
+                        <span class="section-criterion-name-display">{{old('criterion3-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion3')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
-                        <span class="section-criterion-name-display">要素4</span>
+                        <span class="section-criterion-name-display">{{old('criterion4-name-hidden')}}</span>
                         <span class="range">
                             <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
                         </span>
@@ -125,110 +128,109 @@
 </script>
 
 <script>
-    function getRatings(google_place_id) {
-        place_type_id = $('#section-place-type option:selected').val();
-        console.log('place_type_id: ' + place_type_id);
-        $.ajax({
-            type: 'GET',
-            url: "{{route('get_ratings')}}",
-            data: {
-                user_id: 23,
-                google_place_id: google_place_id,
-                place_type_id: place_type_id
-            },
-            dataType: 'JSON',
-            success: function(data) {
-                if (data == 'nodata') {
-                    // ratingデータが無いときの処理
+    function getRatings(google_place_id, place_type_id) {
+        // place_type_id = $('#section-place-type option:selected').val();
+        // document.getElementById('form_place_type_id').value = place_type_id;
+        // console.log('place_type_id: ' + place_type_id);
+        // var ratings_json = localStorage.getItem('ratings_json');
+        var ratings_json = localStorage.getItem('ratings_json');
+        if (!ratings_json) {
+            $.ajax({
+                type: 'GET',
+                url: "{{route('get.ratings')}}",
+                data: {
+                    // user_id: 23,
+                    google_place_id: google_place_id
+                    // place_type_id: place_type_id
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    var ratings_json = JSON.stringify(data);
+                    localStorage.setItem('ratings_json', ratings_json);
+                    setRatings(place_type_id);
+                },
+                error: function() {
+                    //取得失敗時に実行する処理
+                    console.log('ratingsの取得失敗');
                 }
-                console.log('getratingreturn' + data);
-                var criterion_names = document.getElementsByClassName('section-criterion-name-display');
-                var rating_values = document.getElementsByClassName('section-rating-value');
-                for (let i = 1; i <= data['num_of_criteria']; i++) {
-                    var criterion_name_ja = data['rating'][i]['criterion_name_ja'];
-                    var rating = data['rating'][i]['rating'];
-                    var elem_id = 'criterion' + i;
-                    document.getElementById(elem_id).value = rating;
-                    criterion_names[i - 1].innerHTML = criterion_name_ja;
-                    rating_values[i - 1].innerHTML = rating;
-                }
-                // document.getElementsByClassName('section-criterion-name-display').value = 1;
-                // for (var i = 0; i < Object.keys(place_types).length; i++) {
+            });
+        } else {
+            setRatings(place_type_id);
+        }
+    }
 
-                // }
-                document.getElementById("section-note-text").value = data['note'];
-                document.getElementById('form_place_type_id').value = 1;
+    function setRatings(place_type_id) {
+        var ratings_json = localStorage.getItem('ratings_json');
+        var ratings = JSON.parse(ratings_json);
+        console.log('setratings');
+        console.log(ratings);
 
-                // var place_type_options = dropdown.getElementsByClassName('section-place-type-option');
-                // place_type_options[data['place_type_id']].setAttribute("selected", "");
-                // getPlaceType(data['place_types']);
-                // setPlaceType();
+        if (!place_type_id) {
+            place_type_id = ratings['place_type_id'];
+        }
 
+        // place_type_idの取得
+        // var place_type_id = ratings['place_type_id'];
+        // var place_type_id = $('#section-place-type option:selected').val();
+        // document.getElementById('form_place_type_id').value = place_type_id;
 
+        if (ratings['user_order'][place_type_id]) {
+            place_type_ratings = ratings['user_order'][place_type_id];
+        } else {
+            place_type_ratings = ratings['default_order'][place_type_id];
+        }
 
-                // var place_types_array = JSON.parse(localStorage.getItem('place_types_json'));
-                // console.log(place_types_array);
-                // // console.log(place_types_array['place_type_name_ja'][place_types_array['place_type_id'].indexOf(data['place_type_id'])]);
-                // console.log('place_type_id: ' + data['place_type_id']);
-                // i = place_types_array['place_type_id'].indexOf(Number(data['place_type_id']));
-                // console.log('index: ' + i);
-                // console.log('place_type_id: ' + place_type_id);
-                dropdown = document.getElementById('section-place-type');
-                dropdown.value = data['place_type_id'];
-                // var place_type_options = dropdown.getElementsByClassName('section-place-type-option');
-                // place_type_options[3].setAttribute("selected", "");
+        // console.log('getratingreturn' + data);
+        var criterion_names = document.getElementsByClassName('section-criterion-name-display');
+        var criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
+        var rating_values = document.getElementsByClassName('section-rating-value');
+        for (let i = 0; i < Object.keys(place_type_ratings['criterion_id']).length; i++) {
+            criterion_names[i].innerHTML = place_type_ratings['criterion_name_ja'][i];
+            criterion_names_hidden[i].value = place_type_ratings['criterion_name_ja'][i];
+            var elem_id = 'criterion' + (i + 1);
+            var rating = place_type_ratings['ratings'][i];
+            document.getElementById(elem_id).value = rating;
+            rating_values[i].innerHTML = rating;
+        }
 
+        document.getElementById("section-note-text").value = ratings['note'];
+        document.getElementById('form_place_type_id').value = place_type_id;
 
-            },
-            error: function() {
-                //取得失敗時に実行する処理
-                console.log('ratingの取得失敗');
-            }
-        });
+        dropdown = document.getElementById('section-place-type');
+        dropdown.value = place_type_id;
     }
 
 
     function getPlaceType() {
         console.log('getPlaceType starts');
-        var deferred = new $.Deferred();
-        $.ajax({
-            type: 'GET',
-            url: "{{route('get.place.type.options')}}",
-            data: {},
-            dataType: 'JSON',
-            success: function(place_types) {
-                // place_typesデータの保存
-                var place_types_json = JSON.stringify(place_types);
-                localStorage.setItem('place_types_json', place_types_json);
-                // var place_types_json2 = localStorage.getItem('place_types_json');
-                // var array2 = JSON.parse(place_types_json2);
-
-                // console.log('place_types');
-                // console.log(place_types);
-                // // // テキストから復元
-                // console.log('place_types_json2');
-                // console.log(place_types_json2);
-                // console.log('array2[1]');
-                // console.log(place_types['place_type_name_ja'][place_types['place_type_id'].indexOf(4)]);
-            },
-            error: function() {
-                console.log('place_type_optionsの取得失敗');
-            }
-        });
-        return deferred;
+        place_types_json = localStorage.getItem('place_types_json');
+        console.log(place_types_json);
+        if (!place_types_json) {
+            $.ajax({
+                type: 'GET',
+                url: "{{route('get.place.type.options')}}",
+                data: {},
+                dataType: 'JSON',
+                success: function(place_types) {
+                    // place_typesデータの保存
+                    var place_types_json = JSON.stringify(place_types);
+                    localStorage.setItem('place_types_json', place_types_json);
+                    setPlaceType();
+                },
+                error: function() {
+                    console.log('place_type_optionsの取得失敗');
+                }
+            });
+        } else {
+            setPlaceType();
+        }
     }
 
     function setPlaceType() {
-        var place_types_json = localStorage.getItem('place_types_json');
-        if (!place_types_json) {
-            var deferred = getPlaceType();
-            deferred.done(function() {
-                place_types_json = localStorage.getItem('place_types_json');
-            });
-        }
+        place_types_json = localStorage.getItem('place_types_json');
         var place_types_array = JSON.parse(place_types_json);
-        console.log('place_types_array2');
-        console.log(place_types_array['place_type_name_ja'][place_types_array['place_type_id'].indexOf(4)]);
+        console.log(place_types_array);
+        // console.log(place_types_array['place_type_name_ja'][place_types_array['place_type_id'].indexOf(4)]);
         // console.log(place_types);
         var dropdown = document.getElementById('section-place-type');
         // 子要素の削除
@@ -253,15 +255,20 @@
 
         place_type_options[0].setAttribute("selected", "");
         place_type_id = document.getElementById('form_place_type_id').value;
-        console.log('place_type_id: ' + place_type_id);
+        // console.log('place_type_id: ' + place_type_id);
         dropdown.value = place_type_id;
 
         //プルダウン選択時の処理を設定
         var options = document.querySelectorAll("#section-place-type option");
         dropdown.addEventListener('change', function() {
+            var google_place_id = document.getElementById('google_place_id').value;
+
             //選択されたoption番号を取得
             var index = this.selectedIndex;
-            document.getElementById('form_place_type_id').value = options[index].value;
+            // document.getElementById('form_place_type_id').value = options[index].value;
+            place_type_id = options[index].value;
+
+            getRatings(google_place_id, place_type_id);
         });
     }
 </script>
@@ -308,8 +315,10 @@
 
     // 入力・ 更新のキャンセル
     document.getElementById("cancel-btn").onclick = function() {
+        // var place_type_id = document.getElementById('form_place_type_id').value;
+        getPlaceType();
         var google_place_id = document.getElementById('google_place_id').value;
-        getRatings(google_place_id);
+        getRatings(google_place_id, null);
     };
 </script>
 
