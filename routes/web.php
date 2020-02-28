@@ -31,7 +31,7 @@ Route::prefix('ratings')->group(function () {
     // フォーム表示用
     // Route::get('add', 'PostController@addForm');
 
-    Route::get('get', 'PostController@getRatings')->name('get_ratings');
+    Route::get('get', 'PostController@getRatings')->name('get.ratings');
     // POSTデータを受け取る用
     Route::post('update', 'PostController@updateRatings');
 
