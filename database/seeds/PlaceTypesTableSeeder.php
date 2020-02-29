@@ -18,9 +18,9 @@ class PlaceTypesTableSeeder extends Seeder
         ];
         foreach ($defalut_set as $item) {
             $place_type = new PlaceType();
-            $place_type->criterion_id = $item[0];
-            $place_type->criterion_name_en = $item[1];
-            $place_type->criterion_name_ja = $item[2];
+            $place_type->place_type_id = $item[0];
+            $place_type->place_type_name_en = $item[1];
+            $place_type->place_type_name_ja = $item[2];
             $place_type->status = 0;
             $place_type->save();
         }
