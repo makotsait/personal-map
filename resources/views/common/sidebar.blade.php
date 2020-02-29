@@ -166,7 +166,12 @@
         console.log(ratings);
 
         if (!place_type_id) {
-            place_type_id = ratings['place_type_id'];
+            if (ratings['place_type_id']) {
+                place_type_id = ratings['place_type_id'];
+            } else {
+                // placeが未登録の場合
+                place_type_id = 1;
+            }
         }
 
         // place_type_idの取得
