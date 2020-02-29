@@ -2,7 +2,6 @@
 <div class="sidebar left scroll_box">
     <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
     <div class="section-sidebar-left-content inner">
-
         <div class="header-image">
             <img id="header-image" src="">
         </div>
@@ -21,8 +20,6 @@
                 </select>
             </div>
         </div>
-
-
 
         <form action="ratings/update" method="POST" class="section">
             @csrf
@@ -109,22 +106,11 @@
         </form>
         <button type="button" Class="btn-default section-cancel-btn" id="cancel-btn">Cancel</button>
     </div>
-    <!-- @if (Session::has('message'))
-    <p>{{ session('message')[0] }}</p>
-    <p>{{ session('message')['item'] }}</p>
-    @endif -->
-
 </div>
 
 <script>
     // perfect-scrollbrの処理
     // var ps = new PerfectScrollbar('.scroll_box');
-    // console.log({
-    //     {
-    //         session('items1')
-    //     }
-    // });
-    console.log('a');
 </script>
 
 <script>
@@ -203,6 +189,7 @@
 
         dropdown = document.getElementById('section-place-type');
         dropdown.value = place_type_id;
+        $(".sidebar.left").trigger("sidebar:open");
     }
 
 
@@ -280,16 +267,11 @@
 
 <script>
     $(document).ready(function() {
-        // 向き
-        var sides = ["left", "top", "right", "bottom"];
-
-        // サイドバーの初期化
-        for (var i = 0; i < sides.length; ++i) {
-            var cSide = sides[i];
-            // $(".sidebar." + cSide).sidebar({side: cSide}{close:true});
-            $(".sidebar." + cSide).sidebar({
-                side: cSide
-            });
+        $(".sidebar.left").sidebar({
+            side: "left"
+        });
+        if (document.getElementById('google_place_id').value) {
+            $(".sidebar.left").trigger("sidebar:open");
         }
 
         // ボタンのクリックにより...
@@ -300,6 +282,7 @@
             $(".sidebar." + side).trigger("sidebar:" + action);
             return false;
         });
+
     });
 </script>
 
