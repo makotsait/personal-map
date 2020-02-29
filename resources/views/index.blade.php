@@ -201,9 +201,6 @@
     localStorage.clear()
     getPlaceType();
 
-
-
-
     // var elem = document.getElementsByClassName('range');
     // var rating_values = document.getElementsByClassName('section-rating-value');
     // var rangeValue = function(bar, target) {
