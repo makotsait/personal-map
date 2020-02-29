@@ -66,11 +66,50 @@ class PostController extends Controller
 
     public function getRatings()
     {
-        $user = Auth::user();
-        $user_id = $user->user_id;
+        $user_id = Auth::user()->user_id;
         $google_place_id = $_GET['google_place_id'];
+
+        $default_set = array(
+            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
+            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
+            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
+            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
+            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
+            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
+        );
+
+        $criterion = Criterion::where('status', 0)->first();
+        if (is_null($criterion)) return 'criterion not found in db';
+        $criteria = Criterion::where('status', 0)->get();
+        $criterion_name_ls = array();
+        foreach ($criteria as $criterion) {
+            $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
+        }
+
+        $i = 0;
+        foreach ($default_set as $place_type_id => $criteria_order) {
+            // $j = 0;
+            foreach ($criteria_order as $k => $order) {
+                $sort[$k] = $order[1];
+            }
+            array_multisort($sort, SORT_ASC, $criteria_order);
+
+            foreach ($criteria_order as $k =>  $order) {
+                $items['default_order'][$place_type_id]['criterion_id'][$k] = $order[0];
+                $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
+                $items['default_order'][$place_type_id]['ratings'][$k] = 0;
+                // $j++;
+            }
+            $i++;
+        }
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
-        if (is_null($place)) return 'place not found in db';
+        if (is_null($place)) {
+            $items['user_order'][0] = '';
+            $items['note'] = '';
+            return $items;
+        }
 
         $items = array();
         $place_id = $place->place_id;
@@ -128,46 +167,12 @@ class PostController extends Controller
         // }
 
         $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
-        if (is_null($note)) return 'note not found in db';
-        $items['note'] = $note->note;
+        if (isset($note)) {
+            $items['note'] = $note->note;
+        } else {
+            $items['note'] = '';
+        };
 
-        $default_set = array(
-            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
-            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
-            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
-            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
-            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
-            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
-        );
-
-        // $place_type_ids = array_keys($default_set);
-
-        $criterion = Criterion::where('status', 0)->first();
-        if (is_null($criteria_order)) return 'criteria_order not found in db';
-        $criteria = Criterion::where('status', 0)->get();
-        $criterion_name_ls = array();
-        foreach ($criteria as $criterion) {
-            $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
-        }
-
-        $i = 0;
-        foreach ($default_set as $place_type_id => $criteria_order) {
-            // $j = 0;
-            foreach ($criteria_order as $k => $order) {
-                $sort[$k] = $order[1];
-            }
-            array_multisort($sort, SORT_ASC, $criteria_order);
-
-            foreach ($criteria_order as $k =>  $order) {
-                $items['default_order'][$place_type_id]['criterion_id'][$k] = $order[0];
-                $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
-                $items['default_order'][$place_type_id]['ratings'][$k] = 0;
-                // $j++;
-            }
-            $i++;
-        }
 
         // $items = array();
         // $place_types = PlaceType::();
