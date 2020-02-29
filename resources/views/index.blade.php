@@ -94,7 +94,6 @@
           document.getElementById('form_place_name').value = data["result"]["name"];
           address_text.innerHTML = data["result"]["formatted_address"];
           document.getElementById('form_place_address').value = data["result"]["formatted_address"];
-          // console.log(data["result"]["photos"][0]["photo_reference"]);
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
         },
         error: function() {
@@ -180,6 +179,7 @@
         });
         var value1 = 'hoge';
         getPlaceDetail(place.place_id);
+        localStorage.clear('ratings_json')
         getRatings(place.place_id, null);
 
         marker.setVisible(true);
@@ -213,7 +213,6 @@
     //   target = rating_values[i];
     //   bar.addEventListener('input', rangeValue(bar, target));
     // }
-    // window.onload = getPlaceType();
   </script>
 
   <!-- <script>
