@@ -1,6 +1,6 @@
 @section('sidebar')
 <div class="sidebar left scroll_box">
-    <img class="sidebar close btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
+    <img class="sidebar-close-btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
     <div class="section-sidebar-left-content inner">
         <div class="header-image">
             <img id="header-image" src="">
@@ -9,8 +9,8 @@
             <h1 class="header-title" id="header-title">place name</h1>
             <span id="place_address">address</span>
 
-            <div include="form-input-select()">
-                <select required id="section-place-type">
+            <div include="form-input-select()" class="sectin-place-type-block">
+                <select required class="form-control" id="section-place-type">
                     <option value="" hidden>Place type</option>
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -43,14 +43,14 @@
                     <span class="rating rating-left" id="section-rating-group-1">
                         <span class="section-criterion-name-display">{{old('criterion1-name-hidden')}}</span>
                         <span class="range">
-                            <input type="range" name="criterion1" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
+                            <input type="range" name="criterion1" class="custom-range" id="criterion1" min="0" max="5" value="{{old('criterion1')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion1')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-2">
                         <span class="section-criterion-name-display">{{old('criterion2-name-hidden')}}</span>
                         <span class="range">
-                            <input type="range" name="criterion2" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
+                            <input type="range" name="criterion2" class="custom-range" id="criterion2" min="0" max="5" value="{{old('criterion2')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion2')}}</span>
                     </span>
@@ -60,14 +60,14 @@
                     <span class="rating rating-left" id="section-rating-group-3">
                         <span class="section-criterion-name-display">{{old('criterion3-name-hidden')}}</span>
                         <span class="range">
-                            <input type="range" name="criterion3" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
+                            <input type="range" name="criterion3" class="custom-range" id="criterion3" min="0" max="5" value="{{old('criterion3')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion3')}}</span>
                     </span>
                     <span class="rating section-rating-inline-right" id="section-rating-group-4">
                         <span class="section-criterion-name-display">{{old('criterion4-name-hidden')}}</span>
                         <span class="range">
-                            <input type="range" name="criterion4" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
+                            <input type="range" name="criterion4" class="custom-range" id="criterion4" min="0" max="5" value="{{old('criterion4')}}">
                         </span>
                         <span class="section-rating-value">{{old('criterion4')}}</span>
                     </span>
@@ -90,21 +90,21 @@
                 </div> -->
             </div>
             <div class="section-note-note-content" id="section-note-note-content">
-                <textarea name="place_note" class="section-note-text" id="section-note-text" rows="20">{{old('place_note')}}</textarea>
+                <textarea name="place_note" class="form-control section-note-text" id="section-note-text" rows="13">{{old('place_note')}}</textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
 
                 <!-- <span class="login">
                     <a link rel="login" href="{{route('logout')}}">ログアウト</a>
                 </span> -->
-                <input type="submit" class="btn-default section-submit-btn section-submit-cancel-btn" value="Save">
+                <input type="submit" class="btn btn-secondary section-submit-btn section-submit-cancel-btn" value="Save">
             </div>
         </form>
         <form action="/logout" method="post" class="section-logout-btn">
             @csrf
-            <input type="submit" value="Logout" class="btn-default">
+            <input type="submit" value="Logout" class="btn btn-secondary">
         </form>
-        <button type="button" Class="btn-default section-cancel-btn" id="cancel-btn">Cancel</button>
+        <button type="button" Class="btn btn-secondary section-cancel-btn" id="cancel-btn">Cancel</button>
     </div>
 </div>
 
@@ -274,15 +274,12 @@
             $(".sidebar.left").trigger("sidebar:open");
         }
 
-        // ボタンのクリックにより...
-        $(".btn[data-action]").on("click", function() {
+        $(".sidebar-close-btn").css("cursor", "pointer");
+        $(".sidebar-close-btn").on("click", function() {
             var $this = $(this);
-            var action = $this.attr("data-action");
-            var side = $this.attr("data-side");
-            $(".sidebar." + side).trigger("sidebar:" + action);
+            $this.trigger("sidebar:toggle");
             return false;
         });
-
     });
 </script>
 
