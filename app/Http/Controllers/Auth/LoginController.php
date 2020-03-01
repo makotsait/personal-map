@@ -51,7 +51,7 @@ class LoginController extends Controller
     }
     public function redirectPath()
     {
-        return '/home';
+        return '/';
     }
 
     public function userLogout()
