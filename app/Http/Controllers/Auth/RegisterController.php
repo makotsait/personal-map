@@ -71,6 +71,10 @@ class RegisterController extends Controller
             'status' => '0',
         ]);
     }
+    public function redirectPath()
+    {
+        return '/';
+    }
 
     // override
     // public function register(Request $request)
