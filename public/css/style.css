@@ -42,7 +42,7 @@ span{
     background: #03A9F4;
 }
 
-.sidebar.close {
+.sidebar-close-btn {
     width: 25px;
     position: absolute;
     top: 0;
@@ -75,9 +75,14 @@ span{
 
 .header-title {
     font-family: Meiryo, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    font-weight: bold;
     color: black;
     margin: 0;
+}
+
+.sectin-place-type-block{
+    margin-top: 10px;
 }
 
 span{
@@ -85,6 +90,7 @@ span{
 }
 .ratings{
     position: relative;
+    margin-bottom: 0.5em;
 }
 
 .ratings-line{
@@ -118,27 +124,29 @@ span{
 .range{
     color: black;
     position: absolute;
-    left: 80px;
+    left: 83px;
 }
 
 .range > input{
     vertical-align: middle;
-    width: 125px;
+    width: 120px;
     height: 12px;
 }
 .section-note-note-content{
-    margin: 20px 20px 0px;
+    margin: 0px 20px 5px 20px;
 }
 .section-note-text{
     width: 440px;
     height: 300px;
+    font-family: meiryo;
+}
+.btn{
+    width: 4.8em;
 }
 .section-submit-cancel-btn-line{
     position: relative;
 }
 .section-submit-cancel-btn{
-    width: 55px;
-    height: 27px;
     margin-bottom: 5px;
     position: absolute;
 }
@@ -147,7 +155,7 @@ span{
     position: absolute;
 }
 .section-submit-btn{
-    left: 350px;
+    left: 315px;
 } 
 .section-logout-btn{
     height: 27px;
@@ -155,11 +163,56 @@ span{
     display: inline-block;
 }
 .section-cancel-btn{
-    margin-left: 330px;
-    position: static;
+    margin-left: 300px;
+    position: absolute;
 } 
 
-.btn-default{
-    width: 55px;
-    height: 27px;
-}
+/* sidebar */
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .controls {
+      background-color: #fff;
+      border-radius: 2px;
+      border: 1px solid transparent;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-sizing: border-box;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      height: 29px;
+      margin-left: 17px;
+      margin-top: 10px;
+      outline: none;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 400px;
+    }
+
+    .controls:focus {
+      border-color: #4d90fe;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+
+    #infowindow-content {
+      display: none;
+    }
+
+    #map #infowindow-content {
+      display: inline;
+    }
+    /* sidebar */
