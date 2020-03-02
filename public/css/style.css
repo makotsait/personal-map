@@ -1,6 +1,6 @@
 span{
     color:black;
-    font-size:14px;
+    font-size:13px;
 }
 
 .sidebar{
@@ -94,28 +94,33 @@ span{
 }
 
 .ratings-line{
-    height: 35px;
+    height: 20px;
+    margin: 0px 25px 15px;
 }
 .section-rating-inline-right{
-    left:240px;
+    left: 250px;
 }
-
+.section-criterion-name-display{
+    font-weight: bold;
+}
 .section-rating-value{
     position: absolute;
-    left: 215px;
+    left: 200px;
+    font-size: 14px;
 }
 
 .rating{
-    width:245px;
+    /* width:245px; */
     box-sizing: border-box;
     /* display: inline-block; */
     position: absolute;
 }
 .raging-value{
     position: absolute;
+    left: 205px;
 }
 .rating-left{
-    padding-left: 20px;
+    /* padding-left: 25px; */
 }
 .rating-right{
     left: 200px;
@@ -124,16 +129,17 @@ span{
 .range{
     color: black;
     position: absolute;
-    left: 83px;
+    left: 70px;
 }
 
 .range > input{
     vertical-align: middle;
     width: 120px;
     height: 12px;
+    
 }
 .section-note-note-content{
-    margin: 0px 20px 5px 20px;
+    margin: 0px 20px 8px 20px;
 }
 .section-note-text{
     width: 440px;
@@ -164,7 +170,7 @@ span{
 }
 .section-cancel-btn{
     margin-left: 300px;
-    position: absolute;
+    /* position: absolute; */
 } 
 
 /* sidebar */
