@@ -132,7 +132,8 @@
         });
         var value1 = 'hoge';
         getPlaceDetail(place.place_id);
-        localStorage.clear('ratings_json')
+        localStorage.clear('ratings_json');
+
         getRatings(place.place_id, null);
 
         marker.setVisible(true);
@@ -153,6 +154,15 @@
 
     localStorage.clear()
     getPlaceType();
+    if (document.getElementById('google_place_id').value) {
+      console.log("kita");
+      $(".sidebar-close-btn").css("cursor", "pointer");
+      $(".sidebar-close-btn").on("click", function() {
+        var $this = $(this);
+        $this.trigger("sidebar:toggle");
+        return false;
+      });
+    }
 
     // var elem = document.getElementsByClassName('range');
     // var rating_values = document.getElementsByClassName('section-rating-value');

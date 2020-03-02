@@ -189,6 +189,14 @@
 
         dropdown = document.getElementById('section-place-type');
         dropdown.value = place_type_id;
+        if ($(".sidebar-close-btn").css('cursor') != "pointer") {
+            // console.log($(".sidebar-close-btn").css('cursor'));
+            $(".sidebar-close-btn").css("cursor", "pointer");
+            $(".sidebar-close-btn").on("click", function() {
+                $(this).trigger("sidebar:toggle");
+                return false;
+            });
+        }
         $(".sidebar.left").trigger("sidebar:open");
     }
 
@@ -274,12 +282,12 @@
             $(".sidebar.left").trigger("sidebar:open");
         }
 
-        $(".sidebar-close-btn").css("cursor", "pointer");
-        $(".sidebar-close-btn").on("click", function() {
-            var $this = $(this);
-            $this.trigger("sidebar:toggle");
-            return false;
-        });
+        // $(".sidebar-close-btn").css("cursor", "pointer");
+        // $(".sidebar-close-btn").on("click", function() {
+        //     var $this = $(this);
+        //     $this.trigger("sidebar:toggle");
+        //     return false;
+        // });
     });
 </script>
 
