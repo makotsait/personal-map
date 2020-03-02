@@ -67,9 +67,20 @@
         },
         success: function(data) {
           // alert(data);
-          console.log('headerimgurl:'.data);
+          // console.log('headerimgurl:'.data);
           document.getElementById('form_header_img_url').value = data;
           place_header_image.setAttribute('src', data);
+          // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
+          var img = new Image();
+          // イメージ配置後に実行する
+          img.addEventListener('load', function(event) {
+            height = img.height;
+            hidden_length = (height - 300) / 2;
+            $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+          });
+          img.src = data;
+
+
         },
         error: function() {
           //取得失敗時に実行する処理
