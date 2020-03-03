@@ -1,5 +1,5 @@
 @section('sidebar')
-<div class="sidebar left scroll_box">
+<div class="sidebar left scroll_box" id="section-sicebar-left">
     <img class="sidebar-close-btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
     <div class="section-sidebar-left-content inner">
         <div class="header-image">
@@ -189,14 +189,20 @@
 
         dropdown = document.getElementById('section-place-type');
         dropdown.value = place_type_id;
-        if ($(".sidebar-close-btn").css('cursor') != "pointer") {
-            $(".sidebar-close-btn").css("cursor", "pointer");
-            $(".sidebar-close-btn").on("click", function() {
-                $(this).trigger("sidebar:toggle");
-                return false;
-            });
-        }
+
         $(".sidebar.left").trigger("sidebar:open");
+        sidebar_is_closed = false;
+        $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
+        setToggleBtnRotationSetting();
+
+
+        // $(".sidebar-close-btn").on("click", function() {
+        //     if ($("#section-sicebar-left"), css("left", 0)) {
+        //         $(this).trigger("sidebar:toggle");
+        //     }
+        //     return false;
+        // });
+
     }
 
 
@@ -269,6 +275,28 @@
 
             getRatings(google_place_id, place_type_id);
         });
+    }
+
+    function setToggleBtnRotationSetting() {
+        if ($(".sidebar-close-btn").css('cursor') != "pointer") {
+            $(".sidebar-close-btn").css("cursor", "pointer");
+
+            // 開閉ボタンクリック時の処理
+            $(".sidebar-close-btn").on("click", function() {
+                var $this = $(this);
+                if (sidebar_is_closed) {
+                    $this.trigger("sidebar:open");
+                    sidebar_is_closed = false;
+                    $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
+                    // console.log("OPEN");
+                } else {
+                    $this.trigger("sidebar:close");
+                    sidebar_is_closed = true;
+                    $(".sidebar-close-btn").css("transform", "");
+                }
+                return false;
+            });
+        }
     }
 </script>
 
