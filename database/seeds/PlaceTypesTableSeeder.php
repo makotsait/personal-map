@@ -14,7 +14,7 @@ class PlaceTypesTableSeeder extends Seeder
     {
         $defalut_set = [
             [1, 'restaurant', 'レストラン'], [2, 'cafe', 'カフェ'], [3, 'hospital', '病院'], [4, 'lodging', 'ホテル'],
-            [5, 'tourist_attraction', '観光施設'], [6, 'park', '公園'], [7, 'amusement_park', '遊園地']
+            [5, 'tourist_attraction', '観光施設'], [6, 'park', '公園'], [7, 'amusement_park', '遊園地'], [8, 'onsen', '温泉']
         ];
         foreach ($defalut_set as $item) {
             $place_type = new PlaceType();

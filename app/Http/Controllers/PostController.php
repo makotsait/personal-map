@@ -68,6 +68,7 @@ class PostController extends Controller
     {
         $user_id = Auth::user()->user_id;
         $google_place_id = $_GET['google_place_id'];
+        $items = array();
 
         $default_set = array(
             '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
@@ -90,7 +91,6 @@ class PostController extends Controller
 
         $i = 0;
         foreach ($default_set as $place_type_id => $criteria_order) {
-            // $j = 0;
             foreach ($criteria_order as $k => $order) {
                 $sort[$k] = $order[1];
             }
@@ -100,7 +100,6 @@ class PostController extends Controller
                 $items['default_order'][$place_type_id]['criterion_id'][$k] = $order[0];
                 $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
                 $items['default_order'][$place_type_id]['ratings'][$k] = 0;
-                // $j++;
             }
             $i++;
         }
@@ -111,11 +110,8 @@ class PostController extends Controller
             return $items;
         }
 
-        $items = array();
         $place_id = $place->place_id;
-        $place_type_id = $place->place_type_id;
-
-        $items['place_type_id'] = $place_type_id;
+        $items['place_type_id'] = $place->place_type_id;
 
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->first();
         if (is_null($criteria_order)) {
@@ -137,34 +133,7 @@ class PostController extends Controller
                 $rating_value = $rating->rating;
             };
             $items['user_order'][$order->place_type_id]['ratings'][] = $rating_value;
-
-            // if (empty($items['num_of_criteria'][$order->place_type_id])) {
-            //     $items['num_of_criteria'][$order->place_type_id] = 0;
-            // }
-            // $items['num_of_criteria'][$order->place_type_id]++;
         }
-
-        // $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->first();
-        // if (is_null($rating)) return 'rating not found in db';
-        // $ratings = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->get();
-        // $i = 0;
-        // foreach ($ratings as $rating) {
-        //     $i++;
-        //     if (is_null($rating)) {
-        //         $rating_value = 0;
-        //     } else {
-        //         $rating_value = $rating->rating;
-        //     };
-        //     // $items['rating'][$i]=$order->criterion criteria_tableに紐付けてここに表示させたい
-        //     // $items['criterion_name'][$i] = $order->place_type->criterion;
-
-        //     // $items['rating'][$i]['criterion_name_en'] = $rating->criterion->criterion_name_en;
-        //     // $items['rating'][$i]['criterion_name_ja'] = $rating->criterion->criterion_name_ja;
-
-        //     $items['criterion_id'][$i] = $rating->criterion_id;
-        //     $items['criterion_name_ja'][$i] = $rating->criterion->criterion_name_ja;
-        //     $items['rating'][$i] = $rating_value;
-        // }
 
         $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
         if (isset($note)) {
@@ -173,14 +142,6 @@ class PostController extends Controller
             $items['note'] = '';
         };
 
-
-        // $items = array();
-        // $place_types = PlaceType::();
-        // $i = 0;
-        // foreach ($place_types as $place_type) {
-        //     $items[$i] = $place_type->place_type_name_ja;
-        //     $i++;
-        // }
         return json_encode($items);
     }
 
