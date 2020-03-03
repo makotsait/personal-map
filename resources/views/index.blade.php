@@ -165,14 +165,13 @@
 
     localStorage.clear()
     getPlaceType();
+
+    var sidebar_is_closed = true;
     if (document.getElementById('google_place_id').value) {
-      console.log("kita");
-      $(".sidebar-close-btn").css("cursor", "pointer");
-      $(".sidebar-close-btn").on("click", function() {
-        var $this = $(this);
-        $this.trigger("sidebar:toggle");
-        return false;
-      });
+      $(".sidebar.left").trigger("sidebar:open");
+      sidebar_is_closed = false;
+      $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
+      setToggleBtnRotationSetting();
     }
 
     // var elem = document.getElementsByClassName('range');
