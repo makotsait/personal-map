@@ -190,7 +190,6 @@
         dropdown = document.getElementById('section-place-type');
         dropdown.value = place_type_id;
         if ($(".sidebar-close-btn").css('cursor') != "pointer") {
-            // console.log($(".sidebar-close-btn").css('cursor'));
             $(".sidebar-close-btn").css("cursor", "pointer");
             $(".sidebar-close-btn").on("click", function() {
                 $(this).trigger("sidebar:toggle");
@@ -281,13 +280,6 @@
         if (document.getElementById('google_place_id').value) {
             $(".sidebar.left").trigger("sidebar:open");
         }
-
-        // $(".sidebar-close-btn").css("cursor", "pointer");
-        // $(".sidebar-close-btn").on("click", function() {
-        //     var $this = $(this);
-        //     $this.trigger("sidebar:toggle");
-        //     return false;
-        // });
     });
 </script>
 
@@ -308,7 +300,6 @@
 
     // 入力・ 更新のキャンセル
     document.getElementById("cancel-btn").onclick = function() {
-        // var place_type_id = document.getElementById('form_place_type_id').value;
         getPlaceType();
         var google_place_id = document.getElementById('google_place_id').value;
         getRatings(google_place_id, null);
