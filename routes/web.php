@@ -15,7 +15,8 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-Route::get('/', 'MapController@index')->middleware('auth')->name('index');
+Route::get('/', 'MapController@index')->middleware('sp.redirect')->middleware('auth')->name('index');
+Route::get('sp', 'MapController@indexSp')->middleware('auth')->name('index_sp');
 Route::get('test', 'PostController@index');
 Route::get('get_place_type_options', 'PostController@getPlaceTypeOpions')->name('get.place.type.options');
 // Route::get('test', 'TestController@test')->name('test');
