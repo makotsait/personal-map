@@ -16,6 +16,10 @@ class MapController extends Controller
     {
         return view('index');
     }
+    public function indexSp()
+    {
+        return view('index_sp');
+    }
 
     /**
      * Show the form for creating a new resource.
