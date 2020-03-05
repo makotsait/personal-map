@@ -195,16 +195,7 @@
         $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
         setToggleBtnRotationSetting();
 
-
-        // $(".sidebar-close-btn").on("click", function() {
-        //     if ($("#section-sicebar-left"), css("left", 0)) {
-        //         $(this).trigger("sidebar:toggle");
-        //     }
-        //     return false;
-        // });
-
     }
-
 
     function getPlaceType() {
         console.log('getPlaceType starts');
@@ -288,7 +279,6 @@
                     $this.trigger("sidebar:open");
                     sidebar_is_closed = false;
                     $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
-                    // console.log("OPEN");
                 } else {
                     $this.trigger("sidebar:close");
                     sidebar_is_closed = true;
