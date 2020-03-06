@@ -16,7 +16,7 @@ class RedirectIfSp
      */
     public function handle($request, Closure $next)
     {
-        if (!\Agent::isMobile()) {
+        if (\Agent::isMobile()) {
             return redirect('sp');
         } else {
             // return redirect('pc');
