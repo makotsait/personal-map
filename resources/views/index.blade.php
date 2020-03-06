@@ -6,18 +6,16 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
-
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('css/perfect-scrollbar.css') }}">
   <script src="{{ asset('/js/jquery-3.4.1.min.js') }}"></script>
   <script src="{{ asset('/js/jquery.sidebar.min.js') }}"></script>
   <script src="{{ asset('/js/perfect-scrollbar.min.js') }}"></script>
-
 </head>
 
 <body>
   @include('common.sidebar')
-  <div style="display: none">
+  <div style="display:none">
     <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
   </div>
   <div id="map"></div>
@@ -53,7 +51,6 @@
           //取得失敗時に実行する処理
           place_name_text.innerHTML = "取得失敗しました";
           address_text.innerHTML = "取得失敗しました";
-          // alert("取得失敗");
         }
       });
     }
@@ -66,8 +63,6 @@
           photoreference: photoreference
         },
         success: function(data) {
-          // alert(data);
-          // console.log('headerimgurl:'.data);
           document.getElementById('form_header_img_url').value = data;
           place_header_image.setAttribute('src', data);
           // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
@@ -79,12 +74,10 @@
             $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
           });
           img.src = data;
-
-
         },
         error: function() {
           //取得失敗時に実行する処理
-          alert("画像取得失敗");
+          console.log("画像取得失敗");
         }
       });
     }
@@ -173,38 +166,6 @@
       $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
       setToggleBtnRotationSetting();
     }
-
-    // var elem = document.getElementsByClassName('range');
-    // var rating_values = document.getElementsByClassName('section-rating-value');
-    // var rangeValue = function(bar, target) {
-    //   return function(evt) {
-    //     target.innerHTML = bar.value;
-    //   }
-    // }
-    // for (var i = 0; i < elem.length; i++) {
-    //   bar = elem[i].getElementsByTagName('input')[0];
-    //   target = rating_values[i];
-    //   bar.addEventListener('input', rangeValue(bar, target));
-    // }
-  </script>
-
-  <!-- <script>
-    $.ajax({
-      type: 'GET',
-      url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap',
-      dataType: 'html',
-      success: function(data) {
-        //取得成功したら実行する処理
-        console.log("ファイルの取得に成功しました");
-      },
-      error: function() {
-        //取得失敗時に実行する処理
-        console.log("何らかの理由で失敗しました");
-      }
-    });
-  </script> -->
-  <script>
-    // src = "{{ asset('js/app.js') }}"
   </script>
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap" async defer></script>

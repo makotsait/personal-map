@@ -1,5 +1,5 @@
 @section('sidebar')
-<div class="sidebar left scroll_box" id="section-sicebar-left">
+<div class="sidebar left scroll_box" id="section-sidebar-left">
     <img class="sidebar-close-btn" data-action="toggle" data-side="left" border="0" src="{{ asset('icon/icon_open_sidebar.png') }}" alt="icon_sidebar_oc">
     <div class="section-sidebar-left-content inner">
         <div class="header-image">
@@ -11,7 +11,7 @@
 
             <div include="form-input-select()" class="sectin-place-type-block">
                 <select required class="form-control" id="section-place-type">
-                    <option value="" hidden>Place type</option>
+                    <option value="" hidden>Loading</option>
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
                     <option value="3">Option 3</option>
@@ -195,16 +195,7 @@
         $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
         setToggleBtnRotationSetting();
 
-
-        // $(".sidebar-close-btn").on("click", function() {
-        //     if ($("#section-sicebar-left"), css("left", 0)) {
-        //         $(this).trigger("sidebar:toggle");
-        //     }
-        //     return false;
-        // });
-
     }
-
 
     function getPlaceType() {
         console.log('getPlaceType starts');
@@ -288,7 +279,6 @@
                     $this.trigger("sidebar:open");
                     sidebar_is_closed = false;
                     $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
-                    // console.log("OPEN");
                 } else {
                     $this.trigger("sidebar:close");
                     sidebar_is_closed = true;
