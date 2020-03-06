@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Auth;
+use Jenssegers\Agent\Agent;
 
 use Illuminate\Http\Request;
 use App\Models\Rating;
@@ -196,6 +197,10 @@ class PostController extends Controller
             }
             $note->save();
         }
-        return redirect()->route('index')->withInput();
+        if (\Agent::isMobile()) {
+            return redirect()->route('index_sp')->withInput();
+        } else {
+            return redirect()->route('index')->withInput();
+        }
     }
 }

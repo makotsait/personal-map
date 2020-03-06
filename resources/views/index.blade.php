@@ -15,7 +15,7 @@
 
 <body>
   @include('common.sidebar')
-  <div style="display: none">
+  <div style="display:none">
     <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
   </div>
   <div id="map"></div>
