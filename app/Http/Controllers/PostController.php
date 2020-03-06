@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Auth;
+use Jenssegers\Agent\Agent;
 
 use Illuminate\Http\Request;
 use App\Models\Rating;
@@ -16,7 +17,17 @@ use App\Models\PlaceType;
 
 class PostController extends Controller
 {
-
+    public $default_criteria_order = array(
+        // [0]:criterion_id, [1]:display_order
+        '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
+        '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
+        '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
+        '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
+        '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+        '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
+        '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
+        '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
+    );
     public function index(Request $request)
     {
         // $items = PostRatings::();
@@ -29,18 +40,7 @@ class PostController extends Controller
 
     public function setCriteriaOrderDefaultValue($user_id, $place_type_id)
     {
-        // [[place_type_id]=>[[criterion_id,display_order]]]
-        $default_set = array(
-            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
-            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
-            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
-            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
-            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
-            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
-        );
-        foreach ($default_set[$place_type_id] as $item) {
+        foreach ($this->default_criteria_order[$place_type_id] as $item) {
             $criteria_order = new CriteriaOrder();
             $criteria_order->user_id = $user_id;
             $criteria_order->place_type_id = $place_type_id;
@@ -70,19 +70,8 @@ class PostController extends Controller
         $google_place_id = $_GET['google_place_id'];
         $items = array();
 
-        $default_set = array(
-            '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
-            '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
-            '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
-            '4' => array([3, 1], [2, 2], [5, 3], [6, 4]),
-            '5' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '6' => array([3, 1], [5, 2], [9, 3], [4, 4]),
-            '7' => array([10, 1], [2, 2], [9, 3], [4, 4]),
-            '8' => array([11, 1], [12, 2], [5, 3], [3, 4])
-        );
-
-        $criterion = Criterion::where('status', 0)->first();
-        if (is_null($criterion)) return 'criterion not found in db';
+        $criterion_exists = Criterion::where('status', 0)->exists();
+        if (!$criterion_exists) return 'criterion not found in db';
         $criteria = Criterion::where('status', 0)->get();
         $criterion_name_ls = array();
         foreach ($criteria as $criterion) {
@@ -90,7 +79,7 @@ class PostController extends Controller
         }
 
         $i = 0;
-        foreach ($default_set as $place_type_id => $criteria_order) {
+        foreach ($this->default_criteria_order as $place_type_id => $criteria_order) {
             foreach ($criteria_order as $k => $order) {
                 $sort[$k] = $order[1];
             }
@@ -113,19 +102,15 @@ class PostController extends Controller
         $place_id = $place->place_id;
         $items['place_type_id'] = $place->place_type_id;
 
-        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->first();
-        if (is_null($criteria_order)) {
-            return 'criteria_order not found in db';
-        } else {
-            $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
-        }
+        $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->exists();
+        if (!$criteria_order_exists) return 'criteria_order not found in db';
+        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
+
         $i = 0;
         foreach ($criteria_order as $order) {
             $i++;
             $items['user_order'][$order->place_type_id]['criterion_id'][] = $order->criterion_id;
             $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
-            // $items['criterion_order'][$order->place_type_id]['display_order'][$i] = $order->display_order;
-
             $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
             if (is_null($rating)) {
                 $rating_value = 0;
@@ -136,10 +121,10 @@ class PostController extends Controller
         }
 
         $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
-        if (isset($note)) {
-            $items['note'] = $note->note;
-        } else {
+        if (is_null($note)) {
             $items['note'] = '';
+        } else {
+            $items['note'] = $note->note;
         };
 
         return json_encode($items);
@@ -177,9 +162,8 @@ class PostController extends Controller
             $place->save();
         }
         $place_id = $place->place_id;
-        $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->first();
-        // **->get()でコレクションを取得して、emptyで空か判定する形はうまく動作しなかったため、一旦first()でモデルを取得して判定する形にした**
-        if (is_null($criteria_order)) {
+        $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->exists();
+        if (!$criteria_order_exists) {
             $this->setCriteriaOrderDefaultValue($user_id, $place_type_id);
         }
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->get();
@@ -187,9 +171,8 @@ class PostController extends Controller
         foreach ($criteria_order as $order) {
             $criterion_id = $order->criterion_id;
             $criterion_input_name = 'criterion' . $order->display_order;
-            // 表示順序からcriterion_idを取得
 
-            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->first();
+            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->where('status', 0)->first();
             if (is_null($rating)) {
                 $rating = new Rating();
                 $rating->user_id = $user_id;
@@ -202,7 +185,7 @@ class PostController extends Controller
             }
             $rating->save();
 
-            $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
+            $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->where('status', 0)->first();
             if (is_null($note)) {
                 $note = new Note();
                 $note->user_id = $user_id;
@@ -214,6 +197,10 @@ class PostController extends Controller
             }
             $note->save();
         }
-        return redirect()->route('index')->withInput();
+        if (\Agent::isMobile()) {
+            return redirect()->route('index_sp')->withInput();
+        } else {
+            return redirect()->route('index')->withInput();
+        }
     }
 }
