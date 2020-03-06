@@ -1,0 +1,217 @@
+body{
+    width:100vw;
+}
+#section-sidebar-left{
+    display: none;
+    width:100%;
+}
+span{
+    color:black;
+    font-size:13px;
+}
+
+.sidebar{
+    position: fixed;
+    color: #fff;
+}
+
+.sidebar.left {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    /* width: 500px; */
+    background: #fff;
+    z-index:1;
+    /* overflow: scroll; */
+}
+
+.sidebar-close-btn {
+    display: none;
+    width: 25px;
+    position: absolute;
+    top: 0;
+    left: 500px;
+    }
+
+.section-sidebar-left-content{
+    overflow:scroll;
+    height:100vh;
+    /* 注意：ディベロッパーツールではvhがうまく機能しない */
+    /* height:500px; */
+}
+
+.header-image{
+    height: 300px;
+    width: 100%;
+    overflow: hidden;
+    /* transform: translateY(-25%) translateX(0%); */
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 408px;
+    height: 544px;
+    /* 親要素にposition:relative; */
+}
+
+.header-title-description {
+    padding: 16px 24px 16px;
+}
+
+.header-title {
+    font-family: Meiryo, sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: black;
+    margin: 0;
+}
+
+.sectin-place-type-block{
+    margin-top: 10px;
+}
+
+span{
+    color: black;
+}
+.ratings{
+    position: relative;
+    margin-bottom: 0.5em;
+}
+
+.ratings-line{
+    height: 20px;
+    margin: 0px 25px 15px;
+}
+.section-rating-inline-right{
+    left: 195px;
+}
+.section-criterion-name-display{
+    font-size: 12px;
+    font-weight: bold;
+}
+.section-rating-value{
+    position: absolute;
+    left: 144px;
+    font-size: 14px;
+}
+
+.rating{
+    /* width:245px; */
+    box-sizing: border-box;
+    /* display: inline-block; */
+    position: absolute;
+}
+.raging-value{
+    position: absolute;
+    left: 205px;
+}
+.rating-left{
+    /* padding-left: 25px; */
+}
+.rating-right{
+    left: 200px;
+}
+
+.range{
+    color: black;
+    position: absolute;
+    left: 64px;
+}
+
+.range > input{
+    vertical-align: middle;
+    width: 70px;
+    height: 12px;
+}
+.section-note-note-content{
+    /* margin: 0px 20px 8px 20px; */
+    margin-bottom: 8px;
+}
+.section-note-text{
+    font-family: meiryo;
+    height: auto;
+    width: 88%; 
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+.btn{
+    width: 4.8em;
+}
+.section-submit-cancel-btn-line{
+    position: relative;
+}
+.section-submit-cancel-btn{
+    margin-bottom: 10px;
+    position: absolute;
+}
+.login{
+    left: 20px;
+    position: absolute;
+}
+.section-submit-btn{
+    float: right;
+    right: 7em;
+} 
+.section-logout-btn{
+    height: auto;
+    margin-left: 20px;
+    display: inline-block;
+}
+.section-cancel-btn{
+    float: right;
+    margin-right: 1.6em;
+} 
+
+/* sidebar */
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .controls {
+        background-color: #fff;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        outline: none;
+        text-overflow: ellipsis;
+
+        width: 92%;
+        height: 29px;
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        padding: 0 11px 0 13px;
+    }
+
+    .controls:focus {
+      border-color: #4d90fe;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+
+    #infowindow-content {
+      display: none;
+    }
+
+    #map #infowindow-content {
+      display: inline;
+    }
+    /* sidebar */

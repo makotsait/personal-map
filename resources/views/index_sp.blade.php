@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style_sp.css') }}">
     <link rel="stylesheet" href="{{ asset('css/perfect-scrollbar.css') }}">
     <script src="{{ asset('/js/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ asset('/js/jquery.sidebar.min.js') }}"></script>
@@ -14,18 +14,20 @@
 </head>
 
 <body>
-    @include('common.sidebar')
-    <div style="display: none">
+    <!-- <div style="display: none"> -->
+    <div>
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     </div>
-    <div id="map"></div>
+    <div id="map" style="display:none"></div>
     <div id="infowindow-content">
         <span id="place-name" class="title"></span><br>
         <strong>Place ID:</strong> <span id="place-id"></span><br>
         <span id="place-address"></span>
     </div>
+    @include('common.sidebar')
 
     <script>
+        $("#section-sidebar-left").removeClass('sidebar left scroll_box');
         var place_detail;
         var place_name_text = document.getElementById('header-title');
         var address_text = document.getElementById('place_address');
@@ -94,58 +96,61 @@
             var input = document.getElementById('pac-input');
 
             var autocomplete = new google.maps.places.Autocomplete(input);
+            // bounds:優先して検索する地域を指定(ここではmapの位置)
             autocomplete.bindTo('bounds', map);
 
             // Specify just the place data fields that you need.
             autocomplete.setFields(['place_id', 'geometry', 'name']);
 
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var infowindow = new google.maps.InfoWindow();
+            // var infowindow = new google.maps.InfoWindow();
             var infowindowContent = document.getElementById('infowindow-content');
-            infowindow.setContent(infowindowContent);
+            // infowindow.setContent(infowindowContent);
 
-            var marker = new google.maps.Marker({
-                map: map
-            });
+            // var marker = new google.maps.Marker({
+            //     map: map
+            // });
 
-            marker.addListener('click', function() {
-                infowindow.open(map, marker);
-            });
+            // marker.addListener('click', function() {
+            //     infowindow.open(map, marker);
+            // });
 
+            // 場所を候補から選択したときの処理
             autocomplete.addListener('place_changed', function() {
-                infowindow.close();
 
+                // infowindow.close();
                 var place = autocomplete.getPlace();
 
-                if (!place.geometry) {
-                    return;
-                }
+                $("#section-sidebar-left").css('display', 'inline');
 
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
+                // if (!place.geometry) {
+                // return;
+                // }
+
+                // if (place.geometry.viewport) {
+                // map.fitBounds(place.geometry.viewport);
+                // } else {
+                // map.setCenter(place.geometry.location);
+                // map.setZoom(17);
+                // }
 
                 // Set the position of the marker using the place ID and location.
-                marker.setPlace({
-                    placeId: place.place_id,
-                    location: place.geometry.location
-                });
-                var value1 = 'hoge';
+                // marker.setPlace({
+                //     placeId: place.place_id,
+                //     location: place.geometry.location
+                // });
+                // marker.setVisible(true);
+
+                // var value1 = 'hoge';
                 getPlaceDetail(place.place_id);
                 localStorage.clear('ratings_json');
 
                 getRatings(place.place_id, null);
 
-                marker.setVisible(true);
-
                 infowindowContent.children['place-name'].textContent = place.name;
                 infowindowContent.children['place-id'].textContent = place.place_id;
-                infowindowContent.children['place-address'].textContent =
-                    place.formatted_address;
+                infowindowContent.children['place-address'].textContent = place.formatted_address;
                 document.getElementById('place_name').value = place.name;
                 document.getElementById('google_place_id').value = place.place_id;
                 infowindow.open(map, marker);
@@ -161,6 +166,8 @@
 
         var sidebar_is_closed = true;
         if (document.getElementById('google_place_id').value) {
+            $("#section-sidebar-left").css('display', 'inline');
+
             $(".sidebar.left").trigger("sidebar:open");
             sidebar_is_closed = false;
             $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
@@ -168,7 +175,7 @@
         }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&language=ja&libraries=places&callback=initMap" async defer></script>
 </body>
 
 </html>
