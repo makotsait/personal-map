@@ -11,7 +11,7 @@
 
             <div include="form-input-select()" class="sectin-place-type-block">
                 <select required class="form-control" id="section-place-type">
-                    <option value="" hidden>Loading</option>
+                    <option value="" hidden>Now Loading</option>
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
                     <option value="3">Option 3</option>
