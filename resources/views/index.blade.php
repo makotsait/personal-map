@@ -113,6 +113,24 @@
         infowindow.open(map, marker);
       });
 
+      function setBounds(map, place) {
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+        return map;
+      }
+
+      function setPlaceDetail(place) {
+        infowindowContent.children['place-name'].textContent = place.name;
+        infowindowContent.children['place-id'].textContent = place.place_id;
+        infowindowContent.children['place-address'].textContent = place.formatted_address;
+        document.getElementById('place_name').value = place.name;
+        document.getElementById('google_place_id').value = place.place_id;
+      }
+
       autocomplete.addListener('place_changed', function() {
         infowindow.close();
 
@@ -122,19 +140,14 @@
           return;
         }
 
-        if (place.geometry.viewport) {
-          map.fitBounds(place.geometry.viewport);
-        } else {
-          map.setCenter(place.geometry.location);
-          map.setZoom(17);
-        }
+        map = setBounds(map, place);
 
         // Set the position of the marker using the place ID and location.
         marker.setPlace({
           placeId: place.place_id,
           location: place.geometry.location
         });
-        var value1 = 'hoge';
+
         getPlaceDetail(place.place_id);
         localStorage.clear('ratings_json');
 
@@ -142,12 +155,7 @@
 
         marker.setVisible(true);
 
-        infowindowContent.children['place-name'].textContent = place.name;
-        infowindowContent.children['place-id'].textContent = place.place_id;
-        infowindowContent.children['place-address'].textContent =
-          place.formatted_address;
-        document.getElementById('place_name').value = place.name;
-        document.getElementById('google_place_id').value = place.place_id;
+        setPlaceDetail(place);
         infowindow.open(map, marker);
       });
     }
