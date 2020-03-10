@@ -137,6 +137,8 @@ class PostController extends Controller
         $google_place_id = $request->google_place_id;
         $place_name =  $request->form_place_name;
         $place_type_id = $request->form_place_type_id;
+        $latitude = $request->form_latitude;
+        $longitude = $request->form_longitude;
         // $place_type_id = $_GET['place_type_id'];
         $place = Place::where('google_place_id', $google_place_id)->first();
         if (is_null($place)) {
@@ -149,6 +151,8 @@ class PostController extends Controller
             $place->google_place_id = $google_place_id;
             $place->place_name = $place_name;
             $place->place_type_id = $place_type_id;
+            $place->latitude = $latitude;
+            $place->longitude = $longitude;
             $place->status = 0;
             $place->save();
             $place = Place::where('google_place_id', $google_place_id)->first();
