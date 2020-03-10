@@ -46,6 +46,8 @@
           address_text.innerHTML = data["result"]["formatted_address"];
           document.getElementById('form_place_address').value = data["result"]["formatted_address"];
           getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
+          document.getElementById('form_latitude').value = data["result"]["geometry"]["location"]["lat"];
+          document.getElementById('form_longitude').value = data["result"]["geometry"]["location"]["lng"];
         },
         error: function() {
           //取得失敗時に実行する処理
