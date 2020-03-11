@@ -85,13 +85,31 @@
     }
 
     function initMap() {
+
       var map = new google.maps.Map(document.getElementById('map'), {
         center: {
           lat: 35.742251,
           lng: 139.7813826
         },
-        zoom: 13
+        zoom: 13,
+        // mapTypeControl: false, // マップ切り替えのコントロールを表示しない
+        streetViewControl: false, // ストリートビューのコントロールを表示しない
       });
+
+      // var place_locations = [{
+      //   'name': 'hoge',
+      //   'location': {
+      //     'lat': 35.6966869,
+      //     'lng': 139.7603095,
+      //   }
+      // }];
+
+      var place_locations = [{
+        'lat': 35.6966869,
+        'lng': 139.7603095
+      }];
+      // place_locations[0]['lat'] = 35.6966869;
+      // place_locations[0]['lng'] = 139.7603095;
 
       var input = document.getElementById('pac-input');
 
@@ -125,6 +143,50 @@
         return map;
       }
 
+      /**
+       * マーカーにイベントを追加する
+       * @param {object} marker     (required) マーカーの情報
+       * @param {object} infoWindow (required) 吹き出しの情報
+       * @param {number} index      (required) 地図情報のインデックス番号
+       */
+      function add_event_to_marker(marker, infoWindow, index) {
+        var item = place_locations[0];
+        item['marker'] = marker;
+        item['infoWindow'] = infoWindow;
+
+        // マーカークリック時に吹き出しを表示する
+        item['marker'].addListener('click', function(e) {
+          // infoWindows_hide();
+          // item['infoWindow'].open(map, item['marker']);
+          console.log('clicked');
+        });
+      }
+
+      function infoWindows_hide() {
+        for (var i = 0; i < place_locations.length; i++) {
+          place_locations[i]['infoWindow'].close();
+        }
+      }
+
+      function add_marker() {
+        for (var i = 0; i < place_locations.length; i++) {
+          var marker = new google.maps.Marker({
+            position: place_locations[i],
+            map: map
+          });
+          // 吹き出しの生成
+          var ins = '<div class="map-window">';
+          ins += '<p class="map-window_name">' + 'helloworld' + '</p>';
+          ins += '</div>';
+          var infoWindow = new google.maps.InfoWindow({
+            content: ins
+          });
+
+          // マーカーのイベント設定
+          add_event_to_marker(marker, infoWindow, i);
+        }
+      }
+
       function setPlaceDetail(place) {
         infowindowContent.children['place-name'].textContent = place.name;
         infowindowContent.children['place-id'].textContent = place.place_id;
@@ -156,6 +218,8 @@
         getRatings(place.place_id, null);
 
         marker.setVisible(true);
+
+        add_marker();
 
         setPlaceDetail(place);
         infowindow.open(map, marker);
