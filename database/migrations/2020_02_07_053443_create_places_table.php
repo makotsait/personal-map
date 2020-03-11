@@ -18,8 +18,8 @@ class CreatePlacesTable extends Migration
             $table->text('google_place_id');
             $table->text('place_name');
             $table->unsignedInteger('place_type_id');
-            $table->double('latitude', 13, 8);
-            $table->double('longitude', 13, 8);
+            $table->double('latitude', 12, 7);
+            $table->double('longitude', 12, 7);
             $table->timestamps();
             $table->unsignedInteger('status');
         });
