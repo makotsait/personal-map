@@ -18,7 +18,7 @@ use App\Models\PlaceType;
 class PostController extends Controller
 {
     public $default_criteria_order = array(
-        // [0]:criterion_id, [1]:display_order
+        // place_type_id => ([0]:criterion_id, [1]:display_order)
         '1' => array([1, 1], [2, 2], [6, 3], [4, 4]),
         '2' => array([3, 1], [2, 2], [1, 3], [4, 4]),
         '3' => array([7, 1], [8, 2], [5, 3], [6, 4]),
@@ -78,19 +78,29 @@ class PostController extends Controller
             $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
         }
 
-        $i = 0;
+        // $default_criteria_orderの構造
+        // place_type_id => ([0]:criterion_id, [1]:display_order)
+        // $i = 0;
         foreach ($this->default_criteria_order as $place_type_id => $criteria_order) {
-            foreach ($criteria_order as $k => $order) {
-                $sort[$k] = $order[1];
+            // [例]$place_type_id = 1, $criteria_order = [[1, 1], [2, 2], [6, 3], [4, 4]]
+            // display_order順にソート
+            // 第二引数はインクリメントとして扱える
+            foreach ($criteria_order as $i => $display_order) {
+                // [例]$i = 0, $display_order = [1, 1]
+                $sort_key[$i] = $display_order[1];
             }
-            array_multisort($sort, SORT_ASC, $criteria_order);
 
-            foreach ($criteria_order as $k =>  $order) {
-                $items['default_order'][$place_type_id]['criterion_id'][$k] = $order[0];
-                $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
-                $items['default_order'][$place_type_id]['ratings'][$k] = 0;
+            array_multisort($sort_key, SORT_ASC, $criteria_order);
+            // [参考]どの列を基準に並び替えるか指定していないので不思議な設定である。
+            // $sort_keyに入れたカラムをハッシュ値等で並び替えるカラムとして自動的に指定する仕様のようだ。
+
+            foreach ($criteria_order as $i => $display_order) {
+                // [例]$i = 0, $display_order = [1, 1]
+                $items['default_order'][$place_type_id]['criterion_id'][$i] = $display_order[0];
+                $items['default_order'][$place_type_id]['criterion_name_ja'][$i] = $criterion_name_ls[$display_order[0]];
+                $items['default_order'][$place_type_id]['ratings'][$i] = 0;
             }
-            $i++;
+            // $i++;
         }
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place)) {
