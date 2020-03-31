@@ -85,7 +85,6 @@
     }
 
     function initMap() {
-
       var map = new google.maps.Map(document.getElementById('map'), {
         center: {
           lat: 35.742251,
@@ -96,20 +95,10 @@
         streetViewControl: false, // ストリートビューのコントロールを表示しない
       });
 
-      // var place_locations = [{
-      //   'name': 'hoge',
-      //   'location': {
-      //     'lat': 35.6966869,
-      //     'lng': 139.7603095,
-      //   }
-      // }];
-
       var place_locations = [{
         'lat': 35.6966869,
         'lng': 139.7603095
       }];
-      // place_locations[0]['lat'] = 35.6966869;
-      // place_locations[0]['lng'] = 139.7603095;
 
       var input = document.getElementById('pac-input');
 
@@ -132,6 +121,8 @@
       marker.addListener('click', function() {
         infowindow.open(map, marker);
       });
+
+      add_marker();
 
       function setBounds(map, place) {
         if (place.geometry.viewport) {
@@ -218,8 +209,6 @@
         getRatings(place.place_id, null);
 
         marker.setVisible(true);
-
-        add_marker();
 
         setPlaceDetail(place);
         infowindow.open(map, marker);
