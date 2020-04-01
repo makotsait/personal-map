@@ -95,10 +95,26 @@
         streetViewControl: false, // ストリートビューのコントロールを表示しない
       });
 
-      var place_locations = [{
-        'lat': 35.6966869,
-        'lng': 139.7603095
-      }];
+      var place_locations = [
+        {
+            "name": "AKIBAカルチャーズZONE",
+            "latlng": {
+                "lat": 35.699519,
+                "lng": 139.770388
+            }
+        }, {
+            "name": "秋葉原ガチャポン会館",
+            "latlng": {
+                "lat": 35.701861,
+                "lng": 139.771220
+            }
+        },{
+            "name": "コミックとらのあな秋葉原店C",
+            "latlng": {
+                "lat": 35.700536,
+                "lng": 139.771158
+            }
+        }];
 
       var input = document.getElementById('pac-input');
 
@@ -140,29 +156,32 @@
        * @param {object} infoWindow (required) 吹き出しの情報
        * @param {number} index      (required) 地図情報のインデックス番号
        */
-      function add_event_to_marker(marker, infoWindow, index) {
-        var item = place_locations[0];
-        item['marker'] = marker;
-        item['infoWindow'] = infoWindow;
 
-        // マーカークリック時に吹き出しを表示する
-        item['marker'].addListener('click', function(e) {
-          // infoWindows_hide();
-          // item['infoWindow'].open(map, item['marker']);
-          console.log('clicked');
-        });
-      }
 
       function infoWindows_hide() {
         for (var i = 0; i < place_locations.length; i++) {
           place_locations[i]['infoWindow'].close();
         }
       }
+      
+      function add_event_to_marker(marker, infoWindow, index) {
+        var item = place_locations[index];
+        item['marker'] = marker;
+        item['infoWindow'] = infoWindow;
+    
+        // マーカークリック時に吹き出しを表示する
+        item['marker'].addListener('click', function(e) {
+            infoWindows_hide();
+            item['infoWindow'].open(map, item['marker']);
+            console.log('clicked');
+        });
+      }
 
       function add_marker() {
         for (var i = 0; i < place_locations.length; i++) {
+          var item = place_locations[i];
           var marker = new google.maps.Marker({
-            position: place_locations[i],
+            position: item['latlng'],
             map: map
           });
           // 吹き出しの生成
