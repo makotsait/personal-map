@@ -11,6 +11,8 @@
   <script src="{{ asset('/js/jquery-3.4.1.min.js') }}"></script>
   <script src="{{ asset('/js/jquery.sidebar.min.js') }}"></script>
   <script src="{{ asset('/js/perfect-scrollbar.min.js') }}"></script>
+  <script src="{{ asset('/js/markerclusterer.js') }}"></script>
+  <!-- <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script> -->
 </head>
 
 <body>
@@ -26,6 +28,40 @@
   </div>
 
   <script>
+    var ready = { api: false, ajax: false };
+    var map;
+    var mc;
+    var mapData;
+    var mapOptions = {
+    center: { // 地図の緯度経度
+        lat: 35.685614,
+        lng: 139.752878
+    },
+        zoom: 14, // 地図の拡大率
+        mapTypeControl: false, // マップ切り替えのコントロールを表示するかどうか
+        streetViewControl: false // ストリートビューのコントロールを表示するかどうか
+    }
+    var place_locations = [
+        {
+            "name": "AKIBAカルチャーズZONE",
+            "latlng": {
+                "lat": 35.699519,
+                "lng": 139.770388
+            }
+        }, {
+            "name": "秋葉原ガチャポン会館",
+            "latlng": {
+                "lat": 35.701861,
+                "lng": 139.771220
+            }
+        },{
+            "name": "コミックとらのあな秋葉原店C",
+            "latlng": {
+                "lat": 35.700536,
+                "lng": 139.771158
+            }
+        }];
+
     var place_detail;
     var place_name_text = document.getElementById('header-title');
     var address_text = document.getElementById('place_address');
@@ -85,36 +121,7 @@
     }
 
     function initMap() {
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: {
-          lat: 35.742251,
-          lng: 139.7813826
-        },
-        zoom: 13,
-        // mapTypeControl: false, // マップ切り替えのコントロールを表示しない
-        streetViewControl: false, // ストリートビューのコントロールを表示しない
-      });
-
-      var place_locations = [
-        {
-            "name": "AKIBAカルチャーズZONE",
-            "latlng": {
-                "lat": 35.699519,
-                "lng": 139.770388
-            }
-        }, {
-            "name": "秋葉原ガチャポン会館",
-            "latlng": {
-                "lat": 35.701861,
-                "lng": 139.771220
-            }
-        },{
-            "name": "コミックとらのあな秋葉原店C",
-            "latlng": {
-                "lat": 35.700536,
-                "lng": 139.771158
-            }
-        }];
+      map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
       var input = document.getElementById('pac-input');
 
@@ -150,52 +157,8 @@
         return map;
       }
 
-      /**
-       * マーカーにイベントを追加する
-       * @param {object} marker     (required) マーカーの情報
-       * @param {object} infoWindow (required) 吹き出しの情報
-       * @param {number} index      (required) 地図情報のインデックス番号
-       */
-
-
-      function infoWindows_hide() {
-        for (var i = 0; i < place_locations.length; i++) {
-          place_locations[i]['infoWindow'].close();
-        }
-      }
       
-      function add_event_to_marker(marker, infoWindow, index) {
-        var item = place_locations[index];
-        item['marker'] = marker;
-        item['infoWindow'] = infoWindow;
-    
-        // マーカークリック時に吹き出しを表示する
-        item['marker'].addListener('click', function(e) {
-            infoWindows_hide();
-            item['infoWindow'].open(map, item['marker']);
-            console.log('clicked');
-        });
-      }
 
-      function add_marker() {
-        for (var i = 0; i < place_locations.length; i++) {
-          var item = place_locations[i];
-          var marker = new google.maps.Marker({
-            position: item['latlng'],
-            map: map
-          });
-          // 吹き出しの生成
-          var ins = '<div class="map-window">';
-          ins += '<p class="map-window_name">' + 'helloworld' + '</p>';
-          ins += '</div>';
-          var infoWindow = new google.maps.InfoWindow({
-            content: ins
-          });
-
-          // マーカーのイベント設定
-          add_event_to_marker(marker, infoWindow, i);
-        }
-      }
 
       function setPlaceDetail(place) {
         infowindowContent.children['place-name'].textContent = place.name;
@@ -233,6 +196,77 @@
         infowindow.open(map, marker);
       });
     }
+
+    /**
+    * Google Maps APIの準備完了後の処理
+    */
+    function api_ready() {
+        ready['api'] = true;
+        generate_map();
+    }
+    
+    /**
+    * 地図を生成する
+    */
+    function generate_map() {
+        if(ready['api'] && ready['ajax']) {
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            add_marker();
+        }
+    }
+
+    function add_marker() {
+      var markers = [];
+      for (var i = 0; i < place_locations.length; i++) {
+        var item = place_locations[i];
+
+        // マーカーの設置
+        var marker = new google.maps.Marker({
+            position: item['latlng']
+        });
+
+        // 吹き出しの生成
+        var ins = '<div class="map-window">';
+        ins += '<p class="map-window_name">' + item['name'] + '</p>';
+        ins += '</div>';
+        var infoWindow = new google.maps.InfoWindow({
+          content: ins
+        });
+
+        // マーカーのイベント設定
+        add_event_to_marker(marker, infoWindow, i);
+
+        // MarkerClusterer用にマーカーの情報を配列にまとめる
+        markers.push(marker);
+      }
+      mc = new MarkerClusterer(map, markers);
+    }
+
+    /**
+      * マーカーにイベントを追加する
+      * @param {object} marker     (required) マーカーの情報
+      * @param {object} infoWindow (required) 吹き出しの情報
+      * @param {number} index      (required) 地図情報のインデックス番号
+      */
+
+    function infoWindows_hide() {
+      for (var i = 0; i < place_locations.length; i++) {
+        place_locations[i]['infoWindow'].close();
+      }
+    }
+    
+    function add_event_to_marker(marker, infoWindow, index) {
+      var item = place_locations[index];
+      item['marker'] = marker;
+      item['infoWindow'] = infoWindow;
+  
+      // マーカークリック時に吹き出しを表示する
+      item['marker'].addListener('click', function(e) {
+          infoWindows_hide();
+          item['infoWindow'].open(map, item['marker']);
+      });
+    }
+
     // フォーム送信後にControllerでリダイレクトにより呼び出される時に、元の値をセットし直す処理
     place_name_text.innerHTML = document.getElementById('form_place_name').value;
     address_text.innerHTML = document.getElementById('form_place_address').value;
