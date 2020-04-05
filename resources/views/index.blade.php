@@ -54,6 +54,23 @@
     var place_name_text = document.getElementById('header-title');
     var address_text = document.getElementById('place_address');
     var place_header_image = document.getElementById('header-image');
+    fetchAllPlacesLocation();
+    function fetchAllPlacesLocation(){
+        console.log('test');
+      $.ajax({
+        type: 'GET',
+        url: "{{route('fetch.all.places.locations')}}",
+        dataType: 'json',
+        success: function(data) {
+            // place_locations = data;
+            console.log(data);
+        },
+        error: function() {
+            //取得失敗時に実行する処理
+            console.log('failed');
+        }
+      });
+    }
 
     function getPlaceDetail(place_id) {
       $.ajax({
@@ -61,22 +78,22 @@
         url: "{{route('get_place_detail')}}",
         dataType: 'json',
         data: {
-          place_id: place_id,
-          _token: '{{ csrf_token() }}'
+            place_id: place_id,
+            _token: '{{ csrf_token() }}'
         },
         success: function(data) {
-          place_name_text.innerHTML = data["result"]["name"];
-          document.getElementById('form_place_name').value = data["result"]["name"];
-          address_text.innerHTML = data["result"]["formatted_address"];
-          document.getElementById('form_place_address').value = data["result"]["formatted_address"];
-          getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-          document.getElementById('form_latitude').value = data["result"]["geometry"]["location"]["lat"];
-          document.getElementById('form_longitude').value = data["result"]["geometry"]["location"]["lng"];
+            place_name_text.innerHTML = data["result"]["name"];
+            document.getElementById('form_place_name').value = data["result"]["name"];
+            address_text.innerHTML = data["result"]["formatted_address"];
+            document.getElementById('form_place_address').value = data["result"]["formatted_address"];
+            getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
+            document.getElementById('form_latitude').value = data["result"]["geometry"]["location"]["lat"];
+            document.getElementById('form_longitude').value = data["result"]["geometry"]["location"]["lng"];
         },
         error: function() {
-          //取得失敗時に実行する処理
-          place_name_text.innerHTML = "取得失敗しました";
-          address_text.innerHTML = "取得失敗しました";
+            //取得失敗時に実行する処理
+            place_name_text.innerHTML = "取得失敗しました";
+            address_text.innerHTML = "取得失敗しました";
         }
       });
     }
