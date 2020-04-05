@@ -207,4 +207,22 @@ class PostController extends Controller
             return redirect()->route('index')->withInput();
         }
     }
+
+    public function fetchAllPlacesLocations(){
+        $user = Auth::user();
+        $user_id = $user->user_id;
+        $item = array();
+        $items = array();
+
+        $exists_rating = Rating::where('user_id', $user_id)->where('status', 0)->exists();
+        if(!$exists_rating) return json_encode('PLACE_NOT_FOUND');
+        $ratings = Rating::where('user_id', $user_id)->where('status', 0)->groupBy('place_id')->get();
+        foreach ($ratings as $rating) {
+            $item['name'] = $rating->place->place_name;
+            $item['latlng']['lat'] = $rating->place->latitude;
+            $item['latlng']['lng'] = $rating->place->longitude;
+            array_push($items, $item);
+        }
+        return json_encode($items);
+    }
 }
