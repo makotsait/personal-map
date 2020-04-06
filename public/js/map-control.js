@@ -1,31 +1,32 @@
-var ready = { api: false, ajax: false };
+var ready = { map: false, locations: false };
 var map;
 var mc;
 // var mapData;
 var mapOptions = {
-center: { // ’n}‚ÌˆÜ“xŒo“x
+center: { // åœ°å›³ã®ç·¯åº¦çµŒåº¦
     lat: 35.685614,
     lng: 139.752878
 },
-    zoom: 14, // ’n}‚ÌŠg‘å—¦
-    mapTypeControl: false, // ƒ}ƒbƒvØ‚è‘Ö‚¦‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğ•\¦‚·‚é‚©‚Ç‚¤‚©
-    streetViewControl: false // ƒXƒgƒŠ[ƒgƒrƒ…[‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğ•\¦‚·‚é‚©‚Ç‚¤‚©
-}
-
-    /**
-    * Google Maps API‚Ì€”õŠ®—¹Œã‚Ìˆ—
-    */
-   function api_ready() {
-    ready['api'] = true;
-    generate_map();
+    zoom: 14, // åœ°å›³ã®æ‹¡å¤§ç‡
+    mapTypeControl: false, // ãƒãƒƒãƒ—åˆ‡ã‚Šæ›¿ãˆã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã©ã†ã‹
+    streetViewControl: false // ã‚¹ãƒˆãƒªãƒ¼ãƒˆãƒ“ãƒ¥ãƒ¼ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã©ã†ã‹
 }
 
 /**
-* ’n}‚ğ¶¬‚·‚é
+* Google Maps APIã®æº–å‚™å®Œäº†å¾Œã®å‡¦ç†
+*/
+function api_ready() {
+  ready['locations'] = true;
+  generate_map();
+  // add_marker();
+}
+
+/**
+* åœ°å›³ã‚’ç”Ÿæˆã™ã‚‹
 */
 function generate_map() {
-    if(ready['api'] && ready['ajax']) {
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    if(ready['map'] && ready['locations']) {
+        // map = new google.maps.Map(document.getElementById('map'), mapOptions);
         add_marker();
     }
 }
@@ -35,12 +36,12 @@ function add_marker() {
   for (var i = 0; i < place_locations.length; i++) {
     var item = place_locations[i];
 
-    // ƒ}[ƒJ[‚Ìİ’u
+    // ãƒãƒ¼ã‚«ãƒ¼ã®è¨­ç½®
     var marker = new google.maps.Marker({
         position: item['latlng']
     });
 
-    // ‚«o‚µ‚Ì¶¬
+    // å¹ãå‡ºã—ã®ç”Ÿæˆ
     var ins = '<div class="map-window">';
     ins += '<p class="map-window_name">' + item['name'] + '</p>';
     ins += '</div>';
@@ -48,20 +49,20 @@ function add_marker() {
       content: ins
     });
 
-    // ƒ}[ƒJ[‚ÌƒCƒxƒ“ƒgİ’è
+    // ãƒãƒ¼ã‚«ãƒ¼ã®ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š
     add_event_to_marker(marker, infoWindow, i);
 
-    // MarkerClusterer—p‚Éƒ}[ƒJ[‚Ìî•ñ‚ğ”z—ñ‚É‚Ü‚Æ‚ß‚é
+    // MarkerClustererç”¨ã«ãƒãƒ¼ã‚«ãƒ¼ã®æƒ…å ±ã‚’é…åˆ—ã«ã¾ã¨ã‚ã‚‹
     markers.push(marker);
   }
   mc = new MarkerClusterer(map, markers);
 }
 
 /**
-  * ƒ}[ƒJ[‚ÉƒCƒxƒ“ƒg‚ğ’Ç‰Á‚·‚é
-  * @param {object} marker     (required) ƒ}[ƒJ[‚Ìî•ñ
-  * @param {object} infoWindow (required) ‚«o‚µ‚Ìî•ñ
-  * @param {number} index      (required) ’n}î•ñ‚ÌƒCƒ“ƒfƒbƒNƒX”Ô†
+  * ãƒãƒ¼ã‚«ãƒ¼ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
+  * @param {object} marker     (required) ãƒãƒ¼ã‚«ãƒ¼ã®æƒ…å ±
+  * @param {object} infoWindow (required) å¹ãå‡ºã—ã®æƒ…å ±
+  * @param {number} index      (required) åœ°å›³æƒ…å ±ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·
   */
 
 function infoWindows_hide() {
@@ -75,7 +76,7 @@ function add_event_to_marker(marker, infoWindow, index) {
   item['marker'] = marker;
   item['infoWindow'] = infoWindow;
 
-  // ƒ}[ƒJ[ƒNƒŠƒbƒN‚É‚«o‚µ‚ğ•\¦‚·‚é
+  // ãƒãƒ¼ã‚«ãƒ¼ã‚¯ãƒªãƒƒã‚¯æ™‚ã«å¹ãå‡ºã—ã‚’è¡¨ç¤ºã™ã‚‹
   item['marker'].addListener('click', function(e) {
       infoWindows_hide();
       item['infoWindow'].open(map, item['marker']);
