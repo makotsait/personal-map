@@ -63,11 +63,19 @@
         dataType: 'json',
         success: function(data) {
             // place_locations = data;
-            console.log(data);
+            if(data != 'PLACE_NOT_FOUND'){
+              // place_locations = JSON.parse(data);
+              place_locations = data;
+              place_locations = data.map(function(str) {
+                return {'name': str.name, 'latlng': {'lat': Number(str.latlng.lat), 'lng': Number(str.latlng.lng)}}
+              })
+              console.log(place_locations);
+              api_ready();
+              }
         },
         error: function() {
             //取得失敗時に実行する処理
-            console.log('failed');
+            console.log('Fetching all places locations failed');
         }
       });
     }
@@ -140,15 +148,13 @@
       var infowindowContent = document.getElementById('infowindow-content');
       infowindow.setContent(infowindowContent);
 
-      var marker = new google.maps.Marker({
-        map: map
-      });
+      // var marker = new google.maps.Marker({
+      //   map: map
+      // });
 
-      marker.addListener('click', function() {
-        infowindow.open(map, marker);
-      });
-
-      add_marker();
+      // marker.addListener('click', function() {
+      //   infowindow.open(map, marker);
+      // });
 
       function setBounds(map, place) {
         if (place.geometry.viewport) {
@@ -159,6 +165,9 @@
         }
         return map;
       }
+
+      ready['map'] = true;
+      generate_map()
 
       function setPlaceDetail(place) {
         infowindowContent.children['place-name'].textContent = place.name;
