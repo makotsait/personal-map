@@ -3,26 +3,17 @@ var map;
 var mc;
 // var mapData;
 var mapOptions = {
-center: { // åœ°å›³ã®ç·¯åº¦çµŒåº¦
+center: { // ’n}‚ÌˆÜ“xŒo“x
     lat: 35.685614,
     lng: 139.752878
 },
-    zoom: 14, // åœ°å›³ã®æ‹¡å¤§ç‡
-    mapTypeControl: false, // ãƒãƒƒãƒ—åˆ‡ã‚Šæ›¿ãˆã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã©ã†ã‹
-    streetViewControl: false // ã‚¹ãƒˆãƒªãƒ¼ãƒˆãƒ“ãƒ¥ãƒ¼ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã‹ã©ã†ã‹
+    zoom: 14, // ’n}‚ÌŠg‘å—¦
+    mapTypeControl: false, // ƒ}ƒbƒvØ‚è‘Ö‚¦‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğ•\¦‚·‚é‚©‚Ç‚¤‚©
+    streetViewControl: false // ƒXƒgƒŠ[ƒgƒrƒ…[‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğ•\¦‚·‚é‚©‚Ç‚¤‚©
 }
 
 /**
-* Google Maps APIã®æº–å‚™å®Œäº†å¾Œã®å‡¦ç†
-*/
-function api_ready() {
-  ready['locations'] = true;
-  generate_map();
-  // add_marker();
-}
-
-/**
-* åœ°å›³ã‚’ç”Ÿæˆã™ã‚‹
+* ’n}‚ğ¶¬‚·‚é
 */
 function generate_map() {
     if(ready['map'] && ready['locations']) {
@@ -36,12 +27,12 @@ function add_marker() {
   for (var i = 0; i < place_locations.length; i++) {
     var item = place_locations[i];
 
-    // ãƒãƒ¼ã‚«ãƒ¼ã®è¨­ç½®
+    // ƒ}[ƒJ[‚Ìİ’u
     var marker = new google.maps.Marker({
         position: item['latlng']
     });
 
-    // å¹ãå‡ºã—ã®ç”Ÿæˆ
+    // ‚«o‚µ‚Ì¶¬
     var ins = '<div class="map-window">';
     ins += '<p class="map-window_name">' + item['name'] + '</p>';
     ins += '</div>';
@@ -49,20 +40,20 @@ function add_marker() {
       content: ins
     });
 
-    // ãƒãƒ¼ã‚«ãƒ¼ã®ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š
+    // ƒ}[ƒJ[‚ÌƒCƒxƒ“ƒgİ’è
     add_event_to_marker(marker, infoWindow, i);
 
-    // MarkerClustererç”¨ã«ãƒãƒ¼ã‚«ãƒ¼ã®æƒ…å ±ã‚’é…åˆ—ã«ã¾ã¨ã‚ã‚‹
+    // MarkerClusterer—p‚Éƒ}[ƒJ[‚Ìî•ñ‚ğ”z—ñ‚É‚Ü‚Æ‚ß‚é
     markers.push(marker);
   }
   mc = new MarkerClusterer(map, markers);
 }
 
 /**
-  * ãƒãƒ¼ã‚«ãƒ¼ã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
-  * @param {object} marker     (required) ãƒãƒ¼ã‚«ãƒ¼ã®æƒ…å ±
-  * @param {object} infoWindow (required) å¹ãå‡ºã—ã®æƒ…å ±
-  * @param {number} index      (required) åœ°å›³æƒ…å ±ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·
+  * ƒ}[ƒJ[‚ÉƒCƒxƒ“ƒg‚ğ’Ç‰Á‚·‚é
+  * @param {object} marker     (required) ƒ}[ƒJ[‚Ìî•ñ
+  * @param {object} infoWindow (required) ‚«o‚µ‚Ìî•ñ
+  * @param {number} index      (required) ’n}î•ñ‚ÌƒCƒ“ƒfƒbƒNƒX”Ô†
   */
 
 function infoWindows_hide() {
@@ -72,13 +63,25 @@ function infoWindows_hide() {
 }
 
 function add_event_to_marker(marker, infoWindow, index) {
-  var item = place_locations[index];
-  item['marker'] = marker;
-  item['infoWindow'] = infoWindow;
+    item = place_locations[index];
+    item['marker'] = marker;
+    // item['infoWindow'] = infoWindow;
 
-  // ãƒãƒ¼ã‚«ãƒ¼ã‚¯ãƒªãƒƒã‚¯æ™‚ã«å¹ãå‡ºã—ã‚’è¡¨ç¤ºã™ã‚‹
-  item['marker'].addListener('click', function(e) {
-      infoWindows_hide();
-      item['infoWindow'].open(map, item['marker']);
+     // ƒ}[ƒJ[ƒNƒŠƒbƒN‚É‚«o‚µ‚ğ•\¦‚·‚é
+    item['marker'].addListener('click', function(e) {
+        google_place_id = item['google_place_id'];
+
+        //‘I‘ğ‚³‚ê‚½option”Ô†‚ğæ“¾
+        // var index = this.selectedIndex;
+        // document.getElementById('form_place_type_id').value = options[index].value;
+        // place_type_id = options[inplace_type_iddex].value;
+
+        getPlaceDetail(google_place_id);
+        localStorage.clear('ratings_json');
+
+        getRatings(google_place_id, null);
+        // setPlaceDetail(place);
+        //   infoWindows_hide();
+        //   item['infoWindow'].open(map, item['marker']);
   });
 }

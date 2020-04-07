@@ -208,6 +208,7 @@ class PostController extends Controller
         }
     }
 
+    // [editing]
     public function fetchAllPlacesLocations(){
         $user = Auth::user();
         $user_id = $user->user_id;
@@ -218,6 +219,7 @@ class PostController extends Controller
         if(!$exists_rating) return json_encode('PLACE_NOT_FOUND');
         $ratings = Rating::where('user_id', $user_id)->where('status', 0)->groupBy('place_id')->get();
         foreach ($ratings as $rating) {
+            $item['google_place_id'] = $rating->place->google_place_id;
             $item['name'] = $rating->place->place_name;
             $item['latlng']['lat'] = $rating->place->latitude;
             $item['latlng']['lng'] = $rating->place->longitude;
