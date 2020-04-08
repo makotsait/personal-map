@@ -32,6 +32,8 @@
             <input type="hidden" name="place_name" id="place_name" value="">
             <input type="hidden" name="form_place_type_id" id="form_place_type_id" value="{{old('form_place_type_id')}}">
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
+            <input type="hidden" name="form_latitude" id="form_latitude" value="{{old('form_latitude')}}">
+            <input type="hidden" name="form_longitude" id="form_longitude" value="{{old('form_longitude')}}">
             <!-- <input type="hidden" name="criterion1-name-hidden" id="criterion1-name-hidden" value="{{old('criterion1-name-hidden')}}"> -->
             <input type="hidden" name="criterion1-name-hidden" class="criterion-name-hidden" value="{{old('criterion1-name-hidden')}}">
             <input type="hidden" name="criterion2-name-hidden" class="criterion-name-hidden" value="{{old('criterion2-name-hidden')}}">

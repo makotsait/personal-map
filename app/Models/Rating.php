@@ -31,6 +31,10 @@ class Rating extends Model
     {
         return $this->belongsTo('App\Models\Criterion', 'criterion_id', 'criterion_id');
     }
+    public function place()
+    {
+        return $this->belongsTo('App\Models\Place', 'place_id', 'place_id');
+    }
     // public function criteria_order()
     // {
     //     return $this->belongsTo('CriteriaOrder', 'criteria_order_id', 'criteria_order_id');

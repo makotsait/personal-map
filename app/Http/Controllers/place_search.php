@@ -22,7 +22,9 @@ function searchPlace($place_id)
 echo 'Google_place_id:';
 $stdin = trim(fgets(STDIN));
 $array = searchPlace($stdin);
-var_dump($array);
+// var_dump($array);
+echo $array["result"]["geometry"]["location"]["lat"];
+echo $array["result"]["geometry"]["location"]["lng"];
 // echo($array["result"]["photos"][0]["photo_reference"]);
 // $opening_hours = $array["result"]["opening_hours"]["weekday_text"];
 // // var_dump($opening_hours);

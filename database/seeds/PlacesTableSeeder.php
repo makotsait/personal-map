@@ -13,7 +13,7 @@ class PlacesTableSeeder extends Seeder
     public function run()
     {
         $defalut_set = [
-            [1, 'ChIJ3d5q2RCMGGAR4OXPZhEThrk', '台湾美食料理 留園 神保町店', 1]
+            [1, 'ChIJ3d5q2RCMGGAR4OXPZhEThrk', '台湾美食料理 留園 神保町店', 1, 35.6966869, 139.7603095]
         ];
         foreach ($defalut_set as $item) {
             $place = new Place();
@@ -21,6 +21,8 @@ class PlacesTableSeeder extends Seeder
             $place->google_place_id = $item[1];
             $place->place_name = $item[2];
             $place->place_type_id = $item[3];
+            $place->latitude = $item[4];
+            $place->longitude = $item[5];
             $place->status = 0;
             $place->save();
         }

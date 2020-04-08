@@ -23,6 +23,7 @@ Route::get('get_place_type_options', 'PostController@getPlaceTypeOpions')->name(
 // Route::post('test', 'PlaceApiController@test')->name('test');
 Route::post('get_place_detail', 'PlaceApiController@getPlaceDetail')->name('get_place_detail');
 Route::get('get_header_image', 'PlaceApiController@getHeaderImage')->name('get_header_image');
+Route::get('fetch-all-places-locations', 'PostController@fetchAllPlacesLocations')->name('fetch.all.places.locations');
 
 // Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
