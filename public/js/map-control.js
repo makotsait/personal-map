@@ -63,9 +63,9 @@ function infoWindows_hide() {
 }
 
 function add_event_to_marker(marker, infoWindow, index) {
-    item = place_locations[index];
+    let item = place_locations[index];
     item['marker'] = marker;
-    // item['infoWindow'] = infoWindow;
+    item['infoWindow'] = infoWindow;
 
      // マーカークリック時に吹き出しを表示する
     item['marker'].addListener('click', function(e) {
