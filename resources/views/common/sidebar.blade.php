@@ -26,7 +26,8 @@
             <input type="hidden" name="user_id" value="23">
             <!-- <input type="hidden" name="place_id" value="2"> -->
             <input type="hidden" name="form_place_name" id="form_place_name" value="{{old('form_place_name')}}">
-            <input type="hidden" name="form_place_address" id="form_place_address" value="{{old('form_place_address')}}">
+            <input type="hidden" name="form_formatted_address" id="form_formatted_address" value="{{old('form_formatted_address')}}">
+            <!-- <input type="hidden" name="form_place_address" id="form_place_address" value="{{old('form_place_address')}}"> -->
             <input type="hidden" name="form_header_img_url" id="form_header_img_url" value="{{old('form_header_img_url')}}">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
