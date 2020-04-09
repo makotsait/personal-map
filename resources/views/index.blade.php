@@ -13,7 +13,6 @@
     <script src="{{ asset('/js/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('/js/markerclusterer.js') }}"></script>
     <script src="{{ asset('/js/map-control.js') }}"></script>
-    <!-- <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script> -->
 </head>
 
 <body>
@@ -30,27 +29,6 @@
 
     <script>
         var place_locations;
-        // var place_locations = [
-        //     {
-        //         "name": "AKIBAカルチャーズZONE",
-        //         "latlng": {
-        //             "lat": 35.699519,
-        //             "lng": 139.770388
-        //         }
-        //     }, {
-        //         "name": "秋葉原ガチャポン会館",
-        //         "latlng": {
-        //             "lat": 35.701861,
-        //             "lng": 139.771220
-        //         }
-        //     },{
-        //         "name": "コミックとらのあな秋葉原店C",
-        //         "latlng": {
-        //             "lat": 35.700536,
-        //             "lng": 139.771158
-        //         }
-        //     }];
-
         var place_detail;
         var place_name_text = document.getElementById('header-title');
         var address_text = document.getElementById('place_address');
@@ -67,7 +45,9 @@
                     // place_locations = data;
                     if (data != 'PLACE_NOT_FOUND') {
                         // place_locations = JSON.parse(data);
-                        // place_locations = data;
+                        place_locations = data;
+                        console.log("place_locations");
+                        console.log(place_locations);
                         place_locations = data.map(function(str) {
                             return {
                                 'google_place_id': str.google_place_id,
@@ -94,24 +74,49 @@
             place_name_text.innerHTML = data["result"]["name"];
             document.getElementById('form_place_name').value = data["result"]["name"];
             address_text.innerHTML = data["result"]["formatted_address"];
-            document.getElementById('form_place_address').value = data["result"]["formatted_address"];
+            document.getElementById('form_formatted_address').value = data["result"]["formatted_address"];
+            // document.getElementById('form_place_address').value = data["result"]["formatted_address"];
             getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
             document.getElementById('form_latitude').value = data["result"]["geometry"]["location"]["lat"];
             document.getElementById('form_longitude').value = data["result"]["geometry"]["location"]["lng"];
         }
 
-        function getPlaceDetail(place_id) {
+        function setPalceHeaderImg(img_url){
+            document.getElementById('form_header_img_url').value = img_url;
+            place_header_image.setAttribute('src', img_url);
+            // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
+            var img = new Image();
+            // イメージ配置後に実行する
+            img.addEventListener('load', function(event) {
+                height = img.height;
+                hidden_length = (height - 300) / 2;
+                $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+            });
+            img.src = img_url;
+        }
+
+        function setPlaceDetailToView(place_details) {
+            place_name_text.innerHTML = place_details['place_name'];
+            document.getElementById('form_place_name').value = place_details['place_name'];
+            address_text.innerHTML = place_details['formatted_address'];
+            document.getElementById('form_formatted_address').value = place_details['formatted_address'];
+            document.getElementById('form_latitude').value = place_details["location"]["lat"];
+            document.getElementById('form_longitude').value = place_details["location"]["lng"];
+            // getPlaceHeaderImg(place_details['header_img_url']);
+            setPalceHeaderImg(place_details['header_img_url']);
+        }
+
+        function fetchPlaceDetails(google_place_id) {
             console.log('place_detail_runing');
             $.ajax({
-                type: 'POST',
-                url: "{{route('get_place_detail')}}",
+                type: 'GET',
+                url: "{{route('fetch.place.details')}}",
                 dataType: 'json',
                 data: {
-                    place_id: place_id,
-                    _token: '{{ csrf_token() }}'
+                    google_place_id: google_place_id,
                 },
                 success: function(data) {
-                    set_place_detail_to_view(data);
+                    setPlaceDetailToView(data);
                 },
                 error: function() {
                     //取得失敗時に実行する処理
@@ -202,7 +207,7 @@
                 // });
                 // marker.setVisible(true);
 
-                getPlaceDetail(place.place_id);
+                fetchPlaceDetails(place.place_id);
                 localStorage.clear('ratings_json');
 
                 getRatings(place.place_id, null);
@@ -223,7 +228,8 @@
 
         // フォーム送信後にControllerでリダイレクトにより呼び出される時に、元の値をセットし直す処理
         place_name_text.innerHTML = document.getElementById('form_place_name').value;
-        address_text.innerHTML = document.getElementById('form_place_address').value;
+        // address_text.innerHTML = document.getElementById('form_place_address').value;
+        address_text.innerHTML = document.getElementById('form_formatted_address').value;
         place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
 
         localStorage.clear()
