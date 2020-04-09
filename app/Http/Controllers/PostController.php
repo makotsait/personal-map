@@ -63,12 +63,20 @@ class PostController extends Controller
             $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
             $place_details['place_name'] = $place->place_name;
             $place_details['formatted_address'] = $place->formatted_address;
-            $place_details['header_imgage_url'] = $place->default_header_image_url;
             $place_details["location"]["lat"] = $place->latitude;
             $place_details["location"]["lng"] = $place->longitude;
+            $place_details['header_imgage_url'] = $place->default_header_image_url;
         }else{
-            return 'PLACE_DETAILS_NOT_FOUND';
+            $place_api_controller = app()->make('App\Http\Controllers\PlaceApiController');
+            $api_data = $place_api_controller->fetchPlaceDetails($google_place_id);
+
+            $place_details['place_name'] = $api_data["result"]["name"];
+            $place_details['formatted_address'] = $api_data["result"]["formatted_address"];
+            $place_details["location"]["lat"] = $api_data["result"]["geometry"]["location"]["lat"];
+            $place_details["location"]["lng"] = $api_data["result"]["geometry"]["location"]["lng"];
+            $place_details['header_imgage_url'] = $place_api_controller->fetchHeaderImgUrl($api_data["result"]["photos"][0]["photo_reference"]);
         }
+        
         return $place_details;
     }
 

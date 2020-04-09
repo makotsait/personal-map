@@ -134,7 +134,6 @@
                 },
                 success: function(data) {
                     setPlaceDetailToView(data);
-
                 },
                 error: function() {
                     //取得失敗時に実行する処理
