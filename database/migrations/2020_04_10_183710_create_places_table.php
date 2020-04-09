@@ -21,7 +21,7 @@ class CreatePlacesTable extends Migration
             $table->double('latitude', 12, 7);
             $table->double('longitude', 12, 7);
             $table->unsignedInteger('default_place_type_id');
-            $table->text('default_header_image_url')->nullable();
+            $table->text('default_header_img_url')->nullable();
             $table->timestamps();
             $table->unsignedInteger('status');
         });

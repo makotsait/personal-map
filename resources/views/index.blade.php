@@ -102,29 +102,12 @@
             document.getElementById('form_formatted_address').value = place_details['formatted_address'];
             document.getElementById('form_latitude').value = place_details["location"]["lat"];
             document.getElementById('form_longitude').value = place_details["location"]["lng"];
-            // getPlaceHeaderImg(place_details['header_imgage_url']);
-            setPalceHeaderImg(place_details['header_imgage_url']);
+            // getPlaceHeaderImg(place_details['header_img_url']);
+            setPalceHeaderImg(place_details['header_img_url']);
         }
 
-        function getPlaceDetail(google_place_id) {
+        function fetchPlaceDetails(google_place_id) {
             console.log('place_detail_runing');
-            // $.ajax({
-            //     type: 'POST',
-            //     url: "{{route('get_place_detail')}}",
-            //     dataType: 'json',
-            //     data: {
-            //         place_id: google_place_id,
-            //         _token: '{{ csrf_token() }}'
-            //     },
-            //     success: function(data) {
-            //         set_place_detail_to_view(data);
-            //     },
-            //     error: function() {
-            //         //取得失敗時に実行する処理
-            //         place_name_text.innerHTML = "取得失敗しました";
-            //         address_text.innerHTML = "取得失敗しました";
-            //     }
-            // });
             $.ajax({
                 type: 'GET',
                 url: "{{route('fetch.place.details')}}",
@@ -224,7 +207,7 @@
                 // });
                 // marker.setVisible(true);
 
-                getPlaceDetail(place.place_id);
+                fetchPlaceDetails(place.place_id);
                 localStorage.clear('ratings_json');
 
                 getRatings(place.place_id, null);
