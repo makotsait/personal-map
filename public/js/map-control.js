@@ -76,7 +76,7 @@ function add_event_to_marker(marker, infoWindow, index) {
         // document.getElementById('form_place_type_id').value = options[index].value;
         // place_type_id = options[inplace_type_iddex].value;
 
-        getPlaceDetail(google_place_id);
+        fetchPlaceDetails(google_place_id);
         localStorage.clear('ratings_json');
 
         getRatings(google_place_id, null);
