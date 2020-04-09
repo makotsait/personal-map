@@ -65,7 +65,7 @@ class PostController extends Controller
             $place_details['formatted_address'] = $place->formatted_address;
             $place_details["location"]["lat"] = $place->latitude;
             $place_details["location"]["lng"] = $place->longitude;
-            $place_details['header_imgage_url'] = $place->default_header_image_url;
+            $place_details['header_img_url'] = $place->default_header_img_url;
         }else{
             $place_api_controller = app()->make('App\Http\Controllers\PlaceApiController');
             $api_data = $place_api_controller->fetchPlaceDetails($google_place_id);
@@ -74,7 +74,7 @@ class PostController extends Controller
             $place_details['formatted_address'] = $api_data["result"]["formatted_address"];
             $place_details["location"]["lat"] = $api_data["result"]["geometry"]["location"]["lat"];
             $place_details["location"]["lng"] = $api_data["result"]["geometry"]["location"]["lng"];
-            $place_details['header_imgage_url'] = $place_api_controller->fetchHeaderImgUrl($api_data["result"]["photos"][0]["photo_reference"]);
+            $place_details['header_img_url'] = $place_api_controller->fetchHeaderImgUrl($api_data["result"]["photos"][0]["photo_reference"]);
         }
         
         return $place_details;
@@ -169,37 +169,26 @@ class PostController extends Controller
         $user_id = $user->user_id;
         $google_place_id = $request->google_place_id;
         $place_type_id = $request->form_place_type_id;
-        $place_name =  $request->form_place_name;
-        $formatted_address =  $request->form_formatted_address;
-        $latitude = $request->form_latitude;
-        $longitude = $request->form_longitude;
-        // $place_type_id = $_GET['place_type_id'];
         $place = Place::where('google_place_id', $google_place_id)->first();
         if (is_null($place)) {
             // 施設の追加
-            // $api_key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
-            // $url = "https://maps.googleapis.com/maps/api/place/details/json?key={$api_key}&place_id={$google_place_id}&language=ja";
-            // $place_detail = json_decode(file_get_contents($url), true);
-            // $place_name = $place_detail["result"]["name"];
             $place = new Place();
             $place->google_place_id = $google_place_id;
+            $place->place_name = $request->form_place_name;
+            $place->formatted_address = $request->form_formatted_address;
+            $place->latitude = $request->form_latitude;
+            $place->longitude = $request->form_longitude;
+            // [todo]place_apiから取得したjsonにplace_typeが複数入力されているのでマッチするものがあればデフォルト値として入れる
             $place->default_place_type_id = 1;
-            $place->place_name = $place_name;
-            $place->formatted_address = $formatted_address;
-            $place->latitude = $latitude;
-            $place->longitude = $longitude;
+            $place->default_header_img_url = $request->form_header_img_url;
             $place->status = 0;
             $place->save();
             $place = Place::where('google_place_id', $google_place_id)->first();
         }
-        if ($place->place_name != $place_name) {
-            $place->place_name = $place_name;
-            $place->save();
-        }
-        if ($place->place_type_id != $place_type_id) {
-            $place->default_place_type_id = $place_type_id;
-            $place->save();
-        }
+        // if ($place->place_type_id != $place_type_id) {
+        //     $place->default_place_type_id = $place_type_id;
+        //     $place->save();
+        // }
         $place_id = $place->place_id;
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
