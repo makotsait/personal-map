@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Agent;
 
 use Illuminate\Http\Request;
+
 use App\Models\Rating;
 use App\Models\Place;
 use App\Models\Criterion;
@@ -51,6 +52,26 @@ class PostController extends Controller
         }
     }
 
+    public function fetchPlaceDetails()
+    {
+        $google_place_id = $_GET['google_place_id'];
+
+        $place_details = array();
+
+        $exists_place = Place::where('google_place_id', $google_place_id)->where('status', 0)->exists();
+        if ($exists_place){
+            $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
+            $place_details['place_name'] = $place->place_name;
+            $place_details['formatted_address'] = $place->formatted_address;
+            $place_details['header_imgage_url'] = $place->default_header_image_url;
+            $place_details["location"]["lat"] = $place->latitude;
+            $place_details["location"]["lng"] = $place->longitude;
+        }else{
+            return 'PLACE_DETAILS_NOT_FOUND';
+        }
+        return $place_details;
+    }
+
     public function getPlaceTypeOpions()
     {
         $items = array();
@@ -66,12 +87,14 @@ class PostController extends Controller
 
     public function getRatings()
     {
-        $user_id = Auth::user()->user_id;
         $google_place_id = $_GET['google_place_id'];
+        $user_id = Auth::user()->user_id;
         $items = array();
 
         $criterion_exists = Criterion::where('status', 0)->exists();
-        if (!$criterion_exists) return 'criterion not found in db';
+        if (!$criterion_exists) {
+            return 'criterion not found in db';
+        }
         $criteria = Criterion::where('status', 0)->get();
         $criterion_name_ls = array();
         foreach ($criteria as $criterion) {
@@ -100,10 +123,12 @@ class PostController extends Controller
         }
 
         $place_id = $place->place_id;
-        $items['place_type_id'] = $place->place_type_id;
+        $items['place_type_id'] = $place->default_place_type_id;
 
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->exists();
-        if (!$criteria_order_exists) return 'criteria_order not found in db';
+        if (!$criteria_order_exists) {
+            return 'criteria_order not found in db';
+        }
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
 
         $i = 0;
@@ -111,7 +136,7 @@ class PostController extends Controller
             $i++;
             $items['user_order'][$order->place_type_id]['criterion_id'][] = $order->criterion_id;
             $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
-            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
+            $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
             if (is_null($rating)) {
                 $rating_value = 0;
             } else {
@@ -120,7 +145,7 @@ class PostController extends Controller
             $items['user_order'][$order->place_type_id]['ratings'][] = $rating_value;
         }
 
-        $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->first();
+        $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->first();
         if (is_null($note)) {
             $items['note'] = '';
         } else {
@@ -135,8 +160,9 @@ class PostController extends Controller
         $user = Auth::user();
         $user_id = $user->user_id;
         $google_place_id = $request->google_place_id;
-        $place_name =  $request->form_place_name;
         $place_type_id = $request->form_place_type_id;
+        $place_name =  $request->form_place_name;
+        $formatted_address =  $request->form_formatted_address;
         $latitude = $request->form_latitude;
         $longitude = $request->form_longitude;
         // $place_type_id = $_GET['place_type_id'];
@@ -149,8 +175,9 @@ class PostController extends Controller
             // $place_name = $place_detail["result"]["name"];
             $place = new Place();
             $place->google_place_id = $google_place_id;
+            $place->default_place_type_id = 1;
             $place->place_name = $place_name;
-            $place->place_type_id = $place_type_id;
+            $place->formatted_address = $formatted_address;
             $place->latitude = $latitude;
             $place->longitude = $longitude;
             $place->status = 0;
@@ -162,7 +189,7 @@ class PostController extends Controller
             $place->save();
         }
         if ($place->place_type_id != $place_type_id) {
-            $place->place_type_id = $place_type_id;
+            $place->default_place_type_id = $place_type_id;
             $place->save();
         }
         $place_id = $place->place_id;
@@ -176,7 +203,7 @@ class PostController extends Controller
             $criterion_id = $order->criterion_id;
             $criterion_input_name = 'criterion' . $order->display_order;
 
-            $rating = Rating::where('user_id',  $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->where('status', 0)->first();
+            $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->where('status', 0)->first();
             if (is_null($rating)) {
                 $rating = new Rating();
                 $rating->user_id = $user_id;
@@ -189,7 +216,7 @@ class PostController extends Controller
             }
             $rating->save();
 
-            $note = Note::where('user_id',  $user_id)->where('place_id', $place_id)->where('status', 0)->first();
+            $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->first();
             if (is_null($note)) {
                 $note = new Note();
                 $note->user_id = $user_id;
@@ -209,14 +236,17 @@ class PostController extends Controller
     }
 
     // [editing]
-    public function fetchAllPlacesLocations(){
+    public function fetchAllPlacesLocations()
+    {
         $user = Auth::user();
         $user_id = $user->user_id;
         $item = array();
         $items = array();
 
         $exists_rating = Rating::where('user_id', $user_id)->where('status', 0)->exists();
-        if(!$exists_rating) return json_encode('PLACE_NOT_FOUND');
+        if (!$exists_rating) {
+            return json_encode('PLACE_NOT_FOUND');
+        }
         $ratings = Rating::where('user_id', $user_id)->where('status', 0)->groupBy('place_id')->get();
         foreach ($ratings as $rating) {
             $item['google_place_id'] = $rating->place->google_place_id;

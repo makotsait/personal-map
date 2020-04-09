@@ -14,7 +14,9 @@ class PlaceApiController extends Controller
         $json = file_get_contents($url);
         return $json;
     }
-    public function getHeaderImage(){
+    
+    public function getHeaderImage()
+    {
         $base_url = "https://maps.googleapis.com/maps/api/place/photo";
         $maxwidth = "500";
         $key = "AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8";
@@ -23,8 +25,7 @@ class PlaceApiController extends Controller
         $url = $base_url.'?'.'maxwidth='.$maxwidth.'&'.'key='.$key.'&'.'photoreference='.$photoreference;
         // $url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&key=AIzaSyA-OXjQyOAsZIuDqm6FDUDqp3vNRLMNhE8&photoreference=CmRaAAAArHCqh8wKJg94Bv_ksvzAhz1IW03ygjkY8UPOKdSwsRRCa_Gx4yLXVqMxuo7XyfNL4djtVFOL8Q-nze21zxQGvNlPfbct8Wm8x-k1XHBBnsw1QhTgBehNpYcQ26DjWEqHEhBPNkoyy9_wRyKnAM9iZaiOGhSUkCtenJ81LJXNoEcsrU-ZB8e98A";
         $header = get_headers($url);
-        $img_url = preg_replace('@^Location: @','',$header[5]);
+        $img_url = preg_replace('@^Location: @', '', $header[5]);
         return $img_url;
     }
 }
-
