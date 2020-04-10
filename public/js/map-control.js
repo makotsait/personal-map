@@ -80,7 +80,6 @@ function add_event_to_marker(marker, infoWindow, index) {
         localStorage.clear('ratings_json');
 
         getRatings(google_place_id, null);
-        // setPlaceDetail(place);
         //   infoWindows_hide();
         //   item['infoWindow'].open(map, item['marker']);
   });
