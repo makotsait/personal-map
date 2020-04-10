@@ -42,12 +42,8 @@
                 url: "{{route('fetch.all.places.locations')}}",
                 dataType: 'json',
                 success: function(data) {
-                    // place_locations = data;
                     if (data != 'PLACE_NOT_FOUND') {
-                        // place_locations = JSON.parse(data);
                         place_locations = data;
-                        console.log("place_locations");
-                        console.log(place_locations);
                         place_locations = data.map(function(str) {
                             return {
                                 'google_place_id': str.google_place_id,
@@ -58,7 +54,6 @@
                                 }
                             }
                         })
-                        console.log(place_locations);
                         ready['locations'] = true;
                         generate_map();
                     }
@@ -68,17 +63,6 @@
                     console.log('Fetching all places locations failed');
                 }
             });
-        }
-
-        function set_place_detail_to_view(data) {
-            place_name_text.innerHTML = data["result"]["name"];
-            document.getElementById('form_place_name').value = data["result"]["name"];
-            address_text.innerHTML = data["result"]["formatted_address"];
-            document.getElementById('form_formatted_address').value = data["result"]["formatted_address"];
-            // document.getElementById('form_place_address').value = data["result"]["formatted_address"];
-            getPlaceHeaderImg(data["result"]["photos"][0]["photo_reference"]);
-            document.getElementById('form_latitude').value = data["result"]["geometry"]["location"]["lat"];
-            document.getElementById('form_longitude').value = data["result"]["geometry"]["location"]["lng"];
         }
 
         function setPalceHeaderImg(img_url){
@@ -128,8 +112,6 @@
         }
 
         function getPlaceHeaderImg(photoreference) {
-            console.log("photoreference");
-            console.log(photoreference);
             $.ajax({
                 type: 'GET',
                 url: "{{route('get_header_image')}}",
@@ -151,7 +133,7 @@
                 },
                 error: function() {
                     //取得失敗時に実行する処理
-                    console.log("画像取得失敗");
+                    console.log("Fetching place header image failed.");
                 }
             });
         }
@@ -167,9 +149,9 @@
 
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var infowindow = new google.maps.InfoWindow();
-            var infowindowContent = document.getElementById('infowindow-content');
-            infowindow.setContent(infowindowContent);
+            // var infowindow = new google.maps.InfoWindow();
+            // var infowindowContent = document.getElementById('infowindow-content');
+            // infowindow.setContent(infowindowContent);
 
             var marker = new google.maps.Marker({
                 map: map
@@ -212,24 +194,13 @@
                 localStorage.clear('ratings_json');
 
                 getRatings(place.place_id, null);
-                setPlaceDetail(place);
 
                 // infowindow.open(map, marker);
             });
         }
 
-        function setPlaceDetail(place) {
-            // console.log(place);
-            // infowindowContent.children['place-name'].textContent = place.name;
-            // infowindowContent.children['place-id'].textContent = place.place_id;
-            // infowindowContent.children['place-address'].textContent = place.formatted_address;
-            document.getElementById('place_name').value = place.name;
-            document.getElementById('google_place_id').value = place.place_id;
-        }
-
         // フォーム送信後にControllerでリダイレクトにより呼び出される時に、元の値をセットし直す処理
         place_name_text.innerHTML = document.getElementById('form_place_name').value;
-        // address_text.innerHTML = document.getElementById('form_place_address').value;
         address_text.innerHTML = document.getElementById('form_formatted_address').value;
         place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
 

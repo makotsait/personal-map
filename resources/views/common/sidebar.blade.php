@@ -24,10 +24,8 @@
         <form action="ratings/update" method="POST" class="section">
             @csrf
             <input type="hidden" name="user_id" value="23">
-            <!-- <input type="hidden" name="place_id" value="2"> -->
             <input type="hidden" name="form_place_name" id="form_place_name" value="{{old('form_place_name')}}">
             <input type="hidden" name="form_formatted_address" id="form_formatted_address" value="{{old('form_formatted_address')}}">
-            <!-- <input type="hidden" name="form_place_address" id="form_place_address" value="{{old('form_place_address')}}"> -->
             <input type="hidden" name="form_header_img_url" id="form_header_img_url" value="{{old('form_header_img_url')}}">
             <input type="hidden" name="criterion_id" value="2">
             <input type="hidden" name="place_name" id="place_name" value="">
@@ -35,7 +33,6 @@
             <input type="hidden" name="google_place_id" id="google_place_id" value="{{old('google_place_id')}}">
             <input type="hidden" name="form_latitude" id="form_latitude" value="{{old('form_latitude')}}">
             <input type="hidden" name="form_longitude" id="form_longitude" value="{{old('form_longitude')}}">
-            <!-- <input type="hidden" name="criterion1-name-hidden" id="criterion1-name-hidden" value="{{old('criterion1-name-hidden')}}"> -->
             <input type="hidden" name="criterion1-name-hidden" class="criterion-name-hidden" value="{{old('criterion1-name-hidden')}}">
             <input type="hidden" name="criterion2-name-hidden" class="criterion-name-hidden" value="{{old('criterion2-name-hidden')}}">
             <input type="hidden" name="criterion3-name-hidden" class="criterion-name-hidden" value="{{old('criterion3-name-hidden')}}">
@@ -118,19 +115,13 @@
 
 <script>
     function getRatings(google_place_id, place_type_id) {
-        // place_type_id = $('#section-place-type option:selected').val();
-        // document.getElementById('form_place_type_id').value = place_type_id;
-        // console.log('place_type_id: ' + place_type_id);
-        // var ratings_json = localStorage.getItem('ratings_json');
         var ratings_json = localStorage.getItem('ratings_json');
         if (!ratings_json) {
             $.ajax({
                 type: 'GET',
                 url: "{{route('get.ratings')}}",
                 data: {
-                    // user_id: 23,
                     google_place_id: google_place_id
-                    // place_type_id: place_type_id
                 },
                 dataType: 'JSON',
                 success: function(data) {
@@ -151,8 +142,6 @@
     function setRatings(place_type_id) {
         var ratings_json = localStorage.getItem('ratings_json');
         var ratings = JSON.parse(ratings_json);
-        console.log('setratings');
-        console.log(ratings);
 
         if (!place_type_id) {
             if (ratings['place_type_id']) {
@@ -163,18 +152,12 @@
             }
         }
 
-        // place_type_idの取得
-        // var place_type_id = ratings['place_type_id'];
-        // var place_type_id = $('#section-place-type option:selected').val();
-        // document.getElementById('form_place_type_id').value = place_type_id;
-
         if (ratings['user_order'][place_type_id]) {
             place_type_ratings = ratings['user_order'][place_type_id];
         } else {
             place_type_ratings = ratings['default_order'][place_type_id];
         }
 
-        // console.log('getratingreturn' + data);
         var criterion_names = document.getElementsByClassName('section-criterion-name-display');
         var criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
         var rating_values = document.getElementsByClassName('section-rating-value');
@@ -203,7 +186,6 @@
     function getPlaceType() {
         console.log('getPlaceType starts');
         place_types_json = localStorage.getItem('place_types_json');
-        console.log(place_types_json);
         if (!place_types_json) {
             $.ajax({
                 type: 'GET',
@@ -228,9 +210,6 @@
     function setPlaceType() {
         place_types_json = localStorage.getItem('place_types_json');
         var place_types_array = JSON.parse(place_types_json);
-        console.log(place_types_array);
-        // console.log(place_types_array['place_type_name_ja'][place_types_array['place_type_id'].indexOf(4)]);
-        // console.log(place_types);
         var dropdown = document.getElementById('section-place-type');
         // 子要素の削除
         while (dropdown.firstChild) {
@@ -243,9 +222,6 @@
             option.value = place_types_array['place_type_id'][i];
             option.innerHTML = place_types_array['place_type_name_ja'][i];
             option.setAttribute("id", 'place-type-' + (i + 1));
-            // if (i == 0) {
-            //     option.setAttribute("selected", "");
-            // }
             dropdown.appendChild(option);
         }
         // 施設タイプを選択
@@ -254,7 +230,6 @@
 
         place_type_options[0].setAttribute("selected", "");
         place_type_id = document.getElementById('form_place_type_id').value;
-        // console.log('place_type_id: ' + place_type_id);
         dropdown.value = place_type_id;
 
         //プルダウン選択時の処理を設定
@@ -264,7 +239,6 @@
 
             //選択されたoption番号を取得
             var index = this.selectedIndex;
-            // document.getElementById('form_place_type_id').value = options[index].value;
             place_type_id = options[index].value;
 
             getRatings(google_place_id, place_type_id);
