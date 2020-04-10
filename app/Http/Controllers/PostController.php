@@ -15,6 +15,7 @@ use App\Models\Criterion;
 use App\Models\CriteriaOrder;
 use App\Models\Note;
 use App\Models\PlaceType;
+use App\Models\PlaceUserPreference;
 
 class PostController extends Controller
 {
@@ -57,6 +58,7 @@ class PostController extends Controller
         $google_place_id = $_GET['google_place_id'];
 
         $place_details = array();
+        $place_details['google_place_id'] = $google_place_id;
 
         $exists_place = Place::where('google_place_id', $google_place_id)->where('status', 0)->exists();
         if ($exists_place){
@@ -109,7 +111,7 @@ class PostController extends Controller
             $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
         }
 
-        $i = 0;
+        // $i = 0;
         foreach ($this->default_criteria_order as $place_type_id => $criteria_order) {
             foreach ($criteria_order as $k => $order) {
                 $sort[$k] = $order[1];
@@ -121,7 +123,7 @@ class PostController extends Controller
                 $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
                 $items['default_order'][$place_type_id]['ratings'][$k] = 0;
             }
-            $i++;
+            // $i++;
         }
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place)) {
@@ -131,7 +133,14 @@ class PostController extends Controller
         }
 
         $place_id = $place->place_id;
-        $items['place_type_id'] = $place->default_place_type_id;
+
+        // editing
+        $place_user_pref = PlaceUserPreference::where('google_place_id', $google_place_id)->where('user_id', $user_id)->where('status', 0)->first();
+        if (isset($place_user_pref)) {
+            $items['place_type_id'] = $place_user_pref->place_type_id;    
+        }elseif(is_null($place_user_pref)){
+            $items['place_type_id'] = $place->default_place_type_id;
+        }
 
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
@@ -139,9 +148,9 @@ class PostController extends Controller
         }
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
 
-        $i = 0;
+        // $i = 0;
         foreach ($criteria_order as $order) {
-            $i++;
+            // $i++;
             $items['user_order'][$order->place_type_id]['criterion_id'][] = $order->criterion_id;
             $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
             $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
@@ -178,17 +187,28 @@ class PostController extends Controller
             $place->formatted_address = $request->form_formatted_address;
             $place->latitude = $request->form_latitude;
             $place->longitude = $request->form_longitude;
-            // [todo]place_apiから取得したjsonにplace_typeが複数入力されているのでマッチするものがあればデフォルト値として入れる
+            // [todo]place_apiから取得したjsonにplace_typeが複数入力されているのでマッチするものがあればデフォルト値として入れる機能の実装
             $place->default_place_type_id = 1;
             $place->default_header_img_url = $request->form_header_img_url;
             $place->status = 0;
             $place->save();
+            // ↓一行は必要なのか？（[todo]削除して動作確認）
             $place = Place::where('google_place_id', $google_place_id)->first();
         }
-        // if ($place->place_type_id != $place_type_id) {
-        //     $place->default_place_type_id = $place_type_id;
-        //     $place->save();
-        // }
+
+        $place_user_pref = PlaceUserPreference::where('google_place_id', $google_place_id)->where('user_id', $user_id)->where('status', 0)->first();
+        if (is_null($place_user_pref)) {
+            $place_user_pref = new PlaceUserPreference();
+            $place_user_pref->user_id = $user_id;
+            $place_user_pref->google_place_id = $google_place_id;
+            $place_user_pref->place_type_id = $place_type_id;
+            $place_user_pref->status = 0;
+            $place_user_pref->save();
+        }elseif($place_type_id != $place_user_pref->place_type_id){
+            $place_user_pref->place_type_id = $place_type_id;
+            $place_user_pref->save();
+        }
+
         $place_id = $place->place_id;
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
@@ -232,7 +252,6 @@ class PostController extends Controller
         }
     }
 
-    // [editing]
     public function fetchAllPlacesLocations()
     {
         $user = Auth::user();
