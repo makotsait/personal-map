@@ -34,7 +34,7 @@ function add_marker() {
 
     // 吹き出しの生成
     var ins = '<div class="map-window">';
-    ins += '<p class="map-window_name">' + item['name'] + '</p>';
+    // ins += '<p class="map-window_name">' + item['name'] + '</p>';
     ins += '</div>';
     var infoWindow = new google.maps.InfoWindow({
       content: ins
@@ -67,8 +67,7 @@ function add_event_to_marker(marker, infoWindow, index) {
     item['marker'] = marker;
     item['infoWindow'] = infoWindow;
 
-     // マーカークリック時に吹き出しを表示する
-    item['marker'].addListener('click', function(e) {
+    item['marker'].addListener('click', function() {
         google_place_id = item['google_place_id'];
 
         //選択されたoption番号を取得

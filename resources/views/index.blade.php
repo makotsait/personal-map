@@ -21,11 +21,11 @@
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     </div>
     <div id="map"></div>
-    <div id="infowindow-content">
+    <!-- <div id="infowindow-content">
         <span id="place-name" class="title"></span><br>
         <strong>Place ID:</strong> <span id="place-id"></span><br>
         <span id="place-address"></span>
-    </div>
+    </div> -->
 
     <script>
         var place_locations;
@@ -89,6 +89,10 @@
             document.getElementById('form_longitude').value = place_details["location"]["lng"];
             // getPlaceHeaderImg(place_details['header_img_url']);
             setPalceHeaderImg(place_details['header_img_url']);
+
+            // 座標の中心をずらす
+            map.panTo(place_details["location"]);
+            // map.setCenter(place_details["location"]);???動作未確認
         }
 
         function fetchPlaceDetails(google_place_id) {
@@ -158,7 +162,13 @@
             });
 
             marker.addListener('click', function() {
-                infowindow.open(map, marker);
+                console.log('clicked1');
+                // infowindow.open(map, marker);
+                // google_place_id = item['google_place_id'];
+                // fetchPlaceDetails(google_place_id);
+                // localStorage.clear('ratings_json');
+
+                // getRatings(google_place_id, null);
             });
 
             function setBounds(map, place) {
@@ -174,8 +184,19 @@
             ready['map'] = true;
             generate_map()
 
+            map.addListener('click', clickEventFunc);
+            function clickEventFunc(event) {
+                // Prevent the default info window from showing.
+                event.stop();
+
+                google_place_id = event.placeId.toString();
+                fetchPlaceDetails(google_place_id);
+                localStorage.clear('ratings_json');
+                getRatings(google_place_id, null);
+            }
+
             autocomplete.addListener('place_changed', function() {
-                infowindow.close();
+                // infowindow.close();
 
                 var place = autocomplete.getPlace();
                 if (!place.geometry) {
@@ -184,11 +205,11 @@
                 map = setBounds(map, place);
 
                 // Set the position of the marker using the place ID and location.
-                // marker.setPlace({
-                //   placeId: place.place_id,
-                //   location: place.geometry.location
-                // });
-                // marker.setVisible(true);
+                marker.setPlace({
+                  placeId: place.place_id,
+                  location: place.geometry.location
+                });
+                marker.setVisible(true);
 
                 fetchPlaceDetails(place.place_id);
                 localStorage.clear('ratings_json');
