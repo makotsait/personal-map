@@ -44,9 +44,9 @@ class PostController extends Controller
     {
         foreach ($this->default_criteria_order[$place_type_id] as $item) {
             $criteria_order = new CriteriaOrder();
-            $criteria_order->user_id = $user_id;
+            $criteria_order->user_id       = $user_id;
             $criteria_order->place_type_id = $place_type_id;
-            $criteria_order->criterion_id = $item[0];
+            $criteria_order->criterion_id  = $item[0];
             $criteria_order->display_order = $item[1];
             $criteria_order->status = 0;
             $criteria_order->save();
@@ -62,34 +62,32 @@ class PostController extends Controller
 
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (isset($place)) {
-            $place_details['place_name'] = $place->place_name;
+            $place_details['place_name']        = $place->place_name;
             $place_details['formatted_address'] = $place->formatted_address;
-            $place_details["location"]["lat"] = $place->latitude;
-            $place_details["location"]["lng"] = $place->longitude;
-            $place_details['header_img_url'] = $place->default_header_img_url;
+            $place_details["location"]["lat"]   = $place->latitude;
+            $place_details["location"]["lng"]   = $place->longitude;
+            $place_details['header_img_url']    = $place->default_header_img_url;
         } else {
             $place_api_controller = app()->make('App\Http\Controllers\PlaceApiController');
             $api_data = $place_api_controller->fetchPlaceDetails($google_place_id);
 
-            $place_details['place_name'] = $api_data["result"]["name"];
+            $place_details['place_name']        = $api_data["result"]["name"];
             $place_details['formatted_address'] = $api_data["result"]["formatted_address"];
-            $place_details["location"]["lat"] = $api_data["result"]["geometry"]["location"]["lat"];
-            $place_details["location"]["lng"] = $api_data["result"]["geometry"]["location"]["lng"];
-            $place_details['header_img_url'] = $place_api_controller->fetchHeaderImgUrl($api_data["result"]["photos"][0]["photo_reference"]);
+            $place_details["location"]["lat"]   = $api_data["result"]["geometry"]["location"]["lat"];
+            $place_details["location"]["lng"]   = $api_data["result"]["geometry"]["location"]["lng"];
+            $place_details['header_img_url']    = $place_api_controller->fetchHeaderImgUrl($api_data["result"]["photos"][0]["photo_reference"]);
         }
         
         return $place_details;
     }
 
-    public function getPlaceTypeOpions()
+    public function getPlaceTypeOptions()
     {
         $items = array();
         $place_types = PlaceType::all();
-        $i = 0;
-        foreach ($place_types as $place_type) {
-            $items['place_type_id'][$i] = $place_type->place_type_id;
+        foreach ($place_types as $i => $place_type) {
+            $items['place_type_id'][$i]      = $place_type->place_type_id;
             $items['place_type_name_ja'][$i] = $place_type->place_type_name_ja;
-            $i++;
         }
         return json_encode($items);
     }
