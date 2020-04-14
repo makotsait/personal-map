@@ -193,13 +193,15 @@
                 data: {},
                 dataType: 'JSON',
                 success: function(place_types) {
+                    console.log('Fetching place type options successed.');
+                    console.log(place_types);
                     // place_typesデータの保存
                     var place_types_json = JSON.stringify(place_types);
                     localStorage.setItem('place_types_json', place_types_json);
                     setPlaceType();
                 },
                 error: function() {
-                    console.log('place_type_optionsの取得失敗');
+                    console.log('Fetching place type options failed.');
                 }
             });
         } else {
