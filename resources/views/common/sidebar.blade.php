@@ -125,13 +125,15 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
+                    console.log('Fetching ratings successed.');
+                    console.log(data);
                     var ratings_json = JSON.stringify(data);
                     localStorage.setItem('ratings_json', ratings_json);
                     setRatings(place_type_id);
                 },
                 error: function() {
                     //取得失敗時に実行する処理
-                    console.log('ratingsの取得失敗');
+                    console.log('Fetching ratings failed.');
                 }
             });
         } else {
