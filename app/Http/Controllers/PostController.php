@@ -92,7 +92,7 @@ class PostController extends Controller
         return json_encode($items);
     }
 
-    public function getRatings()
+    public function fetchRatings()
     {
         $google_place_id = $_GET['google_place_id'];
         $user_id = Auth::user()->user_id;
@@ -117,7 +117,7 @@ class PostController extends Controller
             foreach ($criteria_order as $k =>  $order) {
                 $items['default_order'][$place_type_id]['criterion_id'][$k]      = $order[0];
                 $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
-                $items['default_order'][$place_type_id]['ratings'][$k] = 0;
+                $items['default_order'][$place_type_id]['ratings'][$k]           = 0;
             }
         }
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
@@ -143,7 +143,7 @@ class PostController extends Controller
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
 
         foreach ($criteria_order as $order) {
-            $items['user_order'][$order->place_type_id]['criterion_id'][] = $order->criterion_id;
+            $items['user_order'][$order->place_type_id]['criterion_id'][]      = $order->criterion_id;
             $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
             $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
             if (is_null($rating)) {
