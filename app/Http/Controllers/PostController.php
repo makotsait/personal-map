@@ -60,15 +60,14 @@ class PostController extends Controller
         $place_details = array();
         $place_details['google_place_id'] = $google_place_id;
 
-        $exists_place = Place::where('google_place_id', $google_place_id)->where('status', 0)->exists();
-        if ($exists_place){
-            $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
+        $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
+        if (isset($place)) {
             $place_details['place_name'] = $place->place_name;
             $place_details['formatted_address'] = $place->formatted_address;
             $place_details["location"]["lat"] = $place->latitude;
             $place_details["location"]["lng"] = $place->longitude;
             $place_details['header_img_url'] = $place->default_header_img_url;
-        }else{
+        } else {
             $place_api_controller = app()->make('App\Http\Controllers\PlaceApiController');
             $api_data = $place_api_controller->fetchPlaceDetails($google_place_id);
 
@@ -137,8 +136,8 @@ class PostController extends Controller
         // editing
         $place_user_pref = PlaceUserPreference::where('google_place_id', $google_place_id)->where('user_id', $user_id)->where('status', 0)->first();
         if (isset($place_user_pref)) {
-            $items['place_type_id'] = $place_user_pref->place_type_id;    
-        }elseif(is_null($place_user_pref)){
+            $items['place_type_id'] = $place_user_pref->place_type_id;
+        } elseif (is_null($place_user_pref)) {
             $items['place_type_id'] = $place->default_place_type_id;
         }
 
@@ -204,7 +203,7 @@ class PostController extends Controller
             $place_user_pref->place_type_id = $place_type_id;
             $place_user_pref->status = 0;
             $place_user_pref->save();
-        }elseif($place_type_id != $place_user_pref->place_type_id){
+        } elseif ($place_type_id != $place_user_pref->place_type_id) {
             $place_user_pref->place_type_id = $place_type_id;
             $place_user_pref->save();
         }
