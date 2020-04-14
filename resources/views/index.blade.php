@@ -65,7 +65,7 @@
             });
         }
 
-        function setPalceHeaderImg(img_url){
+        function setPalceHeaderImg(img_url) {
             document.getElementById('form_header_img_url').value = img_url;
             place_header_image.setAttribute('src', img_url);
             // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
@@ -185,11 +185,12 @@
             generate_map()
 
             map.addListener('click', clickEventFunc);
+
             function clickEventFunc(event) {
                 // Prevent the default info window from showing.
                 event.stop();
 
-                google_place_id = event.placeId.toString();
+                google_place_id = event.placeId;
                 fetchPlaceDetails(google_place_id);
                 localStorage.clear('ratings_json');
                 getRatings(google_place_id, null);
@@ -206,8 +207,8 @@
 
                 // Set the position of the marker using the place ID and location.
                 marker.setPlace({
-                  placeId: place.place_id,
-                  location: place.geometry.location
+                    placeId: place.place_id,
+                    location: place.geometry.location
                 });
                 marker.setVisible(true);
 
