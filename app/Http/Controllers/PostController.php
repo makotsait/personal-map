@@ -92,34 +92,69 @@ class PostController extends Controller
         return json_encode($items);
     }
 
+    public function sortDisplayOrderAsc($criteria_order)
+    {
+        foreach ($criteria_order as $i => $each_order) {
+            $display_order = $each_order[1];
+            $sort[$i] = $display_order;
+        }
+        array_multisort($sort, SORT_ASC, $criteria_order);
+        return $criteria_order;
+    }
+
+    public function set()
+    {
+    }
+
+    public function createCriterionNameList()
+    {
+        $criterion_name_ls = array();
+        $criterion_exists = Criterion::where('status', 0)->exists();
+        if (!$criterion_exists) {
+            return 'criterion not found in db';
+        }
+        $criteria = Criterion::where('status', 0)->get();
+        foreach ($criteria as $criterion) {
+            $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
+        }
+        return $criterion_name_ls;
+    }
+
+    public function setDefaultDisplayOrder($place_type_id, $criterion_name_ls, $criteria_order)
+    {
+        $items = array();
+        foreach ($criteria_order as $i => $each_order) {
+            $criterion_id = $each_order[0];
+            $items['criterion_id'][$i]      = $criterion_id;
+            $items['criterion_name_ja'][$i] = $criterion_name_ls[$criterion_id];
+            $items['ratings'][$i]           = 0;
+        }
+        return $items;
+    }
+
+    public function setPlaceUserPref($google_place_id, $user_id, $place)
+    {
+        $place_user_pref = PlaceUserPreference::where('google_place_id', $google_place_id)->where('user_id', $user_id)->where('status', 0)->first();
+        if (isset($place_user_pref)) {
+            return $place_user_pref->place_type_id;
+        } elseif (is_null($place_user_pref)) {
+            return $place->default_place_type_id;
+        }
+    }
+
     public function fetchRatings()
     {
         $google_place_id = $_GET['google_place_id'];
         $user_id = Auth::user()->user_id;
         $items = array();
 
-        $criterion_exists = Criterion::where('status', 0)->exists();
-        if (!$criterion_exists) {
-            return 'criterion not found in db';
-        }
-        $criteria = Criterion::where('status', 0)->get();
-        $criterion_name_ls = array();
-        foreach ($criteria as $criterion) {
-            $criterion_name_ls[$criterion->criterion_id] = $criterion->criterion_name_ja;
-        }
+        $criterion_name_ls = $this->createCriterionNameList();
 
         foreach ($this->default_criteria_order as $place_type_id => $criteria_order) {
-            foreach ($criteria_order as $k => $order) {
-                $sort[$k] = $order[1];
-            }
-            array_multisort($sort, SORT_ASC, $criteria_order);
-
-            foreach ($criteria_order as $k =>  $order) {
-                $items['default_order'][$place_type_id]['criterion_id'][$k]      = $order[0];
-                $items['default_order'][$place_type_id]['criterion_name_ja'][$k] = $criterion_name_ls[$order[0]];
-                $items['default_order'][$place_type_id]['ratings'][$k]           = 0;
-            }
+            $criteria_order = $this->sortDisplayOrderAsc($criteria_order);
+            $items['default_order'][$place_type_id] = $this->setDefaultDisplayOrder($place_type_id, $criterion_name_ls, $criteria_order);
         }
+
         $place = Place::where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place)) {
             $items['user_order'][0] = '';
@@ -129,37 +164,23 @@ class PostController extends Controller
 
         $place_id = $place->place_id;
 
-        $place_user_pref = PlaceUserPreference::where('google_place_id', $google_place_id)->where('user_id', $user_id)->where('status', 0)->first();
-        if (isset($place_user_pref)) {
-            $items['place_type_id'] = $place_user_pref->place_type_id;
-        } elseif (is_null($place_user_pref)) {
-            $items['place_type_id'] = $place->default_place_type_id;
-        }
+        $items['place_type_id'] = $this->setPlaceUserPref($google_place_id, $user_id, $place);
 
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
             return 'criteria_order not found in db';
         }
         $criteria_order = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->orderBy('display_order', 'asc')->orderBy('place_type_id', 'asc')->get();
-
-        foreach ($criteria_order as $order) {
-            $items['user_order'][$order->place_type_id]['criterion_id'][]      = $order->criterion_id;
-            $items['user_order'][$order->place_type_id]['criterion_name_ja'][] = $order->criterion->criterion_name_ja;
-            $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $order->criterion_id)->first();
-            if (is_null($rating)) {
-                $rating_value = 0;
-            } else {
-                $rating_value = $rating->rating;
-            };
-            $items['user_order'][$order->place_type_id]['ratings'][] = $rating_value;
+        foreach ($criteria_order as $each_order) {
+            $items['user_order'][$each_order->place_type_id]['criterion_id'][]      = $each_order->criterion_id;
+            $items['user_order'][$each_order->place_type_id]['criterion_name_ja'][] = $each_order->criterion->criterion_name_ja;
+            $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $each_order->criterion_id)->first();
+            $rating_value = isset($rating)? $rating->rating : 0;
+            $items['user_order'][$each_order->place_type_id]['ratings'][] = $rating_value;
         }
 
         $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->first();
-        if (is_null($note)) {
-            $items['note'] = '';
-        } else {
-            $items['note'] = $note->note;
-        };
+        $items['note'] = isset($note)? $note->note : '';
 
         return json_encode($items);
     }
