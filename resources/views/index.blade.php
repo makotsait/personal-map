@@ -191,9 +191,11 @@
                 event.stop();
 
                 google_place_id = event.placeId;
-                fetchPlaceDetails(google_place_id);
-                localStorage.clear('ratings_json');
-                getRatings(google_place_id, null);
+                if (google_place_id) {
+                    fetchPlaceDetails(google_place_id);
+                    localStorage.clear('ratings_json');
+                    getRatings(google_place_id, null);
+                }
             }
 
             autocomplete.addListener('place_changed', function() {
