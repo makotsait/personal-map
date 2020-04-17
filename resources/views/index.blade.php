@@ -90,9 +90,8 @@
             // getPlaceHeaderImg(place_details['header_img_url']);
             setPalceHeaderImg(place_details['header_img_url']);
 
-            // 座標の中心をずらす
-            map.panTo(place_details["location"]);
-            // map.setCenter(place_details["location"]);???動作未確認
+            // 座標を画面中央に移動
+            map.panTo(new google.maps.LatLng(place_details["location"]["lat"], parseFloat(place_details["location"]["lng"])));
         }
 
         function fetchPlaceDetails(google_place_id) {
@@ -106,6 +105,7 @@
                 },
                 success: function(data) {
                     setPlaceDetailToView(data);
+
                 },
                 error: function() {
                     //取得失敗時に実行する処理
