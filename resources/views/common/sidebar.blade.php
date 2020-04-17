@@ -114,7 +114,7 @@
 </script>
 
 <script>
-    function getRatings(google_place_id, place_type_id) {
+    function getRatings(google_place_id, place_type_id, require_rewrite_note = true) {
         var ratings_json = localStorage.getItem('ratings_json');
         if (!ratings_json) {
             $.ajax({
@@ -125,21 +125,23 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
+                    console.log('Fetching ratings successed.');
+                    console.log(data);
                     var ratings_json = JSON.stringify(data);
                     localStorage.setItem('ratings_json', ratings_json);
-                    setRatings(place_type_id);
+                    setRatings(place_type_id, require_rewrite_note);
                 },
                 error: function() {
                     //取得失敗時に実行する処理
-                    console.log('ratingsの取得失敗');
+                    console.log('Fetching ratings failed.');
                 }
             });
         } else {
-            setRatings(place_type_id);
+            setRatings(place_type_id, require_rewrite_note);
         }
     }
 
-    function setRatings(place_type_id) {
+    function setRatings(place_type_id, require_rewrite_note) {
         var ratings_json = localStorage.getItem('ratings_json');
         var ratings = JSON.parse(ratings_json);
 
@@ -170,7 +172,10 @@
             rating_values[i].innerHTML = rating;
         }
 
-        document.getElementById("section-note-text").value = ratings['note'];
+        console.log(require_rewrite_note);
+        if (require_rewrite_note) {
+            document.getElementById("section-note-text").value = ratings['note'];
+        }
         document.getElementById('form_place_type_id').value = place_type_id;
 
         dropdown = document.getElementById('section-place-type');
@@ -193,13 +198,15 @@
                 data: {},
                 dataType: 'JSON',
                 success: function(place_types) {
+                    console.log('Fetching place type options successed.');
+                    console.log(place_types);
                     // place_typesデータの保存
                     var place_types_json = JSON.stringify(place_types);
                     localStorage.setItem('place_types_json', place_types_json);
                     setPlaceType();
                 },
                 error: function() {
-                    console.log('place_type_optionsの取得失敗');
+                    console.log('Fetching place type options failed.');
                 }
             });
         } else {
@@ -241,7 +248,7 @@
             var index = this.selectedIndex;
             place_type_id = options[index].value;
 
-            getRatings(google_place_id, place_type_id);
+            getRatings(google_place_id, place_type_id, false);
         });
     }
 
