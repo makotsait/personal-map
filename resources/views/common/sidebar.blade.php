@@ -172,7 +172,6 @@
             rating_values[i].innerHTML = rating;
         }
 
-        console.log(require_rewrite_note);
         if (require_rewrite_note) {
             document.getElementById("section-note-text").value = ratings['note'];
         }

@@ -21,11 +21,7 @@
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     </div>
     <div id="map"></div>
-    <!-- <div id="infowindow-content">
-        <span id="place-name" class="title"></span><br>
-        <strong>Place ID:</strong> <span id="place-id"></span><br>
-        <span id="place-address"></span>
-    </div> -->
+
 
     <script>
         var place_locations;
@@ -55,7 +51,7 @@
                             }
                         })
                         ready['locations'] = true;
-                        generate_map();
+                        add_marker();
                     }
                 },
                 error: function() {
@@ -90,8 +86,9 @@
             // getPlaceHeaderImg(place_details['header_img_url']);
             setPalceHeaderImg(place_details['header_img_url']);
 
-            // 座標を画面中央に移動
-            map.panTo(new google.maps.LatLng(place_details["location"]["lat"], parseFloat(place_details["location"]["lng"])));
+            // 座標の中心をずらす
+            map.panTo(place_details["location"]);
+            // map.setCenter(place_details["location"]);???動作未確認
         }
 
         function fetchPlaceDetails(google_place_id) {
@@ -105,7 +102,6 @@
                 },
                 success: function(data) {
                     setPlaceDetailToView(data);
-
                 },
                 error: function() {
                     //取得失敗時に実行する処理
@@ -153,22 +149,8 @@
 
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            // var infowindow = new google.maps.InfoWindow();
-            // var infowindowContent = document.getElementById('infowindow-content');
-            // infowindow.setContent(infowindowContent);
-
             var marker = new google.maps.Marker({
                 map: map
-            });
-
-            marker.addListener('click', function() {
-                console.log('clicked1');
-                // infowindow.open(map, marker);
-                // google_place_id = item['google_place_id'];
-                // fetchPlaceDetails(google_place_id);
-                // localStorage.clear('ratings_json');
-
-                // getRatings(google_place_id, null);
             });
 
             function setBounds(map, place) {
@@ -182,7 +164,7 @@
             }
 
             ready['map'] = true;
-            generate_map()
+            add_marker()
 
             map.addListener('click', clickEventFunc);
 
@@ -230,8 +212,6 @@
 
         localStorage.clear()
         getPlaceType();
-
-        console.log("aa47");
 
         var sidebar_is_closed = true;
         if (document.getElementById('google_place_id').value) {
