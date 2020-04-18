@@ -72,31 +72,11 @@
                         <span class="section-rating-value">{{old('criterion4')}}</span>
                     </span>
                 </div>
-                <!-- <div class="ratings-line" id="section-ratings-line-3">
-                    <span class="rating rating-left" id="section-rating-group-5">
-                        <span>要素5</span>
-                        <span class="range">
-                            <input type="range" name="criterion3" min="0" max="5" value="0">
-                        </span>
-                        <span class="section-rating-value">0</span>
-                    </span>
-                    <span class="rating section-rating-inline-right" id="section-rating-group-6">
-                        <span>要素6</span>
-                        <span class="range">
-                            <input type="range" name="criterion4" min="0" max="5" value="0">
-                        </span>
-                        <span class="section-rating-value">0</span>
-                    </span>
-                </div> -->
             </div>
             <div class="section-note-note-content" id="section-note-note-content">
                 <textarea name="place_note" class="form-control section-note-text" id="section-note-text" rows="13">{{old('place_note')}}</textarea>
             </div>
             <div class="section-submit-cancel-btn-line">
-
-                <!-- <span class="login">
-                    <a link rel="login" href="{{route('logout')}}">ログアウト</a>
-                </span> -->
                 <input type="submit" class="btn btn-secondary section-submit-btn section-submit-cancel-btn" value="Save">
             </div>
         </form>
@@ -109,13 +89,8 @@
 </div>
 
 <script>
-    // perfect-scrollbrの処理
-    // var ps = new PerfectScrollbar('.scroll_box');
-</script>
-
-<script>
     function getRatings(google_place_id, place_type_id, require_rewrite_note = true) {
-        var ratings_json = localStorage.getItem('ratings_json');
+        let ratings_json = localStorage.getItem('ratings_json');
         if (!ratings_json) {
             $.ajax({
                 type: 'GET',
@@ -127,7 +102,7 @@
                 success: function(data) {
                     console.log('Fetching ratings successed.');
                     console.log(data);
-                    var ratings_json = JSON.stringify(data);
+                    ratings_json = JSON.stringify(data);
                     localStorage.setItem('ratings_json', ratings_json);
                     setRatings(place_type_id, require_rewrite_note);
                 },
@@ -142,8 +117,8 @@
     }
 
     function setRatings(place_type_id, require_rewrite_note) {
-        var ratings_json = localStorage.getItem('ratings_json');
-        var ratings = JSON.parse(ratings_json);
+        const ratings_json = localStorage.getItem('ratings_json');
+        const ratings = JSON.parse(ratings_json);
 
         if (!place_type_id) {
             if (ratings['place_type_id']) {
@@ -160,28 +135,27 @@
             place_type_ratings = ratings['default_order'][place_type_id];
         }
 
-        var criterion_names = document.getElementsByClassName('section-criterion-name-display');
-        var criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
-        var rating_values = document.getElementsByClassName('section-rating-value');
+        let html_criterion_names        = document.getElementsByClassName('section-criterion-name-display');
+        let html_criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
+        let html_rating_values          = document.getElementsByClassName('section-rating-value');
         for (let i = 0; i < Object.keys(place_type_ratings['criterion_id']).length; i++) {
-            criterion_names[i].innerHTML = place_type_ratings['criterion_name_ja'][i];
-            criterion_names_hidden[i].value = place_type_ratings['criterion_name_ja'][i];
-            var elem_id = 'criterion' + (i + 1);
-            var rating = place_type_ratings['ratings'][i];
+            html_criterion_names[i].innerHTML    = place_type_ratings['criterion_name_ja'][i];
+            html_criterion_names_hidden[i].value = place_type_ratings['criterion_name_ja'][i];
+
+            let elem_id = 'criterion' + (i + 1);
+            let rating  = place_type_ratings['ratings'][i];
             document.getElementById(elem_id).value = rating;
-            rating_values[i].innerHTML = rating;
+            html_rating_values[i].innerHTML = rating;
         }
 
         if (require_rewrite_note) {
             document.getElementById("section-note-text").value = ratings['note'];
         }
         document.getElementById('form_place_type_id').value = place_type_id;
-
-        dropdown = document.getElementById('section-place-type');
-        dropdown.value = place_type_id;
+        document.getElementById('section-place-type').value = place_type_id;
 
         $(".sidebar.left").trigger("sidebar:open");
-        sidebar_is_closed = false;
+        is_sidebar_closed = false;
         $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
         setToggleBtnRotationSetting();
 
@@ -258,22 +232,20 @@
             // 開閉ボタンクリック時の処理
             $(".sidebar-close-btn").on("click", function() {
                 var $this = $(this);
-                if (sidebar_is_closed) {
+                if (is_sidebar_closed) {
                     $this.trigger("sidebar:open");
-                    sidebar_is_closed = false;
+                    is_sidebar_closed = false;
                     $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
                 } else {
                     $this.trigger("sidebar:close");
-                    sidebar_is_closed = true;
+                    is_sidebar_closed = true;
                     $(".sidebar-close-btn").css("transform", "");
                 }
                 return false;
             });
         }
     }
-</script>
 
-<script>
     $(document).ready(function() {
         $(".sidebar.left").sidebar({
             side: "left"
@@ -282,27 +254,26 @@
             $(".sidebar.left").trigger("sidebar:open");
         }
     });
-</script>
 
-<!-- スライドバーに評価値を表示するスクリプト -->
-<script>
-    var elem = document.getElementsByClassName('range');
-    var rating_values = document.getElementsByClassName('section-rating-value');
-    var rangeValue = function(bar, target) {
+    // スライドバーに評価値を表示する
+    let html_range         = document.getElementsByClassName('range');
+    let html_rating_values = document.getElementsByClassName('section-rating-value');
+
+    let rangeValue = function(bar, target) {
         return function(evt) {
             target.innerHTML = bar.value;
         }
     }
-    for (var i = 0; i < elem.length; i++) {
-        bar = elem[i].getElementsByTagName('input')[0];
-        target = rating_values[i];
+    for (var i = 0; i < html_range.length; i++) {
+        bar    = html_range[i].getElementsByTagName('input')[0];
+        target = html_rating_values[i];
         bar.addEventListener('input', rangeValue(bar, target));
     }
 
     // 入力・ 更新のキャンセル
     document.getElementById("cancel-btn").onclick = function() {
         getPlaceType();
-        var google_place_id = document.getElementById('google_place_id').value;
+        const google_place_id = document.getElementById('google_place_id').value;
         getRatings(google_place_id, null);
     };
 </script>
