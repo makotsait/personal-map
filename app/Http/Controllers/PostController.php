@@ -43,13 +43,7 @@ class PostController extends Controller
     public function insertCriteriaOrderDefaultValues($user_id, $place_type_id)
     {
         foreach ($this->default_criteria_order[$place_type_id] as $item) {
-            $criteria_order = new CriteriaOrder();
-            $criteria_order->user_id       = $user_id;
-            $criteria_order->place_type_id = $place_type_id;
-            $criteria_order->criterion_id  = $item[0];
-            $criteria_order->display_order = $item[1];
-            $criteria_order->status = 0;
-            $criteria_order->save();
+            $criteria_order = CriteriaOrder::create(['user_id'=>$user_id, 'place_type_id'=>$place_type_id,'criterion_id'=>$item[0],'display_order'=>$item[1]]);
         }
     }
 
