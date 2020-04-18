@@ -164,12 +164,12 @@
         localStorage.clear()
         getPlaceType();
 
-        var sidebar_is_closed = true;
+        var is_sidebar_closed = true;
         if (document.getElementById('google_place_id').value) {
             $("#section-sidebar-left").css('display', 'inline');
 
             $(".sidebar.left").trigger("sidebar:open");
-            sidebar_is_closed = false;
+            is_sidebar_closed = false;
             $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
             setToggleBtnRotationSetting();
         }
