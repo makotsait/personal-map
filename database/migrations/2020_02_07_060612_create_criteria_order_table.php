@@ -20,7 +20,7 @@ class CreateCriteriaOrderTable extends Migration
             $table->unsignedInteger('criterion_id');
             $table->unsignedInteger('display_order');
             $table->timestamps();
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
         });
     }
 

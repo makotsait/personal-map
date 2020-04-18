@@ -9,7 +9,7 @@ class Rating extends Model
     // デフォルトが$primaryKey=idになっているので書き換える
     protected $primaryKey = 'rating_id';
     // rating_idへの書き込みを防ぐ
-    protected $guarded = 'rating_id';
+    protected $guarded = ['rating_id'];
 
     public static $rules = array(
         'criterion1' => 'between:0,5',

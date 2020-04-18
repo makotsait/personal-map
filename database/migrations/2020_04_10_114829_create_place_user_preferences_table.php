@@ -19,7 +19,7 @@ class CreatePlaceUserPreferencesTable extends Migration
             $table->text('google_place_id');
             $table->unsignedInteger('place_type_id');
             $table->timestamps();
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
         });
     }
 
