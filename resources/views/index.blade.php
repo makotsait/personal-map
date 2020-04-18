@@ -26,6 +26,7 @@
     <script>
         var place_locations;
         var place_detail;
+        var is_sidebar_closed;
         var place_name_text = document.getElementById('header-title');
         var address_text = document.getElementById('place_address');
         var place_header_image = document.getElementById('header-image');
@@ -82,13 +83,12 @@
             address_text.innerHTML = place_details['formatted_address'];
             document.getElementById('form_formatted_address').value = place_details['formatted_address'];
             document.getElementById('form_latitude').value = place_details["location"]["lat"];
-            document.getElementById('form_longitude').value = place_details["location"]["lng"];
+            document.getElementById('form_longitude').value = place_details["location"]["lat"];
             // getPlaceHeaderImg(place_details['header_img_url']);
             setPalceHeaderImg(place_details['header_img_url']);
 
             // 座標の中心をずらす
-            map.panTo(place_details["location"]);
-            // map.setCenter(place_details["location"]);???動作未確認
+            map.panTo(new google.maps.LatLng(place_details["location"]["lat"], place_details["location"]["lng"]));
         }
 
         function fetchPlaceDetails(google_place_id) {
@@ -101,6 +101,7 @@
                     google_place_id: google_place_id,
                 },
                 success: function(data) {
+                    console.log(data);
                     setPlaceDetailToView(data);
                 },
                 error: function() {
@@ -213,10 +214,10 @@
         localStorage.clear()
         getPlaceType();
 
-        var sidebar_is_closed = true;
+        is_sidebar_closed = true;
         if (document.getElementById('google_place_id').value) {
             $(".sidebar.left").trigger("sidebar:open");
-            sidebar_is_closed = false;
+            is_sidebar_closed = false;
             $(".sidebar-close-btn").css("transform", "rotateY(180deg)");
             setToggleBtnRotationSetting();
         }
