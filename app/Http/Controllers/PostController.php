@@ -185,19 +185,11 @@ class PostController extends Controller
         return json_encode($items);
     }
 
-    public function setPlace($google_place_id, $request)
+    public function createPlace($google_place_id, $request)
     {
-        $place = new Place();
-        $place->google_place_id        = $google_place_id;
-        $place->place_name             = $request->form_place_name;
-        $place->formatted_address      = $request->form_formatted_address;
-        $place->latitude               = $request->form_latitude;
-        $place->longitude              = $request->form_longitude;
-        // [todo]place_apiから取得したjsonにplace_typeが複数入力されているので、マッチしたタイプ名をデフォルト値として入れる機能の実装
-        $place->default_place_type_id  = 1;
-        $place->default_header_img_url = $request->form_header_img_url;
-        $place->status = 0;
-        $place->save();
+        $place = Place::create(['google_place_id'=>$google_place_id, 'place_name'=>$request->form_place_name,'formatted_address'=>$request->form_formatted_address,
+            'latitude'=>$request->form_latitude,'longitude'=>$request->form_longitude,'default_place_type_id'=>1,'default_header_img_url'=>$request->form_header_img_url]);
+        // [todo]place_apiから取得したjsonにplace_typeが複数入力されているので、マッチしたタイプ名のidをdefault_type_idとして入れる機能の実装
         return $place;
     }
 
@@ -205,14 +197,9 @@ class PostController extends Controller
     {
         $place_user_pref = PlaceUserPreference::where('user_id', $user_id)->where('google_place_id', $google_place_id)->where('status', 0)->first();
         if (is_null($place_user_pref)) {
-            $place_user_pref = new PlaceUserPreference();
-            $place_user_pref->user_id         = $user_id;
-            $place_user_pref->google_place_id = $google_place_id;
-            $place_user_pref->place_type_id   = $place_type_id;
-            $place_user_pref->status = 0;
-            $place_user_pref->save();
+            $place_user_pref = PlaceUserPreference::create(['user_id'=>$user_id, 'google_place_id'=>$google_place_id,'place_type_id'=>$place_type_id]);
         } elseif ($place_type_id != $place_user_pref->place_type_id) {
-            $place_user_pref->place_type_id   = $place_type_id;
+            $place_user_pref->fill(['place_type_id' => $place_type_id]);
             $place_user_pref->save();
         }
     }
@@ -226,7 +213,6 @@ class PostController extends Controller
             $rating->fill(['rating' => $new_rating]);
             $rating->save();
         }
-        return $rating;
     }
 
     public function setUserNote($user_id, $place_id, $new_note)
@@ -250,7 +236,7 @@ class PostController extends Controller
 
         $place = Place::where('google_place_id', $google_place_id)->first();
         if (is_null($place)) {
-            $place = $this->setPlace($google_place_id, $request);
+            $place = $this->createPlace($google_place_id, $request);
         }
         $place_id = $place->place_id;
 

@@ -23,7 +23,7 @@ class CreatePlacesTable extends Migration
             $table->unsignedInteger('default_place_type_id');
             $table->text('default_header_img_url')->nullable();
             $table->timestamps();
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
         });
     }
 
