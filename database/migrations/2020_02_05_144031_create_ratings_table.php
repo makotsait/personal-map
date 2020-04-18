@@ -20,7 +20,7 @@ class CreateRatingsTable extends Migration
             $table->unsignedInteger('criterion_id');
             $table->unsignedInteger('rating');
             $table->timestamps();
-            $table->unsignedInteger('status');
+            $table->unsignedInteger('status')->default(0);
         });
     }
 
