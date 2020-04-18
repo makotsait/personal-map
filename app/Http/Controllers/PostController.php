@@ -233,14 +233,9 @@ class PostController extends Controller
     {
         $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->first();
         if (is_null($note)) {
-            $note = new Note();
-            $note->user_id  = $user_id;
-            $note->place_id = $place_id;
-            $note->note     = $new_note;
-            $note->status = 0;
-            $note->save();
+            $note = Note::create(['user_id'=>$user_id, 'place_id'=>$place_id,'note'=>$new_note]);
         } elseif ($note->note != $new_note) {
-            $note->note     = $new_note;
+            $note->fill(['note' => $new_note]);
             $note->save();
         }
     }
