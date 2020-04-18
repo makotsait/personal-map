@@ -221,17 +221,12 @@ class PostController extends Controller
     {
         $rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('criterion_id', $criterion_id)->where('status', 0)->first();
         if (is_null($rating)) {
-            $rating = new Rating();
-            $rating->user_id      = $user_id;
-            $rating->place_id     = $place_id;
-            $rating->criterion_id = $criterion_id;
-            $rating->rating       = $new_rating;
-            $rating->status = 0;
-            $rating->save();
+            $rating = Rating::create(['user_id'=>$user_id, 'place_id'=>$place_id,'criterion_id'=>$criterion_id,'rating'=>$new_rating]);
         } elseif ($rating->rating !=  $new_rating) {
-            $rating->rating       =  $new_rating;
+            $rating->fill(['rating' => $new_rating]);
             $rating->save();
         }
+        return $rating;
     }
 
     public function setUserNote($user_id, $place_id, $new_note)
