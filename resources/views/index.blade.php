@@ -27,13 +27,12 @@
         var place_locations;
         var place_detail;
         var is_sidebar_closed;
-        var place_name_text = document.getElementById('header-title');
-        var address_text = document.getElementById('place_address');
-        var place_header_image = document.getElementById('header-image');
+        // var place_name_text = document.getElementById('header-title');
+        // var address_text = document.getElementById('place_address');
+        // var place_header_image = document.getElementById('header-image');
         fetchAllPlacesLocation();
 
         function fetchAllPlacesLocation() {
-            console.log('testhoge');
             $.ajax({
                 type: 'GET',
                 url: "{{route('fetch.all.places.locations')}}",
@@ -64,7 +63,7 @@
 
         function setPalceHeaderImg(img_url) {
             document.getElementById('form_header_img_url').value = img_url;
-            place_header_image.setAttribute('src', img_url);
+            document.getElementById('header-image').setAttribute('src', img_url);
             // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
             var img = new Image();
             // イメージ配置後に実行する
@@ -78,9 +77,9 @@
 
         function setPlaceDetailToView(place_details) {
             document.getElementById('google_place_id').value = place_details['google_place_id'];
-            place_name_text.innerHTML = place_details['place_name'];
+            document.getElementById('header-title').innerHTML = place_details['place_name'];
             document.getElementById('form_place_name').value = place_details['place_name'];
-            address_text.innerHTML = place_details['formatted_address'];
+            document.getElementById('place_address').innerHTML = place_details['formatted_address'];
             document.getElementById('form_formatted_address').value = place_details['formatted_address'];
             document.getElementById('form_latitude').value = place_details["location"]["lat"];
             document.getElementById('form_longitude').value = place_details["location"]["lat"];
@@ -101,13 +100,14 @@
                     google_place_id: google_place_id,
                 },
                 success: function(data) {
+                    console.log('Fetching place details ended.');
                     console.log(data);
                     setPlaceDetailToView(data);
                 },
                 error: function() {
-                    //取得失敗時に実行する処理
-                    place_name_text.innerHTML = "取得失敗しました";
-                    address_text.innerHTML = "取得失敗しました";
+                    console.log('Fetching place details failed.');
+                    document.getElementById('header-title').innerHTML = "取得失敗しました";
+                    document.getElementById('place_address').innerHTML = "取得失敗しました";
                 }
             });
         }
@@ -121,7 +121,7 @@
                 },
                 success: function(data) {
                     document.getElementById('form_header_img_url').value = data;
-                    place_header_image.setAttribute('src', data);
+                    document.getElementById('header-image').setAttribute('src', data);
                     // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
                     var img = new Image();
                     // イメージ配置後に実行する
@@ -139,7 +139,18 @@
             });
         }
 
+
         function initMap() {
+            var mapOptions = {
+                center: { // 地図の緯度経度
+                    lat: 35.685614,
+                    lng: 139.752878
+                },
+                zoom: 14, // 地図の拡大率
+                mapTypeControl: false, // マップ切り替えのコントロールを表示するかどうか
+                streetViewControl: false // ストリートビューのコントロールを表示するかどうか
+            }
+
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             var input = document.getElementById('pac-input');
             var autocomplete = new google.maps.places.Autocomplete(input);
@@ -182,7 +193,6 @@
             }
 
             autocomplete.addListener('place_changed', function() {
-                // infowindow.close();
 
                 var place = autocomplete.getPlace();
                 if (!place.geometry) {
@@ -202,14 +212,13 @@
 
                 getRatings(place.place_id, null);
 
-                // infowindow.open(map, marker);
             });
         }
 
         // フォーム送信後にControllerでリダイレクトにより呼び出される時に、元の値をセットし直す処理
-        place_name_text.innerHTML = document.getElementById('form_place_name').value;
-        address_text.innerHTML = document.getElementById('form_formatted_address').value;
-        place_header_image.setAttribute('src', document.getElementById('form_header_img_url').value);
+        document.getElementById('header-title').innerHTML = document.getElementById('form_place_name').value;
+        document.getElementById('place_address').innerHTML = document.getElementById('form_formatted_address').value;
+        document.getElementById('header-image').setAttribute('src', document.getElementById('form_header_img_url').value);
 
         localStorage.clear()
         getPlaceType();

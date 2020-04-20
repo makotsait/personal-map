@@ -1,6 +1,5 @@
 var ready = { map: false, locations: false };
-var map;
-var mc;
+// var mc;  
 // var mapData;
 var mapOptions = {
 center: { // 地図の緯度経度
@@ -19,20 +18,20 @@ function add_marker() {
     if(ready['map'] && ready['locations']) {
         var markers = [];
         for (var i = 0; i < place_locations.length; i++) {
-        var item = place_locations[i];
+            var item = place_locations[i];
 
-        // マーカーの設置
-        var marker = new google.maps.Marker({
-            position: item['latlng']
-        });
+            // マーカーの設置
+            var marker = new google.maps.Marker({
+                position: item['latlng']
+            });
 
-        // マーカーのイベント設定
-        add_event_to_marker(marker, i);
+            // マーカーのイベント設定
+            add_event_to_marker(marker, i);
 
-        // MarkerClusterer用にマーカーの情報を配列にまとめる
-        markers.push(marker);
+            // MarkerClusterer用にマーカーの情報を配列にまとめる
+            markers.push(marker);
         }
-        mc = new MarkerClusterer(map, markers);
+        var mc = new MarkerClusterer(map, markers);
     }
 }
 
