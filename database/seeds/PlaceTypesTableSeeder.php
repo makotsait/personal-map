@@ -12,11 +12,11 @@ class PlaceTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        $defalut_set = [
+        $defalut_values = [
             [1, 'restaurant', 'レストラン'], [2, 'cafe', 'カフェ'], [3, 'hospital', '病院'], [4, 'lodging', 'ホテル'],
             [5, 'tourist_attraction', '観光施設'], [6, 'park', '公園'], [7, 'amusement_park', '遊園地'], [8, 'onsen', '温泉']
         ];
-        foreach ($defalut_set as $item) {
+        foreach ($defalut_values as $item) {
             $place_type = new PlaceType();
             $place_type->place_type_id = $item[0];
             $place_type->place_type_name_en = $item[1];
