@@ -73,7 +73,7 @@
             document.getElementById('place_address').innerHTML = place_details['formatted_address'];
             document.getElementById('form_formatted_address').value = place_details['formatted_address'];
             document.getElementById('form_latitude').value = place_details["location"]["lat"];
-            document.getElementById('form_longitude').value = place_details["location"]["lat"];
+            document.getElementById('form_longitude').value = place_details["location"]["lng"];
             setPalceHeaderImg(place_details['header_img_url']);
 
             // 座標の中心をずらす
