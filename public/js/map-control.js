@@ -1,6 +1,5 @@
 var ready = { map: false, locations: false };
-var map;
-var mc;
+// var mc;  
 // var mapData;
 var mapOptions = {
 center: { // 地図の緯度経度
@@ -12,27 +11,36 @@ center: { // 地図の緯度経度
     streetViewControl: false // ストリートビューのコントロールを表示するかどうか
 }
 
-/**
-* 地図を生成する
-*/
-function add_marker() {
+function add_selected_place_marker(google_place_id, location) {
+    var marker = new google.maps.Marker({
+        map: map
+    });
+    // Set the position of the marker using the place ID and location.
+    marker.setPlace({
+        placeId: google_place_id,
+        location: location
+    });
+    marker.setVisible(true);
+}
+
+function add_registered_place_markers() {
     if(ready['map'] && ready['locations']) {
         var markers = [];
         for (var i = 0; i < place_locations.length; i++) {
-        var item = place_locations[i];
+            var item = place_locations[i];
 
-        // マーカーの設置
-        var marker = new google.maps.Marker({
-            position: item['latlng']
-        });
+            // マーカーの設置
+            var marker = new google.maps.Marker({
+                position: item['latlng']
+            });
 
-        // マーカーのイベント設定
-        add_event_to_marker(marker, i);
+            // マーカーのイベント設定
+            add_event_to_marker(marker, i);
 
-        // MarkerClusterer用にマーカーの情報を配列にまとめる
-        markers.push(marker);
+            // MarkerClusterer用にマーカーの情報を配列にまとめる
+            markers.push(marker);
         }
-        mc = new MarkerClusterer(map, markers);
+        var mc = new MarkerClusterer(map, markers);
     }
 }
 
