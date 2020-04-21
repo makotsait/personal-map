@@ -60,7 +60,7 @@
             // イメージ配置後に実行する
             img.addEventListener('load', function(event) {
                 height = img.height;
-                hidden_length = (height - 300) / 2;
+                hidden_length = (height - 500) / 2;
                 $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
             });
             img.src = img_url;
@@ -101,33 +101,23 @@
             });
         }
 
-        function getPlaceHeaderImg(photoreference) {
-            $.ajax({
-                type: 'GET',
-                url: "{{route('get_header_image')}}",
-                data: {
-                    photoreference: photoreference
-                },
-                success: function(data) {
-                    console.log("Fetching place header image ended.");
-                    document.getElementById('form_header_img_url').value = data;
-                    document.getElementById('header-image').setAttribute('src', data);
-                    // 縦長の画像の場合、重要な対象が枠に収まらない恐れがあるため、画像中央を表示させる
-                    var img = new Image();
-                    // イメージ配置後に実行する
-                    img.addEventListener('load', function(event) {
-                        height = img.height;
-                        hidden_length = (height - 300) / 2;
-                        $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
-                    });
-                    img.src = data;
-                },
-                error: function() {
-                    //取得失敗時に実行する処理
-                    console.log("Fetching place header image failed.");
-                }
-            });
-        }
+        // function getPlaceHeaderImg(photoreference) {
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: "{{route('get_header_image')}}",
+        //         data: {
+        //             photoreference: photoreference
+        //         },
+        //         success: function(data) {
+        //             console.log("Fetching place header image ended.");
+        //             setPalceHeaderImg(data);
+        //         },
+        //         error: function() {
+        //             //取得失敗時に実行する処理
+        //             console.log("Fetching place header image failed.");
+        //         }
+        //     });
+        // }
 
         function initMap() {
             const mapOptions = {

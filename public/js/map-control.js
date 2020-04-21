@@ -54,11 +54,11 @@ function add_event_to_marker(marker, index) {
     let item = place_locations[index];
     item['marker'] = marker;
     item['marker'].addListener('click', function() {
-        google_place_id = item['google_place_id'];
+        const google_place_id = item['google_place_id'];
 
         fetchPlaceDetails(google_place_id);
         localStorage.clear('ratings_json');
 
         getRatings(google_place_id, null);
-  });
+    });
 }
