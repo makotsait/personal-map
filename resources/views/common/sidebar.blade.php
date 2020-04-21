@@ -135,15 +135,15 @@
             place_type_ratings = ratings['default_order'][place_type_id];
         }
 
-        let html_criterion_names        = document.getElementsByClassName('section-criterion-name-display');
+        let html_criterion_names = document.getElementsByClassName('section-criterion-name-display');
         let html_criterion_names_hidden = document.getElementsByClassName('criterion-name-hidden');
-        let html_rating_values          = document.getElementsByClassName('section-rating-value');
+        let html_rating_values = document.getElementsByClassName('section-rating-value');
         for (let i = 0; i < Object.keys(place_type_ratings['criterion_id']).length; i++) {
-            html_criterion_names[i].innerHTML    = place_type_ratings['criterion_name_ja'][i];
+            html_criterion_names[i].innerHTML = place_type_ratings['criterion_name_ja'][i];
             html_criterion_names_hidden[i].value = place_type_ratings['criterion_name_ja'][i];
 
             let elem_id = 'criterion' + (i + 1);
-            let rating  = place_type_ratings['ratings'][i];
+            let rating = place_type_ratings['ratings'][i];
             document.getElementById(elem_id).value = rating;
             html_rating_values[i].innerHTML = rating;
         }
@@ -206,7 +206,6 @@
         }
         // 施設タイプを選択
         var place_type_options = dropdown.getElementsByClassName('section-place-type-option');
-        // console.log('place_type_options: ' + place_type_options[0].innerHTML);
 
         place_type_options[0].setAttribute("selected", "");
         place_type_id = document.getElementById('form_place_type_id').value;
@@ -256,7 +255,7 @@
     });
 
     // スライドバーに評価値を表示する
-    let html_range         = document.getElementsByClassName('range');
+    let html_range = document.getElementsByClassName('range');
     let html_rating_values = document.getElementsByClassName('section-rating-value');
 
     let rangeValue = function(bar, target) {
@@ -265,7 +264,7 @@
         }
     }
     for (var i = 0; i < html_range.length; i++) {
-        bar    = html_range[i].getElementsByTagName('input')[0];
+        bar = html_range[i].getElementsByTagName('input')[0];
         target = html_rating_values[i];
         bar.addEventListener('input', rangeValue(bar, target));
     }
