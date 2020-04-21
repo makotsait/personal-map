@@ -250,7 +250,7 @@ class PostController extends Controller
         $this->setUserNote($user_id, $place_id, $request->place_note);
 
         if (\Agent::isMobile()) {
-            return redirect()->route('index.sp')->withInput();
+            return redirect()->route('index.sp')->withInput()->with('is_with_input', true);
         } else {
             return redirect()->route('index')->withInput();
         }
