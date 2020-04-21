@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PlaceLogs</title>
+    <title>PersonalMap</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
@@ -119,6 +119,38 @@
         //     });
         // }
 
+        function setBounds(place) {
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+        }
+
+        function setAutocomplete() {
+            const input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+            autocomplete.setFields(['place_id', 'geometry', 'name']); // Specify just the place data fields that you need.
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            autocomplete.addListener('place_changed', function() {
+                place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+                setBounds(place);
+
+                add_selected_place_marker(place.place_id, place.geometry.location)
+
+                fetchPlaceDetails(place.place_id);
+                localStorage.clear('ratings_json');
+
+                getRatings(place.place_id, null);
+            });
+        }
+
         function initMap() {
             const mapOptions = {
                 center: { // 地図の緯度経度
@@ -130,18 +162,13 @@
                 streetViewControl: false // ストリートビューのコントロールを表示するかどうか
             }
 
-
             fetchAllPlacesLocation();
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            const input = document.getElementById('pac-input');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
-            autocomplete.setFields(['place_id', 'geometry', 'name']); // Specify just the place data fields that you need.
-
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
             ready['map'] = true;
-            add_registered_place_markers()
+            add_registered_place_markers();
+
+            setAutocomplete();
 
             function clickEventFunc(event) {
                 // Prevent the default info window from showing.
@@ -156,30 +183,6 @@
             }
 
             map.addListener('click', clickEventFunc);
-
-            function setBounds() {
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-            }
-
-            autocomplete.addListener('place_changed', function() {
-                place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    return;
-                }
-                setBounds();
-
-                add_selected_place_marker(place.place_id, place.geometry.location)
-
-                fetchPlaceDetails(place.place_id);
-                localStorage.clear('ratings_json');
-
-                getRatings(place.place_id, null);
-            });
         }
 
         // フォーム送信後にControllerでリダイレクトにより呼び出された時に、元の値をセットし直す処理
