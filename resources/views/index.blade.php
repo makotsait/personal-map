@@ -43,6 +43,7 @@
                         })
                         ready['locations'] = true;
                         add_registered_place_markers();
+                        console.log(data);
                     }
                 },
                 error: function() {
@@ -152,16 +153,6 @@
         }
 
         function initMap() {
-            const mapOptions = {
-                center: { // 地図の緯度経度
-                    lat: 35.685614,
-                    lng: 139.752878
-                },
-                zoom: 14, // 地図の拡大率
-                mapTypeControl: false, // マップ切り替えのコントロールを表示するかどうか
-                streetViewControl: false // ストリートビューのコントロールを表示するかどうか
-            }
-
             fetchAllPlacesLocation();
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
