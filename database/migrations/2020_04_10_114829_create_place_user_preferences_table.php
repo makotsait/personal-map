@@ -16,7 +16,7 @@ class CreatePlaceUserPreferencesTable extends Migration
         Schema::create('place_user_preferences', function (Blueprint $table) {
             $table->increments('place_user_preference_id');
             $table->unsignedInteger('user_id');
-            $table->text('google_place_id');
+            $table->unsignedInteger('place_id');
             $table->unsignedInteger('place_type_id');
             $table->timestamps();
             $table->unsignedInteger('status')->default(0);
