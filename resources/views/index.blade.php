@@ -21,7 +21,15 @@
     <div style="display:none">
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     </div>
+    <div class="account-control-style">
+        <form action="/logout" method="post" class="account-control-section-logout-btn">
+            @csrf
+            <input type="submit" value="Logout" class=" map-btn btn btn-default">
+        </form>
+    </div>
+    
     <div id="map"></div>
+    
 
 
     <script>
