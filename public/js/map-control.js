@@ -7,8 +7,9 @@ center: { // 地図の緯度経度
     lng: 139.752878
 },
     zoom: 12, // 地図の拡大率
-    mapTypeControl: false, // マップ切り替えのコントロールを表示するかどうか
-    streetViewControl: false // ストリートビューのコントロールを表示するかどうか
+    mapTypeControl:    false, // マップ切り替えのコントロールを表示するかどうか
+    fullscreenControl: false, //全画面表示コントロール
+    streetViewControl: false  // ストリートビューのコントロールを表示するかどうか
 }
 
 function add_selected_place_marker(google_place_id, location) {
