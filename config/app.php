@@ -233,6 +233,7 @@ return [
     | Others
     |--------------------------------------------------------------------------
     */
-    'google_place_api' => env('GOOGLE_API_KEY', '')
+    'google_place_api_js'  => env('GOOGLE_API_KEY_JS', ''),
+    'google_place_api_php' => env('GOOGLE_API_KEY_PHP', '')
 
 ];

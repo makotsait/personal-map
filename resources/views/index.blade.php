@@ -194,7 +194,7 @@
         }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{config('app.google_place_api')}}&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{config('app.google_place_api_js')}}&libraries=places&callback=initMap" async defer></script>
 </body>
 
 </html>
