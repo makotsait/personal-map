@@ -3,6 +3,26 @@ span{
     font-size:13px;
 }
 
+.account-control-style{
+    z-index: 1;
+    position: absolute;
+    margin-top: 10px;
+    margin-right: 10px;
+    top: 0px;
+    right: 4.8em;
+}
+
+.account-control-section-logout-btn{
+    position: absolute;
+    background: #fff;
+}
+
+.map-btn{
+    width: 4.8em;
+    height: 40px;
+    font-weight: bold;
+}
+
 .sidebar{
     position: fixed;
     color: #fff;
