@@ -63,7 +63,9 @@
             img.addEventListener('load', function(event) {
                 height = img.height;
                 hidden_length = (height - 500) / 2;
-                $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                if(hidden_length>0){
+                    $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                }
             });
             img.src = img_url;
         }
