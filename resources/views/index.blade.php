@@ -21,7 +21,15 @@
     <div style="display:none">
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     </div>
+    <div class="account-control-style">
+        <form action="/logout" method="post" class="account-control-section-logout-btn">
+            @csrf
+            <input type="submit" value="Logout" class=" map-btn btn btn-default">
+        </form>
+    </div>
+    
     <div id="map"></div>
+    
 
 
     <script>
@@ -63,7 +71,9 @@
             img.addEventListener('load', function(event) {
                 height = img.height;
                 hidden_length = (height - 500) / 2;
-                $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                if(hidden_length>0){
+                    $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                }
             });
             img.src = img_url;
         }
