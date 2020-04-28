@@ -80,6 +80,7 @@
 
         function setPlaceDetailToView(place_details) {
             document.getElementById('google_place_id').value = place_details['google_place_id'];
+            document.getElementById('delete_google_place_id').value = place_details['google_place_id'];
             document.getElementById('header-title').innerHTML = place_details['place_name'];
             document.getElementById('form_place_name').value = place_details['place_name'];
             document.getElementById('place_address').innerHTML = place_details['formatted_address'];
