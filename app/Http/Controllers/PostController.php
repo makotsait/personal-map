@@ -277,4 +277,24 @@ class PostController extends Controller
         }
         return json_encode($items);
     }
+
+    public function deleteRatings(Request $request){
+        $user_id = Auth::user()->user_id;
+
+        $place = Place::where('google_place_id', $request->delete_google_place_id)->where('status', 0)->first();
+        if (is_null($place)) {
+            return redirect()->to('/');
+        }
+        $place_id = $place->place_id;
+
+        $exists_rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->exists();
+        if ($exists_rating) {
+            Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->delete();
+        }
+        $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->first();
+        if(isset($note)){
+            $note->delete();
+        }
+        return redirect()->to('/');
+    }
 }

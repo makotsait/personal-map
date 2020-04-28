@@ -37,5 +37,7 @@ Route::prefix('ratings')->group(function () {
     // POSTデータを受け取る用
     Route::post('update', 'PostController@updateRatings');
 
+    Route::post('delete', 'PostController@deleteRatings');
+
     // Route::get('edit{id}', 'PostController@updateRatings');
 });
