@@ -14,6 +14,10 @@
 <body>
     <div>
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+        <form action="/logout" method="post" class="account-control-section-logout-btn">
+            @csrf
+            <input type="submit" value="Logout" class="sp_logout_btn">
+        </form>
     </div>
     <div id="map" style="display:none"></div>
     @include('common.sidebar')
