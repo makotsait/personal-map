@@ -80,11 +80,12 @@
                 <input type="submit" class="btn btn-secondary section-submit-btn section-submit-cancel-btn" value="Save">
             </div>
         </form>
-        <form action="/logout" method="post" class="section-logout-btn">
+        <form action="ratings/delete" method='POST' name="delete_form" class="section-delete-btn" id="section-delete-btn">
             @csrf
-            <input type="submit" value="Logout" class="btn btn-secondary">
+            <input type="hidden" name="delete_google_place_id" id="delete_google_place_id" value="{{old('delete_google_place_id')}}">
+            <input type="submit" name="delete" value="Delete" class="btn-delete btn btn-secondary">
         </form>
-        <button type="button" Class="btn btn-secondary section-cancel-btn" id="cancel-btn">Cancel</button>
+        <button type="button" class="btn btn-secondary section-cancel-btn" id="cancel-btn">Cancel</button>
     </div>
 </div>
 
@@ -244,6 +245,18 @@
             });
         }
     }
+
+    // 削除確認ダイアログをセット
+    $(function(){
+        $(".btn-delete").click(function(){
+            if(confirm("本当に削除しますか？")){
+                // 処理を止めずに続行
+            }else{
+                // 処理をキャンセル
+                return false;
+            }
+        });
+    });
 
     $(document).ready(function() {
         $(".sidebar.left").sidebar({
