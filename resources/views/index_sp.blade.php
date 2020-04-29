@@ -14,6 +14,10 @@
 <body>
     <div>
         <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+        <form action="/logout" method="post" class="account-control-section-logout-btn">
+            @csrf
+            <input type="submit" value="Logout" class="sp_logout_btn">
+        </form>
     </div>
     <div id="map" style="display:none"></div>
     @include('common.sidebar')
@@ -30,7 +34,7 @@
             img.addEventListener('load', function(event) {
                 height = img.height;
                 hidden_length = (height - 300) / 2;
-                if(hidden_length>0){
+                if (hidden_length > 0) {
                     $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
                 }
             });
@@ -39,6 +43,7 @@
 
         function setPlaceDetailToView(place_details) {
             document.getElementById('google_place_id').value = place_details['google_place_id'];
+            document.getElementById('delete_google_place_id').value = place_details['google_place_id'];
             document.getElementById('header-title').innerHTML = place_details['place_name'];
             document.getElementById('form_place_name').value = place_details['place_name'];
             document.getElementById('place_address').innerHTML = place_details['formatted_address'];
