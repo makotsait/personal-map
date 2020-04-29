@@ -10,6 +10,20 @@ span{
     font-size:13px;
 }
 
+.account-control-section-logout-btn{
+    position: absolute;
+    right: 0px;
+}
+
+.sp_logout_btn{
+    position: relative;
+    z-index: 1;
+    height: 30px;
+    right: 14px;
+    top: 9px;
+    background-color: #fff;
+}
+
 .sidebar{
     position: fixed;
     color: #fff;
@@ -104,9 +118,7 @@ span{
     position: absolute;
     left: 205px;
 }
-.rating-left{
-    /* padding-left: 25px; */
-}
+
 .rating-right{
     left: 200px;
 }
@@ -152,7 +164,7 @@ span{
     float: right;
     right: 7em;
 } 
-.section-logout-btn{
+.section-delete-btn{
     height: auto;
     margin-left: 20px;
     display: inline-block;

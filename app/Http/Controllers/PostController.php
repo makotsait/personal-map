@@ -126,7 +126,7 @@ class PostController extends Controller
         return $items;
     }
 
-    public function setPlaceUserPref($place_id, $user_id, $place)
+    public function getPlaceTypeId($place_id, $user_id, $place)
     {
         $place_user_pref = PlaceUserPreference::where('place_id', $place_id)->where('user_id', $user_id)->where('status', 0)->first();
         if (isset($place_user_pref)) {
@@ -158,7 +158,7 @@ class PostController extends Controller
 
         $place_id = $place->place_id;
 
-        $items['place_type_id'] = $this->setPlaceUserPref($place_id, $user_id, $place);
+        $items['place_type_id'] = $this->getPlaceTypeId($place_id, $user_id, $place);
 
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
@@ -187,7 +187,7 @@ class PostController extends Controller
         return $place;
     }
 
-    public function setUserPref($user_id, $place_id, $place_type_id)
+    public function updatePlaceUserPref($user_id, $place_id, $place_type_id)
     {
         $place_user_pref = PlaceUserPreference::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->first();
         if (is_null($place_user_pref)) {
@@ -234,7 +234,7 @@ class PostController extends Controller
         }
         $place_id = $place->place_id;
 
-        $this->setUserPref($user_id, $place_id, $place_type_id);
+        $this->updatePlaceUserPref($user_id, $place_id, $place_type_id);
 
         $criteria_order_exists = CriteriaOrder::where('user_id', $user_id)->where('place_type_id', $place_type_id)->where('status', 0)->exists();
         if (!$criteria_order_exists) {
@@ -276,5 +276,33 @@ class PostController extends Controller
             array_push($items, $item);
         }
         return json_encode($items);
+    }
+
+    public function deleteRatings(Request $request)
+    {
+        $user_id = Auth::user()->user_id;
+
+        $place = Place::where('google_place_id', $request->delete_google_place_id)->where('status', 0)->first();
+        if (is_null($place)) {
+            return redirect()->to('/');
+        }
+        $place_id = $place->place_id;
+
+        $exists_rating = Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->exists();
+        if ($exists_rating) {
+            Rating::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->delete();
+        }
+
+        $note = Note::where('user_id', $user_id)->where('place_id', $place_id)->first();
+        if (isset($note)) {
+            $note->delete();
+        }
+
+        $place_user_pref = PlaceUserPreference::where('user_id', $user_id)->where('place_id', $place_id)->where('status', 0)->first();
+        if (isset($place_user_pref)) {
+            $place_user_pref->delete();
+        }
+
+        return redirect()->to('/');
     }
 }
