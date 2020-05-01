@@ -14,7 +14,7 @@ PersonalMap is a web application which lets you to make notes of a place, rate i
 ## Set your google api key
 Rename "../.env.example" to "../.env".<br>
 Open file "../.env" and add your API Key.<br>
-If you don't have google api keys, get them from [here](https://cloud.google.com/maps-platform?hl=ja).
+If you don't have google api keys, get them from [here](https://cloud.google.com/maps-platform).
 ```
 GOOGLE_API_KEY_JS  = YOUR_API_KEY_HERE
 GOOGLE_API_KEY_PHP = YOUR_API_KEY_HERE
