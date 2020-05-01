@@ -36,6 +36,8 @@
                 hidden_length = (height - 300) / 2;
                 if (hidden_length > 0) {
                     $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                } else {
+                    $("#header-image").css("transform", "translateY(0px)");
                 }
             });
             img.src = img_url;
