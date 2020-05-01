@@ -8,10 +8,8 @@
     <link rel="shortcut icon" href="{{ asset('images/favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/perfect-scrollbar.css') }}">
     <script src="{{ asset('/js/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ asset('/js/jquery.sidebar.min.js') }}"></script>
-    <script src="{{ asset('/js/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('/js/markerclusterer.js') }}"></script>
     <script src="{{ asset('/js/map-control.js') }}"></script>
 </head>
@@ -27,9 +25,9 @@
             <input type="submit" value="Logout" class=" map-btn btn btn-default">
         </form>
     </div>
-    
+
     <div id="map"></div>
-    
+
 
 
     <script>
@@ -71,8 +69,10 @@
             img.addEventListener('load', function(event) {
                 height = img.height;
                 hidden_length = (height - 500) / 2;
-                if(hidden_length>0){
+                if (hidden_length > 0) {
                     $("#header-image").css("transform", "translateY(-" + hidden_length + "px)");
+                } else {
+                    $("#header-image").css("transform", "translateY(0px)");
                 }
             });
             img.src = img_url;
