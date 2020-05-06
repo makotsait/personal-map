@@ -17,7 +17,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="user_name" class="col-md-4 col-form-label text-md-right">User Name/email</label>
+                            <label for="user_name" class="col-md-4 col-form-label text-md-right">User Name/ Email</label>
 
                             <div class="col-md-6">
                                 <input id="login_id" type="text" class="form-control @error('login_id') is-invalid @enderror" name="login_id" value="{{ old('login_id') }}" required autocomplete="on" autofocus>
@@ -61,12 +61,12 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
-
+                                <!-- 
                                 @if (Route::has('password.request'))
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
-                                @endif
+                                @endif -->
                             </div>
                         </div>
                     </form>
