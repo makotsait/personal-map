@@ -28,8 +28,6 @@
 
     <div id="map"></div>
 
-
-
     <script>
         function fetchAllPlacesLocation() {
             $.ajax({
@@ -113,24 +111,6 @@
                 }
             });
         }
-
-        // function getPlaceHeaderImg(photoreference) {
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: "{{route('get_header_image')}}",
-        //         data: {
-        //             photoreference: photoreference
-        //         },
-        //         success: function(data) {
-        //             console.log("Fetching place header image ended.");
-        //             setPalceHeaderImg(data);
-        //         },
-        //         error: function() {
-        //             //取得失敗時に実行する処理
-        //             console.log("Fetching place header image failed.");
-        //         }
-        //     });
-        // }
 
         function setBounds(place) {
             if (place.geometry.viewport) {

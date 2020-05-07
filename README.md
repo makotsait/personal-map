@@ -1,5 +1,5 @@
 # PersonalMap
-PersonalMap is a web application which lets you to make notes of a place, rate it, and review your impressions about it. This app makes it easier to make notes of a place that was shown on TV, or that you visited.
+Personal Map is a web application which lets you to make notes of a place, rate it, and review your impressions about it. This app makes it easier to make notes of a place that was shown on TV, or that you visited.
 
 ### Features
 * Writing anything you want since your notes will not be published.
@@ -28,13 +28,13 @@ Execute the following command from the command line.
 >> php artisan migrate --seed
 ```
 
-## Change setting on APP_ENV (If you need)
+## Change setting on APP_ENV
 If you use this app on your server and you also want it to use https in every access, all you need to do is to rewrite "../.env".<br>
-Find this line.
+Find the following line in ".env".
 ```
 APP_ENV=local
 ```
-Substitute "local" to "production"
+Substitute "local" to "production".
 ```
 APP_ENV=production
 ```
