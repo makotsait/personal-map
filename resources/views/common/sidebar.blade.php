@@ -82,7 +82,8 @@
         </form>
         <form action="ratings/delete" method='POST' name="delete_form" class="section-delete-btn" id="section-delete-btn">
             @csrf
-            <input type="hidden" name="delete_google_place_id" id="delete_google_place_id" value="{{old('delete_google_place_id')}}">
+            <!-- old('delete_google_place_id')は利用不可。挙動より上から1つ目のformの値のみが読み込まれていると推測。値は同じなのでgoogle_place_idで代用。 -->
+            <input type="hidden" name="delete_google_place_id" id="delete_google_place_id" value="{{old('google_place_id')}}">
             <input type="submit" name="delete" value="Delete" class="btn-delete btn btn-secondary">
         </form>
         <button type="button" class="btn btn-secondary section-cancel-btn" id="cancel-btn">Cancel</button>
@@ -247,11 +248,11 @@
     }
 
     // 削除確認ダイアログをセット
-    $(function(){
-        $(".btn-delete").click(function(){
-            if(confirm("本当に削除しますか？")){
+    $(function() {
+        $(".btn-delete").click(function() {
+            if (confirm("本当に削除しますか？")) {
                 // 処理を止めずに続行
-            }else{
+            } else {
                 // 処理をキャンセル
                 return false;
             }
